@@ -1,0 +1,75 @@
+@use '@/styles/constants/colors' as colors;
+
+.docs {
+  summary {
+    padding: 0.3em 0.5em;
+    height: 3.5rem;
+    border-bottom: 1px solid colors.$border-color;
+    background-color: colors.$summary-bg;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .docs-content{
+    display: grid;
+    gap: 3rem;
+  }
+
+  .doc-description{
+    line-height: 2;
+    color: colors.$font-color;
+
+    strong{
+      font-weight: 600;
+    }
+
+    code {
+      background-color: colors.$badge-bg;
+      color: colors.$badge-color;
+      border-radius: 3px;
+      padding: 0.2em 0.3em;
+      font-size: 90%;
+    }
+
+    ul{
+      line-height: 2.3;
+      list-style: disc;
+      margin-left: 2rem;
+    }
+
+    ol{
+      list-style: auto;
+      margin-left: 1rem;
+    }
+
+  }
+
+  .doc-components {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: end;
+    width: 100%;
+  }
+
+  .doc-code {
+    pre.shiki {
+      padding: 1rem;
+      line-height: 2;
+    }
+  }
+}
+
+
+@media (max-width: 900px) {
+  .docs{
+    padding: 2rem;
+    overflow: auto;
+  }
+
+  .docs-content{
+    overflow-x: scroll;
+  }
+}

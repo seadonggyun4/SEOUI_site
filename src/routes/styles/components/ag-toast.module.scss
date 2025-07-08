@@ -1,0 +1,110 @@
+@use '@/routes/styles/constants/colors' as colors;
+
+.toast-container {
+  position: fixed;
+  top: 6rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 200000;
+  will-change: transform, height;
+}
+
+.toast {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem 3rem 1rem 1rem;
+  background-color: white;
+  filter: drop-shadow(0 4px 4px rgba(0,0,0,.12));
+  border: 1px solid colors.$border-color;
+  min-width: 30rem;
+  max-width: 40rem;
+  transition:
+    margin-bottom 0.3s ease-out 0s,
+    opacity 0.3s ease-out 0.2s,
+    transform 0.3s ease-out 0.2s;
+
+  // 진입 애니메이션
+  &.toast--enter {
+    margin: 0;
+    opacity: 0;
+    transform: translateX(10%);
+  }
+
+  // 퇴장 애니메이션
+  &.toast--exit {
+    opacity: 0;
+    transform: translateY(10%);
+    transition:
+      opacity 0.2s ease-out 0s,
+      transform 0.2s ease-out 0s,
+      margin-bottom 0.3s ease-out 0.2s;
+  }
+
+  // 타입별 왼쪽 아이콘 배경 색상
+  &--success .toast__icon-wrapper {
+    background-color: #dcfce7;
+    color: colors.$success-color;
+  }
+
+  &--error .toast__icon-wrapper {
+    background-color: #fee2e2;
+    color: colors.$error-color;
+  }
+
+  &--warning .toast__icon-wrapper {
+    background-color: #fef3c7;
+    color: colors.$warning-color;
+  }
+
+  &--info .toast__icon-wrapper {
+    background-color: #dbeafe;
+    color: colors.$primary-color;
+  }
+
+  // 아이콘 배경 원형 스타일
+  &__icon-wrapper {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+
+  // 메시지 텍스트 블록
+  &__message {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .toast__title {
+      font-weight: bold;
+    }
+
+    .toast__count{
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: colors.pick(gray, 9);
+    }
+  }
+
+  // 닫기 버튼
+  &__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: colors.$font-secondary-color;
+    cursor: pointer;
+
+    &:hover {
+      color: colors.$font-color;
+    }
+  }
+}

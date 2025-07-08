@@ -1,0 +1,213 @@
+@use '@/routes/styles/constants/colors' as colors;
+
+ag-datepicker {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  z-index: 10001;
+}
+
+// Layout
+.ag-datepicker-wrapper{
+  position: fixed;
+  display: grid;
+  min-width: 40rem;
+  padding: 1rem 2rem;
+  background-color: #ffff;
+  border: 1px solid colors.$border-color;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translate3D(-50%, -50%, 0) scale(0.5);
+  will-change: transform;
+  // transition: all .3s ease-in-out; => JS에서 제어
+
+  .datepicker-header {
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto 1fr auto;
+    font-size: 1.8rem;
+    font-weight: 500;
+    text-align: center;
+    line-height: 3;
+
+    button {
+      background: none;
+      border: none;
+      color: colors.$font-secondary-color;
+      cursor: pointer;
+    }
+  }
+
+  .calendar-time {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+  }
+
+  .calendar {
+    .calendar-body {
+      .calendar-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        line-height: 2;
+        gap: 2rem;
+        border-top: 1px solid colors.$border-color;
+        border-bottom: 1px solid colors.$border-color;
+        color: colors.$font-secondary-color;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 1rem 2rem;
+        padding: 1rem 0;
+        height: 100%;
+
+      .day {
+        width: 100%;
+        line-height: 2.5;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+        text-align: center;
+        cursor: pointer;
+        color: inherit;
+
+        &.weekend,
+        &.holiday {
+          color: #C73E68;
+        }
+
+        &.selected {
+          background-color: colors.$primary-color;
+          color: white;
+          border: none;
+        }
+
+        &.criteria:not(.selected) {
+          background-color: colors.$primary-bg-color;
+          color: colors.$primary-color;
+        }
+
+        &.disabled {
+          pointer-events: none;
+          cursor: not-allowed;
+          background-color: colors.$disabled-color;
+          color: colors.$font-secondary-color;
+          border: none;
+        }
+
+        &.today {
+          border: 1px solid colors.$primary-color;
+        }
+      }
+
+        .empty {
+          height: 4rem;
+        }
+      }
+    }
+  }
+
+  .time-picker {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 8rem;
+    height: 30rem;
+
+    .time-title {
+      line-height: 2;
+      font-weight: 500;
+      text-align: center;
+      border-top: 1px solid colors.$border-color;
+      border-bottom: 1px solid colors.$border-color;
+      color: colors.$font-secondary-color;
+    }
+
+    ul {
+      overflow-y: auto;
+      height: 100%;
+      display: block;
+
+      li {
+        line-height: 2.5;
+        text-align: center;
+        border-radius: 0.25rem;
+        cursor: pointer;
+
+        &.selected {
+          background-color: colors.$primary-color;
+          color: white;
+        }
+      }
+    }
+  }
+
+  .notice{
+    padding: 0;
+    background-color: transparent;
+    line-height: 2;
+  }
+
+  .datepicker-controler{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr 80px;
+
+    &.no-time{
+      grid-template-columns: 1fr 80px;
+    }
+
+    .input-group {
+      position: relative;
+      background-color: #f5f7fa;
+
+      i {
+        position: absolute;
+        transform: translateY(-50%);
+        left: 2rem;
+        top: 50%;
+        color: colors.$font-secondary-color;
+      }
+
+      input {
+        background: transparent;
+        width: 100%;
+        text-indent: 2rem;
+        padding: 1rem 2rem;
+        border: 1px solid colors.$border-color;
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+          border: 1px solid colors.$primary-color;
+        }
+
+        &::placeholder{
+          color: colors.$font-secondary-color;
+        }
+      }
+    }
+
+    button{
+      border: none;
+      cursor: pointer;
+      color: #ffff;
+      background-color: colors.$primary-color;
+
+      &:disabled{
+        background-color: colors.$disabled-color;
+        color: colors.$font-secondary-color;
+        border-color: transparent;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &.enter {
+    opacity: 1;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate3D(-50%, -50%, 0) scale(1) !important;
+  }
+}

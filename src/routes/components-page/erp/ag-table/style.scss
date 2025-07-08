@@ -1,0 +1,27 @@
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.2em 0.3em;
+  border-radius: 5px;
+
+  &.gray {
+    background-color: #e2e3e5;
+    color: #495057;
+  }
+
+  &.green {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  &.blue {
+    background-color: #dbeafe;
+    color: #1e3a8a;
+  }
+
+  &.red {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+}

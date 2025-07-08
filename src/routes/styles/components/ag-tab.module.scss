@@ -1,0 +1,26 @@
+@use '@/routes/styles/constants/colors' as colors;
+
+.tab-list {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: end;
+}
+
+.ag-tab {
+  padding: 1rem 2rem;
+  min-width: 10rem;
+  max-width: 15rem;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: colors.$border-color;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.active {
+    background-color: colors.$box-head-border-color;
+    color: colors.$primary-color;
+  }
+}

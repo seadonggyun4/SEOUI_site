@@ -1,0 +1,115 @@
+@use '@/routes/styles/constants/colors' as colors;
+
+ag-select,
+ag-select-search {
+  display: block;
+  height: auto;
+  width: auto;
+}
+
+.ag-select {
+  position: relative;
+
+  .selected {
+    position: relative;
+    padding: 0.5rem 0.8rem;
+    width: 100%;
+    border: 1px solid colors.pick(gray, 5);
+    background: white;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      right: 0.8rem;
+      font-size: 0.8rem;
+      color: colors.pick(gray, 9);
+      transform: translateY(-50%);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    &:hover {
+      border-color: colors.$primary-color;
+    }
+  }
+
+  .ag-select-scroll {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid colors.$border-color;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    scrollbar-gutter: stable;
+    z-index: 1000;
+    will-change: scroll-position, transform;
+    --top-placeholder: 0px;
+    --bottom-placeholder: 0px;
+
+    &.hidden {
+      display: none;
+    }
+
+    .virtual-placeholder {
+      will-change: transform;
+      transition: none !important;
+    }
+    .virtual-placeholder.top    { height: var(--top-placeholder); }
+    .virtual-placeholder.bottom { height: var(--bottom-placeholder); }
+
+    .option-wrapper {
+      .option {
+        height: var(--row-height);
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        line-height: 300%;
+        padding: 0 0.8rem;
+
+        &.focused {
+          background-color: colors.pick(yellow, 0);
+        }
+
+        &.active {
+          background-color: colors.$primary-bg-color;
+          color: colors.$primary-color;
+          font-weight: 500;
+        }
+
+        &.disabled {
+          color: colors.$font-secondary-color;
+          pointer-events: none;
+        }
+      }
+    }
+
+    .select-search-input {
+      position: sticky;
+      top: 0;
+      padding: 0.3rem;
+      background-color: #fff;
+
+      input {  padding-left: 1.5rem; }
+
+      .search-icon {
+        position: absolute;
+        top: 50%;
+        left: 0.7rem;
+        color: #999;
+        font-size: 1rem;
+        pointer-events: none;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}

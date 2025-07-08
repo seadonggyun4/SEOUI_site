@@ -1,0 +1,22 @@
+html{
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+
+body{
+  position: relative;
+}
+
+/* 모든 정의되지 않은 태그 숨김 */
+:where(*):not(:defined) {
+  visibility: hidden;
+}
+
+/* WebKit 브라우저에서 달력 아이콘만 선택해 클릭 비활성화 */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="datetime"]::-webkit-calendar-picker-indicator
+{
+  pointer-events: none; /* 클릭 막기 */
+}

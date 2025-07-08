@@ -1,0 +1,212 @@
+@use '@/routes/styles/constants/colors' as colors;
+@use "sass:color";
+
+.ag-table {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
+
+  .ag-table-scroll {
+    // 스크롤 가능 영역
+    position: relative;
+    width: 100%;
+    overflow: auto;
+    scrollbar-gutter: stable;
+    will-change: scroll-position, transform;
+    background-color: #fff;
+
+    --top-placeholder: 0px;
+    --bottom-placeholder: 0px;
+
+    // placeholder tr 높이는 CSS 변수를 통해
+    .virtual-placeholder {
+      will-change: transform;
+      transition: none !important;
+    }
+    .virtual-placeholder.top    { height: var(--top-placeholder); }
+    .virtual-placeholder.bottom { height: var(--bottom-placeholder); }
+
+    // 실제 행 높이도 CSS 변수에서
+    table {
+      width: 100%;
+      table-layout: fixed;
+      border-spacing: 0;
+
+      th {
+        height: 3.5rem;
+        border-bottom: 1px solid colors.$border-color;
+        color: colors.$font-secondary-color;
+        font-weight: 500;
+      }
+
+      th, td {
+        padding: 0 .8rem;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &.text-center {
+          text-align: center;
+        }
+        &.text-right {
+          text-align: right;
+        }
+        &.text-left {
+          text-align: left;
+        }
+
+        &.empty {
+          color: colors.pick(gray, 4);
+        }
+      }
+
+      thead {
+        position: sticky;
+        top: 0;
+        background-color: colors.$box-head-border-color;
+        z-index: 5;
+        transition: filter .2s ease;
+
+        &.scrolling {
+          filter: drop-shadow(0 4px 4px rgba(0,0,0,.12));
+        }
+      }
+
+      tbody {
+        tr {
+          td {
+            position: relative;
+            border: 1px solid transparent;
+            height: var(--row-height, 3.5rem); // 기본높이 제어 가능
+
+            &.fill-preview-top    { border-top: 1px dashed #006dcbf2; }
+            &.fill-preview-bottom { border-bottom: 1px dashed #006dcbf2 !important;}
+            &.fill-preview-left   { border-left: 1px dashed #006dcbf2; }
+            &.fill-preview-right  { border-right: 1px dashed #006dcbf2; }
+
+            &.active { background-color:  colors.$primary-bg-color }
+            &.active.no-selecte { opacity: 0.3; }
+            &.start-cell { background-color: transparent;}
+            &.active-top { border-top: 1px solid #006dcbf2; }
+            &.active-bottom { border-bottom: 1px solid #006dcbf2 !important; }
+            &.active-left { border-left: 1px solid #006dcbf2; }
+            &.active-right { border-right: 1px solid #006dcbf2; }
+            &.copy-flash { animation: copyFlash 1s ease-out; }
+
+            @keyframes copyFlash {
+              0% {
+                opacity: 0.3;
+              }
+              100% {
+                opacity: 1;
+              }
+            }
+
+            & img{
+              display: block;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+
+          button {
+            width: 100%;
+            height: 100%;
+          }
+
+          &.canceled {
+            td {
+              color: colors.pick(red, 3);
+            }
+          }
+        }
+        tr:not(:last-child) {
+          td {
+            border-bottom: 1px solid colors.$border-color;
+          }
+        }
+        tr.active {
+          color: colors.$primary-color;
+        }
+        tr:hover { cursor: pointer; }
+      }
+    }
+  }
+
+  .fill-handler {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 6px;
+    height: 6px;
+    background: #007aff;
+    border-radius: 1px;
+    cursor: crosshair;
+    display: none;
+  }
+
+  .context-menu {
+    position: absolute;
+    right: 0px;
+    top: -50px;
+    display: none;
+    padding: 0.5rem 0.8rem;
+    min-width: 8rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: scale(0.9);
+    z-index: 1000;
+
+    &.show {
+      display: flex;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    .menu-item {
+      display: grid;
+      grid-auto-flow: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.8rem;
+      background: none;
+      border: none;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s ease-in-out;
+
+      &:hover {
+        background-color: colors.pick(gray, 3)
+      }
+    }
+  }
+
+  .ag-drag-box {
+    position: absolute;
+    pointer-events: none;
+    background-color: rgba(128, 128, 128, 0.2);
+    border: 1px solid rgba(128, 128, 128, 0.6);
+    z-index: 9999;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+
+
+

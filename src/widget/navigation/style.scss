@@ -1,0 +1,105 @@
+@use '@/styles/constants/colors' as colors;
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateX(-500px);
+  height: 100%;
+  width: 12%;
+  max-width: 25rem;
+  background: colors.$nav-bg;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 5px;
+  transition: transform 0.8s cubic-bezier(0.8, 0, 0.33, 1);
+  overflow: hidden;
+  z-index: 100000;
+
+  &-header {
+    height: 10rem;
+
+    h2 {
+      width: 100%;
+      font-size: 2.3rem;
+      font-weight: bold;
+      text-align: center;
+      line-height: 2.5;
+      color: colors.$primary-color;
+    }
+
+    .nav-tabs {
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: center;
+      gap: 1rem;
+
+      .nav-tab {
+        padding: 0.5rem 0.8rem;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        color: colors.$font-secondary-color;
+        border-bottom: 2px solid transparent;
+        transition: color 0.3s ease, border-bottom 0.3s ease;
+
+        &.active {
+          color: colors.$primary-color;
+          border-bottom: 2px solid colors.$primary-color;
+        }
+
+        &:hover {
+          color: colors.$primary-color;
+        }
+      }
+    }
+  }
+
+  &-list {
+    display: grid;
+    gap: 3rem;
+    padding: 2rem;
+    width: 100%;
+    max-height: calc(100% - 15%);
+    transform: translateX(-100px);
+    opacity: 0;
+    transition: transform 1.5s cubic-bezier(0.9, 0, 0.33, 1), opacity 1.5s cubic-bezier(0.9, 0, 0.33, 1);
+    overflow-y: auto;
+  }
+
+  &-group-title {
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 2;
+    color: #ffff;
+  }
+
+  &-group-list {
+    a {
+      display: block;
+      text-decoration: none;
+      color: colors.$font-secondary-color;
+      line-height: 2;
+      transition: color 0.2s;
+
+      &:hover,
+      &.active {
+        color: #ffff;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &.open {
+    transform: translateX(0px);
+
+    .nav-list{
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .nav {
+    display: none;
+  }
+}

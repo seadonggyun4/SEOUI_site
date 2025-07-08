@@ -1,0 +1,92 @@
+@use '@/routes/styles/constants/colors' as colors;
+
+input[type=text],
+input[type=number],
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=time],
+input[type=file],
+select,
+textarea {
+  width: 100%;
+  border: 1px solid colors.pick(gray, 5);
+  padding: 0.5rem;
+  height: auto;
+  outline: none;
+
+  svg {
+    color: colors.$secondary-color;
+  }
+
+  &::placeholder {
+    color: colors.$font-secondary-color;
+  }
+
+  &:not(:disabled):hover,
+  &:not(:read-only):hover {
+    border-color: colors.$primary-color;
+  }
+
+  &:not(:disabled):focus,
+  &:not(:read-only):focus {
+    border-color: colors.$primary-color;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 0 1px colors.pick(indigo, 5);
+  }
+
+  &:disabled{
+    background-color: colors.$disabled-color;
+    pointer-events: none;
+  }
+}
+
+input[type=text],
+input[type=number],
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=time]{
+  &:read-only{
+    background-color: colors.$disabled-color;
+    pointer-events: none;
+  }
+}
+
+input[type="file"]{
+  position: relative;
+  cursor: pointer;
+
+  &::-webkit-file-upload-button {
+    position: absolute;
+    top: 0;
+    right: -0.5rem;
+    border: none;
+    border-right: 1px solid #e1e1e1;
+    height: 100%;
+    cursor: pointer;
+  }
+}
+
+input[type="color"]{
+  border: none;
+  width: 100%;
+  cursor: pointer;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0.5rem;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+  }
+}
+
+textarea{
+  resize: none;
+}
+
+.input__required {
+  font-size: 1.2rem;
+  color: colors.$error-color;
+  margin-right: 4px;
+}

@@ -1,0 +1,76 @@
+@use '@/styles/constants/colors' as colors;
+
+.components-layout {
+  display: grid;
+  gap: 5rem;
+  padding: 2rem 0;
+  margin: 0 auto;
+  width: 70%;
+  height: 100%;
+  max-width: 192rem;
+
+  &.wide{
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+  }
+}
+
+.page-loder{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background: #ffff;
+  transform: scaleX(1);
+
+  &.show{
+    visibility: visible;
+    animation: curtainShow 0.8s ease-in-out;
+    transform-origin: left;
+  }
+
+  &.hide {
+    animation: curtainHide 0.8s ease-in-out;
+    transform-origin: right;
+    animation-fill-mode: forwards;
+  }
+
+  &.full-hide{
+    transform: scaleX(0);
+  }
+}
+
+@keyframes curtainShow {
+  0% {
+    transform: scaleX(0);
+    clip-path: polygon(0 0, 83% 0, 100% 100%, 0% 100%);
+  }
+  100% {
+    transform: scaleX(1);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  }
+}
+
+@keyframes curtainHide {
+  0% {
+    transform: scaleX(1);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  }
+  100% {
+    transform: scaleX(0);
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+}
+
+
+
+@media (max-width: 900px) {
+  .components-layout {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}

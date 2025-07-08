@@ -1,0 +1,6 @@
+@use '@/routes/styles/components';
+@use '@/routes/styles/elements';
+
+// [ elements ]
+// angelcar-info-foreigner
+@use '@/routes/angelcar-info-foreigner/styles/elements' as foreignerApp;
