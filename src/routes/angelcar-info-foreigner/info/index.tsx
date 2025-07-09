@@ -78,7 +78,7 @@ export default component$(() => {
 
     return (
       <div>
-        {section.heading && <h3>{section.heading}</h3>}
+        {section.heading && <h3 class="section-header">{section.heading}</h3>}
         {section.subheading && <h4>{section.subheading}</h4>}
         {section.content && section.content.length > 0 && (
           <p>

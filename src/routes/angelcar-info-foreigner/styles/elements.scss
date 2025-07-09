@@ -18,6 +18,28 @@
   }
 }
 
+h3.section-header {
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  line-height: 2;
+  font-size: 1.5rem;
+  color: colors.$primary-color;
+  border-bottom: 2px solid colors.$primary-color;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 2px;
+    background-color: colors.$error-color;
+  }
+}
+
 .container {
   position: relative;
   display: grid;
@@ -37,28 +59,6 @@
   @media (max-width: 768px) {
     max-width: 100%;
     width: 100%;
-  }
-}
-
-.banner-img-box {
-  position: relative;
-  width: 100%;
-
-  img {
-    width: 100%;
-    object-fit: contain;
-  }
-
-  h1 {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    width: 10rem;
-
-    img {
-      width: 100%;
-      object-fit: contain;
-    }
   }
 }
 

@@ -9,6 +9,16 @@ export default component$(() => {
   const isUserAuthenticated = useSignal(false);
   const userName = useSignal('');
 
+  // 스크롤을 최하단으로 이동하는 함수
+  const scrollToBottom = $(() => {
+    requestAnimationFrame(() => {
+      const messagesArea = document.querySelector('.messages-area');
+      if (messagesArea) {
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+      }
+    });
+  });
+
   // 인증 상태 확인 및 리다이렉트
   useVisibleTask$(() => {
     try {
@@ -18,6 +28,9 @@ export default component$(() => {
         if (parsedData.userName && parsedData.userName.trim()) {
           isUserAuthenticated.value = true;
           userName.value = parsedData.userName;
+
+          // 초기 스크롤 설정
+          setTimeout(() => scrollToBottom(), 100);
           return;
         }
       }
@@ -29,6 +42,53 @@ export default component$(() => {
       // 에러 발생 시에도 user 페이지로 리다이렉트
       window.location.href = '/angelcar-info-foreigner/user/';
     }
+  });
+
+  // 키보드 이벤트 처리 및 스크롤 관리
+  useVisibleTask$(() => {
+    let isKeyboardOpen = false;
+    const initialViewportHeight = window.innerHeight;
+
+    // 뷰포트 크기 변경 감지 (모바일 키보드)
+    const handleResize = () => {
+      const currentHeight = window.innerHeight;
+      const heightDifference = initialViewportHeight - currentHeight;
+
+      // 키보드가 올라왔는지 판단 (150px 이상 차이)
+      if (heightDifference > 150 && !isKeyboardOpen) {
+        isKeyboardOpen = true;
+        // 키보드가 올라올 때 스크롤 유지
+        setTimeout(() => scrollToBottom(), 300);
+      } else if (heightDifference <= 150 && isKeyboardOpen) {
+        isKeyboardOpen = false;
+        // 키보드가 내려갈 때도 스크롤 유지
+        setTimeout(() => scrollToBottom(), 100);
+      }
+    };
+
+    // 입력창 포커스 이벤트
+    const textarea = document.querySelector('.chat-input-area textarea');
+    const handleFocus = () => {
+      // iOS Safari 대응: 약간의 지연 후 스크롤
+      setTimeout(() => scrollToBottom(), 500);
+    };
+
+    const handleBlur = () => {
+      // 포커스가 해제될 때도 스크롤 유지
+      setTimeout(() => scrollToBottom(), 100);
+    };
+
+    // 이벤트 리스너 등록
+    window.addEventListener('resize', handleResize);
+    textarea?.addEventListener('focus', handleFocus);
+    textarea?.addEventListener('blur', handleBlur);
+
+    // 정리 함수
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      textarea?.removeEventListener('focus', handleFocus);
+      textarea?.removeEventListener('blur', handleBlur);
+    };
   });
 
   const sendMessage = $(() => {
@@ -49,6 +109,9 @@ export default component$(() => {
     messages.value = [...messages.value, newMessage];
     chatInput.value = '';
 
+    // 메시지 전송 후 스크롤
+    setTimeout(() => scrollToBottom(), 50);
+
     // 자동 응답 시뮬레이션
     setTimeout(() => {
       const autoReply: ChatMessage = {
@@ -65,7 +128,10 @@ export default component$(() => {
         isRead: false
       };
       messages.value = [...messages.value, autoReply];
-    }, 1000);
+
+      // 자동 응답 후 스크롤
+      setTimeout(() => scrollToBottom(), 50);
+    }, 500);
   });
 
   // 엔터 키 핸들러 분리
@@ -82,6 +148,13 @@ export default component$(() => {
         }, 0);
       }
     }
+  });
+
+  // 입력창 변경 시 스크롤 유지
+  const handleInput = $((e: Event) => {
+    chatInput.value = (e.target as HTMLTextAreaElement).value;
+    // 타이핑 중에도 스크롤 유지
+    setTimeout(() => scrollToBottom(), 10);
   });
 
   // 플로팅 버튼 클릭 핸들러 (인증된 사용자만 접근)
@@ -118,11 +191,9 @@ export default component$(() => {
       <main>
         <section class="messenger-content">
           {/* 인증된 사용자 환영 메시지 */}
-          <div class="section-header">
-            <h3>
-              {currentContent.tabContents.chat.sections[0].heading} - Welcome, {userName.value}!
-            </h3>
-          </div>
+          <h3 class="section-header">
+            {currentContent.tabContents.chat.sections[0].heading} - Welcome, {userName.value}!
+          </h3>
 
           <div class="chat-container">
             <div class="messages-area">
@@ -135,7 +206,7 @@ export default component$(() => {
               <textarea
                 placeholder={activeLang.value === 'en' ? "Type your message..." : "請輸入您的訊息..."}
                 value={chatInput.value}
-                onInput$={(e) => chatInput.value = (e.target as HTMLTextAreaElement).value}
+                onInput$={handleInput}
                 onKeyDown$={handleKeyDown}
               />
             </div>
