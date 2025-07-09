@@ -35,11 +35,6 @@ export interface StepItem {
   imageSrc: string;
 }
 
-export interface MenuLabels {
-  en: string;
-  zh: string;
-}
-
 export interface ContentData {
   meta: {
     title: string;
@@ -52,7 +47,6 @@ export interface ContentData {
   tabContents: {
     [key: string]: TabContent;
   };
-  menu: MenuLabels;
 }
 
 export const contentData: { [key: string]: ContentData } = {
@@ -396,10 +390,6 @@ export const contentData: { [key: string]: ContentData } = {
           }
         ]
       }
-    },
-    menu: {
-      en: 'English',
-      zh: 'Chinese'
     }
   },
   zh: {
@@ -739,10 +729,6 @@ export const contentData: { [key: string]: ContentData } = {
           }
         ]
       }
-    },
-    menu: {
-      en: '英語',
-      zh: '中文'
     }
   }
 };

@@ -262,13 +262,13 @@ export default component$(() => {
             class="menu-item"
             onClick$={() => {activeLang.value = 'en'}}
           >
-            {currentContent.menu.en}
+            English
           </div>
           <div
             class="menu-item"
             onClick$={() => {activeLang.value = 'zh'}}
           >
-            {currentContent.menu.zh}
+            中文
           </div>
         </menu>
       </div>

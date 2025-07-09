@@ -7,8 +7,9 @@ export default component$(() => {
   const activeLang = useSignal('en');
   const isUserAuthenticated = useSignal(false); // 사용자 인증 상태
   const userName = useSignal(''); // 사용자명
+  const hasUnreadMessages = useSignal(false); // 읽지 않은 메시지 상태
 
-  // 인증 상태 확인
+  // 인증 상태 확인 및 메시지 상태 확인
   useVisibleTask$(() => {
     try {
       const foreignerAppData = sessionStorage.getItem('foreignerApp');
@@ -17,11 +18,35 @@ export default component$(() => {
         if (parsedData.userName && parsedData.userName.trim()) {
           isUserAuthenticated.value = true;
           userName.value = parsedData.userName;
+
+          // 읽지 않은 메시지 상태 확인 (예시: localStorage에서 확인)
+          const unreadMessages = localStorage.getItem('unreadMessages');
+          hasUnreadMessages.value = unreadMessages === 'true';
         }
       }
     } catch (error) {
       console.error('Failed to parse foreignerApp data:', error);
       isUserAuthenticated.value = false;
+    }
+  });
+
+  // 메시지 상태를 주기적으로 확인 (실제 앱에서는 WebSocket이나 API 폴링 사용)
+  useVisibleTask$(() => {
+    if (isUserAuthenticated.value) {
+      const checkMessages = () => {
+        try {
+          // 실제 구현에서는 서버 API를 호출하거나 WebSocket으로 실시간 확인
+          const unreadMessages = localStorage.getItem('unreadMessages');
+          hasUnreadMessages.value = unreadMessages === 'true';
+        } catch (error) {
+          console.error('Failed to check messages:', error);
+        }
+      };
+
+      // 30초마다 메시지 상태 확인
+      const interval = setInterval(checkMessages, 30000);
+
+      return () => clearInterval(interval);
     }
   });
 
@@ -36,12 +61,22 @@ export default component$(() => {
     menu?.classList.toggle('active');
   });
 
+  // 메시지 클릭 핸들러 (읽지 않은 메시지 상태 초기화)
+  const handleMessageClick = $(() => {
+    hasUnreadMessages.value = false;
+    localStorage.setItem('unreadMessages', 'false');
+    // 메시지 페이지로 이동
+    window.location.href = '/angelcar-info-foreigner/message';
+  });
+
   // 로그아웃 핸들러
   const handleLogout = $(() => {
     try {
       sessionStorage.removeItem('foreignerApp');
+      localStorage.removeItem('unreadMessages'); // 메시지 상태도 초기화
       isUserAuthenticated.value = false;
       userName.value = '';
+      hasUnreadMessages.value = false;
       window.location.href = '/angelcar-info-foreigner/info/';
     } catch (error) {
       console.error('Failed to logout:', error);
@@ -217,7 +252,13 @@ export default component$(() => {
           {isUserAuthenticated.value && (
             <>
               <a href="#" class="menu-item fa fa-bookmark" title="예약조회"></a>
-              <a href="/angelcar-info-foreigner/message" class="menu-item fa fa-comment-dots" title="메시지"></a>
+              <div class="menu-item-wrapper" onClick$={handleMessageClick}>
+                <a href="#" class="menu-item fa fa-comment-dots" title="메시지"></a>
+                <div class="message-indicator">
+                  <div class="indicator-dot"></div>
+                  <div class="indicator-pulse"></div>
+                </div>
+              </div>
               <a
                 href="#"
                 class="menu-item fa-solid fa-right-from-bracket"
@@ -239,13 +280,13 @@ export default component$(() => {
             class="menu-item"
             onClick$={() => {activeLang.value = 'en'}}
           >
-            {currentContent.menu.en}
+            English
           </div>
           <div
             class="menu-item"
             onClick$={() => {activeLang.value = 'zh'}}
           >
-            {currentContent.menu.zh}
+            中文
           </div>
         </menu>
       </div>
