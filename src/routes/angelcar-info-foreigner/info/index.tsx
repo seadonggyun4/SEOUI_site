@@ -254,7 +254,7 @@ export default component$(() => {
           {/* 로그인 이후에만 표시 */}
           {isUserAuthenticated.value && (
             <>
-              <a href="#" class="menu-item fa fa-bookmark" title="예약조회"></a>
+              <a href="#" class="menu-item fa-solid fa-car" title="예약조회"></a>
               <div class="menu-item-wrapper" onClick$={handleMessageClick}>
                 <a href="#" class="menu-item fa fa-comment-dots" title="메시지"></a>
                 <div class="message-indicator">

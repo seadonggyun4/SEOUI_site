@@ -98,11 +98,7 @@ export default component$(() => {
       id: Date.now().toString(),
       sender: 'user',
       message: chatInput.value,
-      timestamp: new Date().toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      }),
+      timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
       isRead: false
     };
 
@@ -120,11 +116,7 @@ export default component$(() => {
         message: activeLang.value === 'en'
           ? "Thank you for your message. Our team will respond shortly."
           : "感謝您的訊息。我們的團隊將很快回覆。",
-        timestamp: new Date().toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        }),
+        timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
         isRead: false
       };
       messages.value = [...messages.value, autoReply];
@@ -242,7 +234,7 @@ export default component$(() => {
           {/* 로그인 이후에만 표시 */}
           {isUserAuthenticated.value && (
             <>
-              <a href="#" class="menu-item fa fa-bookmark" title="예약조회"></a>
+              <a href="#" class="menu-item fa-solid fa-car" title="예약조회"></a>
               <a href="/angelcar-info-foreigner/message" class="menu-item fa fa-comment-dots" title="메시지"></a>
               <a
                 href="#"

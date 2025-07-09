@@ -54,21 +54,21 @@ export const messengerContentData: { [key: string]: MessengerContentData } = {
                 id: "1",
                 sender: "admin",
                 message: "Hello! Welcome to Angelcar customer support. How can I help you today?",
-                timestamp: "10:30",
+                timestamp: "2025-07-09 23:56",
                 isRead: true
               },
               {
                 id: "2",
                 sender: "user",
                 message: "Hi, I have a question about my reservation.",
-                timestamp: "10:32",
+                timestamp: "2025-07-09 23:56",
                 isRead: true
               },
               {
                 id: "3",
                 sender: "admin",
                 message: "I'd be happy to help! Could you please provide your reservation number?",
-                timestamp: "10:33",
+                timestamp: "2025-07-09 23:56",
                 isRead: true
               }
             ]
