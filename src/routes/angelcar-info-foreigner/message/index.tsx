@@ -166,6 +166,9 @@ export default component$(() => {
   // 로그아웃 핸들러
   const handleLogout = $(() => {
     try {
+      const check = confirm('로그아웃을 진행하시겠습니까?')
+      if(!check) return;
+
       sessionStorage.removeItem('foreignerApp');
       isUserAuthenticated.value = false;
       userName.value = '';
