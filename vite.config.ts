@@ -41,6 +41,23 @@ export default defineConfig(({ command, mode }): UserConfig => {
         },
       },
     },
+    ssr: {
+      noExternal: ['@builder.io/qwik', '@builder.io/qwik-city']
+    },
+    build: {
+      rollupOptions: {
+        external: [
+          // 브라우저 전용 API들을 외부 의존성으로 처리
+          'HTMLElement',
+          'window',
+          'document'
+        ]
+      }
+    },
+    define: {
+      // 서버 환경에서 브라우저 전용 객체들에 대한 폴백 정의
+      global: 'globalThis',
+    }
   };
 });
 
