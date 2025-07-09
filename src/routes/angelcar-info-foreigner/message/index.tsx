@@ -163,6 +163,18 @@ export default component$(() => {
     menu?.classList.toggle('active');
   });
 
+  // 로그아웃 핸들러
+  const handleLogout = $(() => {
+    try {
+      sessionStorage.removeItem('foreignerApp');
+      isUserAuthenticated.value = false;
+      userName.value = '';
+      window.location.href = '/angelcar-info-foreigner/info/';
+    } catch (error) {
+      console.error('Failed to logout:', error);
+    }
+  });
+
   const currentContent = messengerContentData[activeLang.value as keyof typeof messengerContentData];
 
   // 메시지 렌더링 함수
@@ -214,23 +226,50 @@ export default component$(() => {
         </section>
       </main>
 
-      {/* Circular Menu */}
+      <footer class="footer">
+        <menu>
+          {/* 공지사항 - 항상 표시 */}
+          <a href="/angelcar-info-foreigner/info" class="menu-item fa fa-book" title="공지사항"></a>
+
+          {/* 로그인 안되었을 때만 표시 */}
+          {!isUserAuthenticated.value && (
+            <a href="/angelcar-info-foreigner/user" class="menu-item fa fa-user" title="인증"></a>
+          )}
+
+          {/* 로그인 이후에만 표시 */}
+          {isUserAuthenticated.value && (
+            <>
+              <a href="#" class="menu-item fa fa-bookmark" title="예약조회"></a>
+              <a href="/angelcar-info-foreigner/message" class="menu-item fa fa-comment-dots" title="메시지"></a>
+              <a
+                href="#"
+                class="menu-item fa-solid fa-right-from-bracket"
+                title="로그아웃"
+                onClick$={handleLogout}
+              ></a>
+            </>
+          )}
+        </menu>
+      </footer>
+
+      {/* Circular language menu */}
       <div id="circularMenu" class="circular-menu">
         <a class="floating-btn" onClick$={handleFloatingBtnClick}>
-          <i class="fa fa-plus"></i>
+          <i class="fa fa-language"></i>
         </a>
-        {/* 인증된 사용자 메뉴 아이템 */}
         <menu class="items-wrapper">
-          <a href="/angelcar-info-foreigner/info" class="menu-item fa fa-book" title="공지사항">공지사항</a>
-          <a href="#" class="menu-item fa fa-bookmark" title="예약조회">예약조회</a>
-          <a href="/angelcar-info-foreigner/message" class="menu-item fa fa-comment-dots" title="메시지">메시지</a>
           <div
-            class="menu-item fa fa-language"
-            title="언어선택"
-            onClick$={() => {
-              activeLang.value = activeLang.value === 'en' ? 'zh' : 'en';
-            }}
-          >언어선택</div>
+            class="menu-item"
+            onClick$={() => {activeLang.value = 'en'}}
+          >
+            {currentContent.menu.en}
+          </div>
+          <div
+            class="menu-item"
+            onClick$={() => {activeLang.value = 'zh'}}
+          >
+            {currentContent.menu.zh}
+          </div>
         </menu>
       </div>
     </div>

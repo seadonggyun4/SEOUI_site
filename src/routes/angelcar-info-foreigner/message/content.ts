@@ -24,6 +24,11 @@ export interface ButtonItem {
   type: 'primary' | 'secondary';
 }
 
+export interface MenuLabels {
+  en: string;
+  zh: string;
+}
+
 export interface MessengerTabContent {
   title: string;
   sections: MessengerSection[];
@@ -33,6 +38,7 @@ export interface MessengerContentData {
   tabContents: {
     [key: string]: MessengerTabContent;
   };
+  menu: MenuLabels;
 }
 
 export const messengerContentData: { [key: string]: MessengerContentData } = {
@@ -103,6 +109,10 @@ export const messengerContentData: { [key: string]: MessengerContentData } = {
           }
         ]
       }
+    },
+    menu: {
+      en: 'English',
+      zh: 'Chinese'
     }
   },
   zh: {
@@ -172,6 +182,10 @@ export const messengerContentData: { [key: string]: MessengerContentData } = {
           }
         ]
       }
+    },
+    menu: {
+      en: '英語',
+      zh: '中文'
     }
   }
 };
