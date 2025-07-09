@@ -1,5 +1,22 @@
 @use '@/routes/styles/constants/colors' as colors;
 
+.header {
+  display: grid;
+  place-items: center;
+  padding: 2rem 3rem;
+  background: linear-gradient(135deg, colors.$primary-color 0%, colors.$secondary-color 100%);
+
+  .logo-container {
+    display: grid;
+    place-items: center;
+
+    img {
+      max-width: 15rem;
+      height: auto;
+      filter: brightness(0) invert(1);
+    }
+  }
+}
 
 .container {
   position: relative;
@@ -150,6 +167,10 @@
       transform: translate3d(-4em, 1em, 0);
       transition-delay: 0.8s;
     }
+  }
+
+  @media (max-width: 768px) {
+    position: fixed;
   }
 }
 

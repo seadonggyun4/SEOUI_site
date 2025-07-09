@@ -1,25 +1,6 @@
 @use '@/routes/styles/constants/colors' as colors;
 @use 'sass:color';
 
-// Header
-.header {
-  display: grid;
-  place-items: center;
-  padding: 2rem 3rem;
-  background: linear-gradient(135deg, colors.$primary-color 0%, colors.$secondary-color 100%);
-
-  .logo-container {
-    display: grid;
-    place-items: center;
-
-    img {
-      max-width: 15rem;
-      height: auto;
-      filter: brightness(0) invert(1);
-    }
-  }
-}
-
 // Main Content
 .main-content {
   display: grid;

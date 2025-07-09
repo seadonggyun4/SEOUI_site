@@ -2,8 +2,6 @@
 
 // Messenger Content
 .messenger-content {
-  display: grid;
-  grid-template-rows: auto 1fr;
   gap: 1rem;
   padding: 1rem;
   height: 100%;
@@ -37,11 +35,11 @@
     height: 100%;
 
     .messages-area {
+      padding: 2rem 0;
       display: grid;
       grid-template-columns: 1fr;
       overflow-y: auto;
       scrollbar-gutter: stable;
-      max-height: 50rem;
       gap: 2rem;
       align-content: start;
 
@@ -91,6 +89,9 @@
     }
 
     textarea {
+      position: absolute;
+      bottom: 0;
+      left: 0;
       padding: 1rem 2rem;
       border: 1px solid #e1e5e9;
       outline: none;
@@ -98,7 +99,12 @@
       min-height: 3rem;
 
       &:focus {
-        border-color: colors.$primary-color;
+        border-top: 1px solid colors.$primary-color;
+      }
+
+      // 모바일에서 풀 사이즈
+      @media (max-width: 768px) {
+        position: fixed;
       }
     }
   }

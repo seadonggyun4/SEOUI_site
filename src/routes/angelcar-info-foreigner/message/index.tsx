@@ -109,18 +109,9 @@ export default component$(() => {
   return (
     <div class="container">
       {/* Header */}
-      <header>
-        <div class="banner-img-box">
-          <figure>
-            <picture>
-              <source srcset="/angelcar-info-foreigner/img/banner_mo.jpg" media="(max-width: 600px)" />
-              <source srcset="/angelcar-info-foreigner/img/banner_ta.jpg" media="(max-width: 1200px)" />
-              <img src="/angelcar-info-foreigner/img/banner.jpg" alt="angelcar" />
-            </picture>
-          </figure>
-          <h1>
-            <img src="/angelcar-info-foreigner/img/logo.png" alt="JEJU ANGEL RENT A CAR" />
-          </h1>
+      <header class="header">
+        <div class="logo-container">
+          <img src="/angelcar-info-foreigner/img/logo.png" alt="JEJU ANGEL RENT A CAR" />
         </div>
       </header>
 
