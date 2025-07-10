@@ -46,9 +46,9 @@
     font-weight: 500;
     transition: background-color 0.2s ease;
 
-    &:hover {
-      background: darken(colors.$summary-bg, 5%);
-    }
+    // &:hover {
+    //   background: darken(colors.$summary-bg, 5%);
+    // }
 
     .streaming-indicator {
       .fas {
@@ -277,9 +277,9 @@
       font-size: 12px;
       transition: background-color 0.2s ease;
 
-      &:hover {
-        background: darken(#dc3545, 10%);
-      }
+      // &:hover {
+      //   background: darken(#dc3545, 10%);
+      // }
 
       .fas {
         font-size: 11px;
@@ -289,9 +289,9 @@
     .raw-code-button {
       background: #6c757d;
 
-      &:hover {
-        background: darken(#6c757d, 10%);
-      }
+      // &:hover {
+      //   background: darken(#6c757d, 10%);
+      // }
     }
   }
 

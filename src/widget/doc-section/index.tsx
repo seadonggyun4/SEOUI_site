@@ -51,16 +51,16 @@ export const DocSection = component$<DocSectionProps>(
     priority = 'medium'
   }) => {
     // 즉시 표시되는 상태들
-    const isVisible = useSignal(true);
+    // const isVisible = useSignal(true);
     const sectionOpen = useSignal(open);
 
     // 스트리밍으로 로드되는 콘텐츠들
-    const descriptionHtml = useSignal('');
-    const highlighted = useSignal('');
+    // const descriptionHtml = useSignal('');
+    // const highlighted = useSignal('');
 
     // 스트리밍 상태들
-    const isDescriptionLoaded = useSignal(!description);
-    const isCodeLoaded = useSignal(!code);
+    // const isDescriptionLoaded = useSignal(!description);
+    // const isCodeLoaded = useSignal(!code);
     const isComponentsLoaded = useSignal(false);
 
     // 우선순위에 따른 지연 시간 계산 함수 (더 이상 필요 없음 - 인라인으로 처리)
