@@ -18,20 +18,8 @@
   //     height: 2px;
   //     background: linear-gradient(90deg, transparent, #007bff, transparent);
   //     transform: translateX(-100%);
-  //     animation: streaming-indicator 2s infinite;
+  //     animation: streaming-indicator 3s infinite;
   //   }
-  // }
-
-  // &.high-priority {
-  //   border-left: 4px solid #28a745;
-  // }
-
-  // &.medium-priority {
-  //   border-left: 4px solid #ffc107;
-  // }
-
-  // &.low-priority {
-  //   border-left: 4px solid #dc3545;
   // }
 
   summary {
@@ -45,10 +33,6 @@
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.2s ease;
-
-    // &:hover {
-    //   background: darken(colors.$summary-bg, 5%);
-    // }
 
     .streaming-indicator {
       .fas {
@@ -277,10 +261,6 @@
       font-size: 12px;
       transition: background-color 0.2s ease;
 
-      // &:hover {
-      //   background: darken(#dc3545, 10%);
-      // }
-
       .fas {
         font-size: 11px;
       }
@@ -288,10 +268,6 @@
 
     .raw-code-button {
       background: #6c757d;
-
-      // &:hover {
-      //   background: darken(#6c757d, 10%);
-      // }
     }
   }
 
