@@ -1,0 +1,243 @@
+@use '@/routes/styles/constants/colors' as colors;
+
+.reservation-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+
+  .header {
+    background: linear-gradient(135deg, colors.$primary-color 0%, colors.$secondary-color 100%);
+    color: white;
+    padding: 20px 16px;
+    text-align: center;
+
+    .logo-container {
+      margin-bottom: 10px;
+
+      img {
+        height: 40px;
+        width: auto;
+      }
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+
+  .main-content {
+    padding: 20px 16px 100px;
+
+    .reservations-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .reservation-card {
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      border: 1px solid #e9ecef;
+
+      .card-header {
+        padding: 16px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .reservation-number {
+          font-weight: 600;
+          font-size: 16px;
+          color: #495057;
+        }
+
+        .status-badge {
+          padding: 4px 12px;
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: 500;
+          text-transform: uppercase;
+
+          &.confirmed {
+            background: colors.$success-bg-color;
+            color: colors.$success-color;
+          }
+
+          &.pending {
+            background: colors.$warning-bg-color;
+            color: colors.$warning-color;
+          }
+
+          &.cancelled {
+            background: colors.$error-bg-color;
+            color: colors.$error-color;
+          }
+
+          &.completed {
+            background: colors.$primary-bg-color;
+            color: colors.$primary-color;
+          }
+        }
+      }
+
+      .card-body {
+        padding: 16px;
+
+        .car-info {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 16px;
+
+          .car-image {
+            width: 80px;
+            height: 60px;
+            border-radius: 4px;
+            object-fit: cover;
+            background: #f8f9fa;
+          }
+
+          .car-details {
+            flex: 1;
+
+            .car-model {
+              font-size: 18px;
+              font-weight: 600;
+              color: #495057;
+              margin-bottom: 4px;
+            }
+
+            .total-price {
+              font-size: 16px;
+              font-weight: 600;
+              color: #007bff;
+            }
+          }
+        }
+
+        .reservation-details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-bottom: 16px;
+
+          .detail-item {
+            .label {
+              font-size: 12px;
+              color: #6c757d;
+              text-transform: uppercase;
+              font-weight: 500;
+              margin-bottom: 2px;
+            }
+
+            .value {
+              font-size: 14px;
+              color: #495057;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .location-info {
+          margin-bottom: 16px;
+
+          .location-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+
+            .icon {
+              width: 16px;
+              height: 16px;
+              color: #6c757d;
+            }
+
+            .location-text {
+              font-size: 14px;
+              color: #495057;
+
+              .label {
+                font-weight: 500;
+                margin-right: 4px;
+              }
+            }
+          }
+        }
+
+        .customer-info {
+          padding-top: 12px;
+          border-top: 1px solid #e9ecef;
+          margin-bottom: 16px;
+
+          .customer-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+
+            .label {
+              font-size: 12px;
+              color: #6c757d;
+              text-transform: uppercase;
+              font-weight: 500;
+            }
+
+            .value {
+              font-size: 14px;
+              color: #495057;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .action-buttons {
+          display: flex;
+
+          .btn {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+
+            &.btn-primary {
+              background: #007bff;
+              color: white;
+
+              &:active {
+                background: #0056b3;
+                transform: translateY(1px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .no-reservations {
+      text-align: center;
+      padding: 60px 20px;
+
+      .icon {
+        font-size: 48px;
+        color: #6c757d;
+        margin-bottom: 16px;
+      }
+
+      .message {
+        font-size: 16px;
+        color: #6c757d;
+        line-height: 1.5;
+      }
+    }
+  }
+}

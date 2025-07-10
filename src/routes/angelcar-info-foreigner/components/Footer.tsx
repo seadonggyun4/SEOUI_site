@@ -49,7 +49,7 @@ export default component$(() => {
         {/* 로그인 된 경우 */}
         {globalState.isUserAuthenticated.value && (
           <>
-            <a href="#" class="menu-item fa-solid fa-car" title="예약조회"></a>
+            <a href="/angelcar-info-foreigner/reservation" class="menu-item fa-solid fa-car" title="예약조회"></a>
 
             {/* 메시지 아이콘 (읽지 않은 메시지 표시기 포함) */}
             <div class="menu-item-wrapper" onClick$={handleMessageClick}>
