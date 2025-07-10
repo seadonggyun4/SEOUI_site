@@ -1,92 +1,18 @@
-import { component$, useSignal, $, useVisibleTask$ } from '@builder.io/qwik';
+// info/index.tsx
+import { component$, useSignal, $, useContext } from '@builder.io/qwik';
+import { GlobalStateContext } from '../store';
 import { contentData, type Section } from './content';
 import './style.scss';
 
 export default component$(() => {
+  const globalState = useContext(GlobalStateContext);
   const activeTab = useSignal('info');
-  const activeLang = useSignal('en');
-  const isUserAuthenticated = useSignal(false); // 사용자 인증 상태
-  const userName = useSignal(''); // 사용자명
-  const hasUnreadMessages = useSignal(false); // 읽지 않은 메시지 상태
-
-  // 인증 상태 확인 및 메시지 상태 확인
-  useVisibleTask$(() => {
-    try {
-      const foreignerAppData = sessionStorage.getItem('foreignerApp');
-      if (foreignerAppData) {
-        const parsedData = JSON.parse(foreignerAppData);
-        if (parsedData.userName && parsedData.userName.trim()) {
-          isUserAuthenticated.value = true;
-          userName.value = parsedData.userName;
-
-          // 읽지 않은 메시지 상태 확인 (예시: localStorage에서 확인)
-          const unreadMessages = localStorage.getItem('unreadMessages');
-          hasUnreadMessages.value = unreadMessages === 'true';
-        }
-      }
-    } catch (error) {
-      console.error('Failed to parse foreignerApp data:', error);
-      isUserAuthenticated.value = false;
-    }
-  });
-
-  // 메시지 상태를 주기적으로 확인 (실제 앱에서는 WebSocket이나 API 폴링 사용)
-  useVisibleTask$(() => {
-    if (isUserAuthenticated.value) {
-      const checkMessages = () => {
-        try {
-          // 실제 구현에서는 서버 API를 호출하거나 WebSocket으로 실시간 확인
-          const unreadMessages = localStorage.getItem('unreadMessages');
-          hasUnreadMessages.value = unreadMessages === 'true';
-        } catch (error) {
-          console.error('Failed to check messages:', error);
-        }
-      };
-
-      // 30초마다 메시지 상태 확인
-      const interval = setInterval(checkMessages, 30000);
-
-      return () => clearInterval(interval);
-    }
-  });
 
   const switchTab = $((tabId: string) => {
     activeTab.value = tabId;
   });
 
-  // 플로팅 버튼 클릭 핸들러
-  const handleFloatingBtnClick = $(() => {
-    // 인증된 경우 메뉴 토글
-    const menu = document.getElementById('circularMenu');
-    menu?.classList.toggle('active');
-  });
-
-  // 메시지 클릭 핸들러 (읽지 않은 메시지 상태 초기화)
-  const handleMessageClick = $(() => {
-    hasUnreadMessages.value = false;
-    localStorage.setItem('unreadMessages', 'false');
-    // 메시지 페이지로 이동
-    window.location.href = '/angelcar-info-foreigner/message';
-  });
-
-  // 로그아웃 핸들러
-  const handleLogout = $(() => {
-    try {
-      const check = confirm('로그아웃을 진행하시겠습니까?')
-      if(!check) return;
-
-      sessionStorage.removeItem('foreignerApp');
-      localStorage.removeItem('unreadMessages'); // 메시지 상태도 초기화
-      isUserAuthenticated.value = false;
-      userName.value = '';
-      hasUnreadMessages.value = false;
-      window.location.href = '/angelcar-info-foreigner/info/';
-    } catch (error) {
-      console.error('Failed to logout:', error);
-    }
-  });
-
-  const currentContent = contentData[activeLang.value as keyof typeof contentData];
+  const currentContent = contentData[globalState.activeLang.value as keyof typeof contentData];
 
   // 섹션 렌더링 함수
   const renderSection = (section: Section) => {
@@ -240,59 +166,6 @@ export default component$(() => {
           </div>
         </section>
       </main>
-
-      <footer class="footer">
-        <menu>
-          {/* 공지사항 - 항상 표시 */}
-          <a href="/angelcar-info-foreigner/info" class="menu-item fa fa-book" title="공지사항"></a>
-
-          {/* 로그인 안되었을 때만 표시 */}
-          {!isUserAuthenticated.value && (
-            <a href="/angelcar-info-foreigner/user" class="menu-item fa fa-user" title="인증"></a>
-          )}
-
-          {/* 로그인 이후에만 표시 */}
-          {isUserAuthenticated.value && (
-            <>
-              <a href="#" class="menu-item fa-solid fa-car" title="예약조회"></a>
-              <div class="menu-item-wrapper" onClick$={handleMessageClick}>
-                <a href="#" class="menu-item fa fa-comment-dots" title="메시지"></a>
-                <div class="message-indicator">
-                  <div class="indicator-dot"></div>
-                  <div class="indicator-pulse"></div>
-                </div>
-              </div>
-              <a
-                href="#"
-                class="menu-item fa-solid fa-right-from-bracket"
-                title="로그아웃"
-                onClick$={handleLogout}
-              ></a>
-            </>
-          )}
-        </menu>
-      </footer>
-
-      {/* Circular language menu */}
-      <div id="circularMenu" class="circular-menu">
-        <a class="floating-btn" onClick$={handleFloatingBtnClick}>
-          <i class="fa fa-language"></i>
-        </a>
-        <menu class="items-wrapper">
-          <div
-            class="menu-item"
-            onClick$={() => {activeLang.value = 'en'}}
-          >
-            English
-          </div>
-          <div
-            class="menu-item"
-            onClick$={() => {activeLang.value = 'zh'}}
-          >
-            中文
-          </div>
-        </menu>
-      </div>
     </div>
   );
 });

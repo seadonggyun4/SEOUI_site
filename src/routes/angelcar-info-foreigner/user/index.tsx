@@ -1,4 +1,6 @@
+// user/index.tsx
 import { component$, useSignal, $, useVisibleTask$ } from '@builder.io/qwik';
+import { loginUser, checkAuthStatus, validateEmail } from '../store/authUtils';
 import './style.scss';
 
 export default component$(() => {
@@ -6,19 +8,13 @@ export default component$(() => {
   const userEmail = useSignal('');
   const isLoading = useSignal(false);
 
+  // 이미 로그인된 사용자 확인
   useVisibleTask$(() => {
-    try {
-      const foreignerAppData = sessionStorage.getItem('foreignerApp');
-      if (foreignerAppData) {
-        const parsedData = JSON.parse(foreignerAppData);
-        if (parsedData.userName && parsedData.userName.trim()) {
-          if (confirm('You are already logged in. Do you want to continue to the main page?')) {
-            window.location.href = '/angelcar-info-foreigner/info';
-          }
-        }
+    const userData = checkAuthStatus();
+    if (userData) {
+      if (confirm('You are already logged in. Do you want to continue to the main page?')) {
+        window.location.href = '/angelcar-info-foreigner/info';
       }
-    } catch (error) {
-      console.error('Error checking login status:', error);
     }
   });
 
@@ -30,27 +26,26 @@ export default component$(() => {
       return;
     }
 
-    // 이메일 유효성 검사
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userEmail.value)) {
+    if (!validateEmail(userEmail.value)) {
       alert('Please enter a valid email address');
       return;
     }
 
     isLoading.value = true;
 
-    // 세션스토리지에 사용자 정보 저장
-    const userData = {
-      userName: userName.value,
-      userEmail: userEmail.value,
-      loginTime: new Date().toISOString(),
-      userId: Math.random().toString(36).substr(2, 9)
-    };
+    try {
+      loginUser({
+        userName: userName.value,
+        userEmail: userEmail.value
+      });
 
-    sessionStorage.setItem('foreignerApp', JSON.stringify(userData));
-
-    isLoading.value = false;
-    window.location.href = '/angelcar-info-foreigner/info';
+      isLoading.value = false;
+      window.location.href = '/angelcar-info-foreigner/info';
+    } catch (error) {
+      isLoading.value = false;
+      alert('Login failed. Please try again.');
+      console.error('Login error:', error);
+    }
   });
 
   const handleInputChange = $((field: 'userName' | 'userEmail', value: string) => {
@@ -109,11 +104,15 @@ export default component$(() => {
 
             <button
               type="submit"
-              class={`login-btn`}
+              class="login-btn"
+              disabled={isLoading.value}
             >
-              <span>Login</span>
+              <span>{isLoading.value ? 'Loading...' : 'Login'}</span>
               <i class="fas fa-arrow-right"></i>
             </button>
+            <a href='/angelcar-info-foreigner/info/' class="login-subtitle">
+              Return to Announcement
+            </a>
           </form>
         </div>
       </main>

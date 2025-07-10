@@ -7,7 +7,6 @@ interface PromiseElement extends HTMLElement {
 }
 
 export default component$(() => {
-
   const handleClick = $((name: string) => {
     const btn = document.querySelector(`[name="${name}-loading"]`) as PromiseElement | null;
     const fakeAsync = new Promise<void>((resolve) => setTimeout(resolve, 2000));
@@ -28,13 +27,23 @@ export default component$(() => {
 
   return (
     <>
-      <DocSection {...docs.size}>
+      {/* 높은 우선순위 - 즉시 로드 */}
+      <DocSection
+        {...docs.size}
+        priority="high"
+        enableStreaming={true}
+      >
         <ag-button size="large" width="100px">확인</ag-button>
         <ag-button width="100px">확인</ag-button>
         <ag-button size="small" width="100px">확인</ag-button>
       </DocSection>
 
-      <DocSection {...docs.variant}>
+      {/* 중간 우선순위 - 300ms 지연 */}
+      <DocSection
+        {...docs.variant}
+        priority="medium"
+        enableStreaming={true}
+      >
         <ag-button variant="primary" width="100px">확인</ag-button>
         <ag-button variant="error" width="100px">확인</ag-button>
         <ag-button variant="warning" width="100px">확인</ag-button>
@@ -42,12 +51,22 @@ export default component$(() => {
         <ag-button variant="white" width="100px">확인</ag-button>
       </DocSection>
 
-      <DocSection {...docs.disabled}>
+      {/* 낮은 우선순위 - 800ms 지연 */}
+      <DocSection
+        {...docs.disabled}
+        priority="low"
+        enableStreaming={true}
+      >
         <ag-button width="100px">활성화</ag-button>
         <ag-button width="100px" disabled>비활성화</ag-button>
       </DocSection>
 
-      <DocSection {...docs.loading}>
+      {/* 커스텀 지연 시간 */}
+      <DocSection
+        {...docs.loading}
+        streamDelay={500}
+        enableStreaming={true}
+      >
         <ag-button size="large" width="100px" name="large-loading" onClick$={() => handleClick('large')}>
           전송
         </ag-button>
@@ -59,7 +78,11 @@ export default component$(() => {
         </ag-button>
       </DocSection>
 
-      <DocSection {...docs.submit}>
+      {/* 스트리밍 비활성화 - 즉시 로드 */}
+      <DocSection
+        {...docs.submit}
+        enableStreaming={false}
+      >
         <form preventdefault:submit onSubmit$={formSubmit}>
           <input type="text" name="dummy" style={{ display: 'none' }} />
           <ag-button type="submit">테스트</ag-button>

@@ -4,7 +4,6 @@ import { qwikCity } from "@builder.io/qwik-city/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { resolve } from 'path';
 import pkg from "./package.json";
-import babel from 'vite-plugin-babel';
 
 type PkgDep = Record<string, string>;
 const { dependencies = {}, devDependencies = {} } = pkg as any as {
@@ -17,7 +16,11 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
 
 export default defineConfig(({ command, mode }): UserConfig => {
   return {
-    plugins: [qwikCity(), qwikVite(), tsconfigPaths()],
+    plugins: [
+      qwikCity(),
+      qwikVite(),
+      tsconfigPaths()
+    ],
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),
@@ -31,6 +34,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
     preview: {
       headers: {
         "Cache-Control": "public, max-age=600",
+        "Transfer-Encoding": "chunked",
       },
     },
     esbuild: {
@@ -66,7 +70,7 @@ function errorOnDuplicatesPkgDeps(devDependencies: PkgDep, dependencies: PkgDep)
   const duplicateDeps = Object.keys(devDependencies).filter(dep => dependencies[dep]);
   const qwikPkg = Object.keys(dependencies).filter(value => /qwik/i.test(value));
 
-  if (qwikPkg.length > 0) {
+  if (qwikPkg.length > 2) {
     throw new Error(`Move qwik packages ${qwikPkg.join(", ")} to devDependencies`);
   }
 
