@@ -1,0 +1,242 @@
+@use '@/styles/constants/colors' as colors;
+
+.page-loder{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+  transform: scaleX(1);
+  z-index: 999999;
+  overflow: hidden;
+
+  // 네비게이션과 동일한 배경 + 추가 효과
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.3) 0%, transparent 50%),
+      linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+    opacity: 0.8;
+  }
+
+  // 동적 파티클 효과
+  &::after{
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+      radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 25%),
+      radial-gradient(circle at 75% 75%, rgba(147, 51, 234, 0.1) 0%, transparent 25%);
+    animation: particleFloat 4s ease-in-out infinite;
+    opacity: 0.6;
+  }
+
+  // 중앙 로딩 인디케이터
+  .loader-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    z-index: 10;
+
+    .loader-spinner {
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top: 3px solid colors.$primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+    }
+
+    .loader-text {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      opacity: 0;
+      animation: fadeInText 0.8s ease-in-out 0.3s forwards;
+    }
+
+    .loader-progress {
+      width: 200px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1px;
+      overflow: hidden;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+          transparent,
+          colors.$primary-color,
+          rgba(147, 51, 234, 0.8),
+          transparent
+        );
+        animation: progressSlide 2s ease-in-out infinite;
+      }
+    }
+  }
+
+  &.show{
+    display: block;
+    .loader-content {
+      animation: contentFadeIn 0.6s ease-out 0.3s both;
+    }
+  }
+
+  &.hide {
+    animation: curtainHide 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: right;
+    animation-fill-mode: forwards;
+
+    .loader-content {
+      animation: contentFadeOut 0.4s ease-in both;
+    }
+
+    &::after {
+      animation: particleFloatOut 0.9s ease-in both;
+    }
+  }
+
+  &.full-hide{
+    display: none;
+  }
+}
+
+// 애니메이션 정의
+@keyframes curtainHide {
+  0% {
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(20px);
+  }
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(20px, -20px) rotate(90deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-10px, -40px) rotate(180deg);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(-30px, -20px) rotate(270deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes particleFloatOut {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentFadeOut {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+@keyframes progressSlide {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 0%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .components-layout {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page-loder {
+    .loader-content {
+      .loader-spinner {
+        width: 50px;
+        height: 50px;
+      }
+
+      .loader-progress {
+        width: 150px;
+      }
+
+      .loader-text {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

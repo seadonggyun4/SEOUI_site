@@ -11,18 +11,16 @@ export default component$(() => {
 
   useVisibleTask$(() => {
     import('@/components/ag-button');
-    import('@/components/ag-bread-crumb');
     import('@/components/ag-check-box');
     import('@/components/ag-toggle');
     import('@/components/ag-radio');
     // import('@/components/ag-datepicker');
     import('@/components/ag-toast');
-    import('@/components/ag-window');
     import('@/components/ag-grid-data-table');
     import('@/components/ag-search-page');
 
 
-    const $loader = document.querySelector('.page-loder') as HTMLElement;
+    const $loader = document.querySelector('.document-loder') as HTMLElement;
     if (!$loader) return;
 
     let isNavigating = false;
@@ -92,7 +90,7 @@ export default component$(() => {
         <Slot />
       </section>
 
-      <div class="page-loder full-hide" aria-hidden />
+      <div class="document-loder full-hide" aria-hidden />
     </>
   );
 });
