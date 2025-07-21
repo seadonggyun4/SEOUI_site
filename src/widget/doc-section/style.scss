@@ -2,7 +2,6 @@
 
 .docs {
   border: 1px solid colors.$border-color;
-  border-radius: 5px;
   overflow: hidden;
   transition: all 0.3s ease;
 
@@ -276,9 +275,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 12px;
+    padding: 0.5rem 0.8rem;
     background: #2e3440;
-    border-radius: 6px 6px 0 0;
 
     .language-tag {
       display: flex;

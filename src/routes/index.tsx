@@ -5,7 +5,7 @@ export default component$(() => {
   const nav = useNavigate();
 
   useVisibleTask$(() => {
-    nav('angelcar-info-foreigner/info/');
+    nav('components-page/ag-button');
   });
 
   return null;

@@ -2,7 +2,6 @@ import { createContextId, useContextProvider, useContext, useStore } from '@buil
 
 interface NavigationStore {
   isOpen: boolean;
-  tab: 'design' | 'component';
 }
 
 export const NavigationContext = createContextId<NavigationStore>('navigation-context');
@@ -10,7 +9,6 @@ export const NavigationContext = createContextId<NavigationStore>('navigation-co
 export const useNavigationProvider = () => {
   const store = useStore<NavigationStore>({
     isOpen: true,
-    tab: 'component',
   });
 
   useContextProvider(NavigationContext, store);
