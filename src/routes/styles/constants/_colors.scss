@@ -2,6 +2,11 @@
 @use "sass:map";
 
 $primary-color: #006dcbf2;
+$primary-hover: color.mix(#000, #006dcbf2, 55%);
+$primary-bg-color: color.mix(#fff, #006dcbf2, 55%);
+$secondary-color: #5f77ca;
+$secondary-hover: color.mix(#000, #5f77ca, 55%);
+$secondary-bg-color: color.mix(#fff, #5f77ca, 55%);
 
 /**
   Open color: open-source color scheme + primary color
@@ -49,11 +54,6 @@ $create-colors: ();
 /**
  Base color
 */
-$primary-hover: pick(blue, 6);
-$primary-bg-color: pick(blue, 0);
-$secondary-color: pick(blue, 9);
-$secondary-hover: pick(blue, 10);
-$secondary-bg-color: color.mix(#fff, pick(blue, 0), 55%);
 $success-color: pick(green, 5);
 $success-hover: pick(green, 6);
 $success-bg-color: pick(green, 0);
@@ -66,11 +66,9 @@ $warning-bg-color: color.mix(#fff, pick(orange, 1), 25%);
 $disabled-color: color.adjust(pick(gray, 3), $lightness: 5%);
 
 /**
- UI color
+  UI color
 */
 $font-color: color.mix(#000, pick(indigo, 10), 70%);
 $font-secondary-color: pick(gray, 5);
-$font-white: rgba(color.adjust(pick(gray, 0), $lightness: 6%), 0.7);
-$table-active-bg: $secondary-bg-color;
 $border-color: pick(gray, 3);
 $box-head-border-color: color.mix(#fff, pick(gray, 2), 35%);
