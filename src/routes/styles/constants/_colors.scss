@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "sass:map";
 
-$primary-color: #00A1E5;
+$primary-color: #006dcbf2;
 
 /**
   Open color: open-source color scheme + primary color
@@ -51,9 +51,6 @@ $create-colors: ();
 */
 $primary-hover: pick(blue, 6);
 $primary-bg-color: pick(blue, 0);
-// $secondary-color: pick(cyan, 4);
-// $secondary-hover: pick(cyan, 5);
-// $secondary-bg-color: color.mix(#fff, pick(cyan, 0), 55%);
 $secondary-color: pick(blue, 9);
 $secondary-hover: pick(blue, 10);
 $secondary-bg-color: color.mix(#fff, pick(blue, 0), 55%);

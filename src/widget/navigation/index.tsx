@@ -14,7 +14,9 @@ export const Navigation = component$(() => {
   return (
     <aside class={{ nav: true, open: nav.isOpen }}>
       <div class="nav-header">
-        <h2>SEOUI</h2>
+        <h2>
+          <img src='/logo.png' />
+        </h2>
       </div>
 
       <nav class={{ 'nav-list': true }}>
