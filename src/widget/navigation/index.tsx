@@ -49,7 +49,6 @@ const componentLinks = [
   {
     title: 'Elements',
     children: [
-      { label: '버튼', href: '/components-page/ag-button/' },
       { label: '체크박스', href: '/components-page/ag-check-box/' },
       { label: '달력', href: '/components-page/ag-datepicker/' },
       { label: '알림 메시지', href: '/components-page/ag-toast/' },
@@ -58,9 +57,7 @@ const componentLinks = [
   {
     title: 'VirtualScroll',
     children: [
-      { label: '가상 스크롤 셀렉트', href: '/components-page/ag-select/' },
       { label: '검색 셀렉트 박스', href: '/components-page/ag-select-search/' },
-      { label: '윈도우 프레임', href: '/components-page/ag-window/' },
       { label: '가상 스크롤 테이블', href: '/components-page/ag-table/' },
     ],
   },

@@ -25,7 +25,7 @@ export const PageLoader = component$(() => {
       };
 
       pageLoader.addEventListener('animationend', handleAnimationEnd);
-    }, 2000);
+    }, 3000);
   });
 
   if (!showLoader.value) return null;
