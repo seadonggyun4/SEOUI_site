@@ -51,19 +51,10 @@ export const DocSection = component$<DocSectionProps>(
     priority = 'medium'
   }) => {
     // 즉시 표시되는 상태들
-    // const isVisible = useSignal(true);
     const sectionOpen = useSignal(open);
 
-    // 스트리밍으로 로드되는 콘텐츠들
-    // const descriptionHtml = useSignal('');
-    // const highlighted = useSignal('');
-
     // 스트리밍 상태들
-    // const isDescriptionLoaded = useSignal(!description);
-    // const isCodeLoaded = useSignal(!code);
     const isComponentsLoaded = useSignal(false);
-
-    // 우선순위에 따른 지연 시간 계산 함수 (더 이상 필요 없음 - 인라인으로 처리)
 
     // Description을 스트리밍으로 로드
     const descriptionResource = useResource$<string>(async ({ track, cleanup }) => {
@@ -198,9 +189,7 @@ export const DocSection = component$<DocSectionProps>(
     // 섹션 토글 핸들러
     const handleToggle = $(() => {
       sectionOpen.value = !sectionOpen.value;
-      if (onClick$) {
-        onClick$();
-      }
+      if (onClick$) onClick$();
     });
 
     return (
@@ -304,9 +293,6 @@ export const DocSection = component$<DocSectionProps>(
                       <div class="skeleton-code-line short"></div>
                       <div class="skeleton-code-line long"></div>
                       <div class="skeleton-code-line medium"></div>
-                    </div>
-                    <div class="loading-text">
-                      <i class="fas fa-palette"></i> 코드 하이라이팅 중...
                     </div>
                   </div>
                 )}
