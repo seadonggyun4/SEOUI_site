@@ -283,9 +283,9 @@ export class AgDatePicker extends LitElement {
     this.inputSelectAll(this.$dateInput)
   }
 
-  private onTimeClick = (time: number) => {
+  private onTimeClick = (time: string) => {
     if (this.disabled || !time) return
-    this.time = time.toString()
+    this.time = time
     this.inputSelectAll(this.$timeInput)
   }
 
@@ -551,7 +551,7 @@ export class AgDatePicker extends LitElement {
               <div class="time-title">시간 선택</div>
               <ul>
                 ${times.map(time => html`
-                  <li class=${this._time === time ? 'selected' : ''} @click=${() => this.onTimeClick(Number(time))}>${time}</li>
+                  <li class=${this._time === time ? 'selected' : ''} @click=${() => this.onTimeClick(time)}>${time}</li>
                 `)}
               </ul>
             </div>
