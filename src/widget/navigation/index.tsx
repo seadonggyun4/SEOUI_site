@@ -47,17 +47,26 @@ export const Navigation = component$(() => {
 
 const componentLinks = [
   {
-    title: 'Elements',
+    title: 'DatePicker',
     children: [
-      { label: '체크박스', href: '/components-page/ag-check-box/' },
       { label: '달력', href: '/components-page/ag-datepicker/' },
+    ],
+  },
+  {
+    title: 'Toast Message',
+    children: [
       { label: '알림 메시지', href: '/components-page/ag-toast/' },
     ],
   },
   {
-    title: 'VirtualScroll',
+    title: 'Search Selete',
     children: [
       { label: '검색 셀렉트 박스', href: '/components-page/ag-select-search/' },
+    ],
+  },
+  {
+    title: 'Grid Table',
+    children: [
       { label: '그리드 테이블', href: '/components-page/ag-grid-table/' },
     ],
   },
