@@ -1,11 +1,77 @@
-$primary-color: #006dcbf2;
+@use "sass:color";
+@use "sass:map";
 
+$primary-color: #006dcbf2;
+$primary-hover: color.mix(#000, #006dcbf2, 55%);
+$primary-bg-color: color.mix(#fff, #006dcbf2, 55%);
+$secondary-color: #5f77ca;
+$secondary-hover: color.mix(#000, #5f77ca, 55%);
+$secondary-bg-color: color.mix(#fff, #5f77ca, 55%);
+
+/**
+  Open color: open-source color scheme + primary color
+*/
+$base-colors: (
+  gray:   color.mix($primary-color, #adb5bd, 0.3%),
+  red:    color.mix($primary-color, #f03e3e, 4.5%),
+  pink:   color.mix($primary-color, #f06595, 6.5%),
+  grape:  color.mix($primary-color, #cc5de8, 7.5%),
+  violet: color.mix($primary-color, #845ef7, 7.5%),
+  indigo: color.mix($primary-color, #5c7cfa, 8.5%),
+  blue:   color.mix($primary-color, #339af0, 10%),
+  cyan:   color.mix($primary-color, #22b8cf, 9.5%),
+  teal:   color.mix($primary-color, #20c997, 9.5%),
+  green:  color.mix($primary-color, #51cf66, 8.5%),
+  lime:   color.mix($primary-color, #94d82d, 7.5%),
+  yellow: color.mix($primary-color, #fcc419, 2%),
+  orange: color.mix($primary-color, #ff922b, 3.5%)
+);
+
+$create-colors: ();
+
+@each $name, $base in $base-colors {
+  $shades: (5: $base);
+
+  @for $i from 1 through 5 {
+    $lighter-step: 5 - $i;
+    $darker-step: 5 + $i;
+
+    $lightened: color.adjust($base, $lightness: $i * 8%);
+    $darkened: color.adjust($base, $lightness: -1 * $i * 8%);
+
+    $shades: map.merge($shades, ($lighter-step: $lightened));
+    $shades: map.merge($shades, ($darker-step: $darkened));
+  }
+
+  $create-colors: map.merge($create-colors, ($name: $shades));
+}
+
+// ex) pick(yellow, 3)
+@function pick($name, $step) {
+  @return map.get(map.get($create-colors, $name), $step);
+}
+
+/**
+  Base color
+*/
+$success-color: pick(green, 5);
+$success-hover: pick(green, 6);
+$success-bg-color: pick(green, 0);
+$error-color: pick(red, 5);
+$error-hover: pick(red, 6);
+$error-bg-color: color.mix(#fff, pick(red, 1), 25%);
+$warning-color: pick(orange, 4);
+$warning-hover: pick(orange, 5);
+$warning-bg-color: color.mix(#fff, pick(orange, 1), 25%);
+$disabled-color: color.adjust(pick(gray, 3), $lightness: 5%);
+
+/**
+  UI color
+*/
 $font-color: #2B2E33;
 $font-secondary-color: #9da5b4;
 $border-color: #e1e1e1;
-
 $nav-bg: #21252b;
 $summary-bg:#f1f2f3;
-
 $badge-bg:#008ff519;
-$badge-color:#006dcbf2;
+$badge-color: $primary-color;
