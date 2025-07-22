@@ -75,7 +75,7 @@ export const docs = {
     description: `
       \`ag-check-box\`, \`ag-toggle\`, \`ag-radio\`는 모두 <strong>formAssociated</strong>가 true로 설정된 컴포넌트이며,
       <code>&lt;form&gt;</code> 내부에서 <strong>name</strong>과 함께 사용하면 실제 폼 데이터로 정상 제출됩니다.
-      <code>ag-button</code>을 <code>type="submit"</code>으로 설정하면 submit 이벤트를 트리거할 수 있습니다.
+      <code>button</code>을 <code>type="submit"</code>으로 설정하면 submit 이벤트를 트리거할 수 있습니다.
 
       체크박스와 토글은 <strong>checked</strong> 상태일 때만 값이 전송되며,
       라디오는 <strong>value</strong>가 선택된 항목의 값으로 제출됩니다.
@@ -85,7 +85,7 @@ export const docs = {
         <ag-check-box name="agree" label="이용 약관 동의" checked></ag-check-box>
         <ag-toggle name="notify" label="알림 수신 동의"></ag-toggle>
         <ag-radio name="plan"></ag-radio>
-        <ag-button type="submit">제출</ag-button>
+        <button type="submit">제출</button>
       </form>
 
       <script>

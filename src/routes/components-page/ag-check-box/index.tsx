@@ -88,7 +88,7 @@ export default component$(() => {
               { label: '프리미엄', value: 'premium' },
             ]}
           />
-          <ag-button type="submit">제출</ag-button>
+          <button type="submit">제출</button>
         </form>
       </DocSection>
     </>

@@ -18,7 +18,7 @@ export default component$(() => {
       });
     }
 
-    const $buttons = document.querySelectorAll('ag-button[name]');
+    const $buttons = document.querySelectorAll('button[name]');
     $buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const type = btn.getAttribute('name') as 'success' | 'error' | 'info' | 'warning';
@@ -30,10 +30,10 @@ export default component$(() => {
   return (
     <>
       <DocSection {...docs.toast}>
-        <ag-button name="info">알림</ag-button>
-        <ag-button name="warning">경고</ag-button>
-        <ag-button name="error">에러</ag-button>
-        <ag-button name="success">성공</ag-button>
+        <button name="info">알림</button>
+        <button name="warning">경고</button>
+        <button name="error">에러</button>
+        <button name="success">성공</button>
         <ag-toast></ag-toast>
       </DocSection>
     </>

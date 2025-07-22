@@ -2,7 +2,6 @@ import { component$, Slot, useVisibleTask$ } from '@builder.io/qwik';
 import { useNavigation } from '@/context/NavigationContext'
 import { useNavigate, useLocation } from '@builder.io/qwik-city';
 import './layout.scss';
-import '@/components/ag-button'
 
 export default component$(() => {
   const location = useLocation();
@@ -10,13 +9,12 @@ export default component$(() => {
   const nav = useNavigation()
 
   useVisibleTask$(() => {
-    import('@/components/ag-button');
     import('@/components/ag-check-box');
     import('@/components/ag-toggle');
     import('@/components/ag-radio');
     // import('@/components/ag-datepicker');
     import('@/components/ag-toast');
-    import('@/components/ag-grid-data-table');
+    import('@/components/ag-grid-table');
     import('@/components/ag-search-page');
 
 

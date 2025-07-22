@@ -50,7 +50,7 @@ export default component$(() => {
         style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
       >
         <div dangerouslySetInnerHTML={`<ag-select-search id="search-select" name="search"></ag-select-search>`} />
-        <ag-button type="submit">제출</ag-button>
+        <button type="submit">제출</button>
       </form>
     </DocSection>
   );

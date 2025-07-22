@@ -58,7 +58,7 @@ const componentLinks = [
     title: 'VirtualScroll',
     children: [
       { label: '검색 셀렉트 박스', href: '/components-page/ag-select-search/' },
-      { label: '가상 스크롤 테이블', href: '/components-page/ag-table/' },
+      { label: '그리드 테이블', href: '/components-page/ag-grid-table/' },
     ],
   },
 ];

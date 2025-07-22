@@ -216,7 +216,7 @@ export default component$(() => {
   return (
     <>
       <DocSection {...docs.virtualTable}>
-        <ag-table>
+        <ag-grid-table>
           <table id="demo-table">
             <colgroup>
               <col style="width: 6rem;" />
@@ -286,11 +286,11 @@ export default component$(() => {
             </thead>
             <tbody></tbody>
           </table>
-        </ag-table>
+        </ag-grid-table>
       </DocSection>
 
       <DocSection {...docs.cellSelection}>
-        <ag-table>
+        <ag-grid-table>
           <table id="gtable">
             <colgroup>
               <col width="5%"/>
@@ -318,7 +318,7 @@ export default component$(() => {
 
             <tbody></tbody>
           </table>
-        </ag-table>
+        </ag-grid-table>
       </DocSection>
 
       <DocSection {...docs.fillHandler}>
