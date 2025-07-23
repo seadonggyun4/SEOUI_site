@@ -16,7 +16,6 @@ export class InteractiveVirtualSelect {
     this._prevStart = -1;
     this._prevEnd = -1;
     this.pool = [];
-    this.isitSearch = false
 
     this._ensureWrapper();
     this._buildDOM();
@@ -52,7 +51,6 @@ export class InteractiveVirtualSelect {
 
     this.render();
   }
-
 
   // wrapper 엘리먼트를 보장
   _ensureWrapper() {
@@ -294,9 +292,7 @@ export class InteractiveVirtualSelect {
 
   // 포커스된 아이템이 보이도록 스크롤
   _scrollIntoView(index) {
-    const overTen = this.isitSearch ? 8 : 9
-    const underTen = this.isitSearch ? this.total - 2 : this.total - 1
-    const offset = this.total > 10 ? overTen :  underTen; // 몇 번째 줄에 고정할지 (0: top, 1: 한 줄 아래)
+    const offset = this.total > 10 ? 9 : this.total - 1; // 몇 번째 줄에 고정할지 (0: top, 1: 한 줄 아래)
     const top = (index - offset) * this.rowHeight;
     const minScroll = Math.max(0, top);
     this.container.scrollTop = minScroll;
@@ -319,13 +315,12 @@ export class InteractiveVirtualSelect {
     const matchedIndex = activeValue != (null | undefined)
       ? this.data.findIndex(opt => opt.value === activeValue)
       : -1;
-    const extraHeight = this.isitSearch && newData.length === 1 ? 30 : 0;
 
     this.activeIndex = matchedIndex;
     this.focusedIndex = matchedIndex;
     this.container.scrollTop = 0;
 
-    this._initializeContainer(extraHeight);
+    this._initializeContainer();
     this._setPlaceholders(0, Math.min(this.total, this.pool.length));
     this._renderPool(0);
     this._applyHighlight();

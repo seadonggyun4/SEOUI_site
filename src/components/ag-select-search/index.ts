@@ -39,10 +39,26 @@ export class AgSelectSearch extends AgSelect {
   }
 
   render() {
+    // 부모 클래스와 동일한 reset 버튼 로직 적용
+    const firstOptionValue = this._options && this._options.length > 0 ? this._options[0].value : null;
+    const showResetButton = this.showReset &&
+                          this._value !== null &&
+                          firstOptionValue !== null &&
+                          this._value !== firstOptionValue;
+
     return html`
       <div class="ag-select" style="width: ${this.width}; height: ${this.height};">
-        <button type="button" class="selected" @click=${this.toggleDropdown}>
+        <button type="button" class="selected ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           ${this._labelText}
+          ${showResetButton
+            ? html`<button
+                type="button"
+                class="reset-button"
+                @click=${this.resetToDefault}
+                title="기본값으로 되돌리기"
+              >×</button>`
+            : ''
+          }
           <span class="arrow">▼</span>
         </button>
         <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
