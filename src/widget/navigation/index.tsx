@@ -61,6 +61,7 @@ const componentLinks = [
   {
     title: 'Search Selete',
     children: [
+      { label: '셀렉트 박스', href: '/components-page/ag-select/' },
       { label: '검색 셀렉트 박스', href: '/components-page/ag-select-search/' },
     ],
   },
