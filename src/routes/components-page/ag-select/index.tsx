@@ -122,7 +122,7 @@ export default component$(() => {
   });
 
   return (
-    <div class="ag-select-docs">
+    <>
       <DocSection {...docs.basic}>
         <div class="demo-item">
           <h4>Slot 방식 (권장)</h4>
@@ -333,6 +333,6 @@ export default component$(() => {
           </div>
         </div>
       </DocSection>
-    </div>
+    </>
   );
 });

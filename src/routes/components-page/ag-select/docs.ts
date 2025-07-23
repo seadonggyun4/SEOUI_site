@@ -74,7 +74,6 @@ export const docs = {
       <code>ag-select</code>는 완전한 키보드 접근성을 제공합니다:
 
       - <strong>Tab</strong>: 셀렉트 포커스 이동
-      - <strong>Enter/Space</strong>: 드롭다운 열기/닫기
       - <strong>↓ (아래 화살표)</strong>: 다음 옵션으로 이동
       - <strong>↑ (위 화살표)</strong>: 이전 옵션으로 이동
       - <strong>Enter</strong>: 현재 포커싱된 옵션 선택
@@ -198,8 +197,6 @@ export const docs = {
       **다중 선택 모드**:
       - 하나 이상 선택되었을 때 리셋 버튼이 나타납니다
       - 리셋 시 모든 선택이 해제됩니다
-
-      프로그래밍 방식으로는 <strong>resetToDefaultValue()</strong> 메서드를 호출할 수 있습니다.
     `,
     code: `
       <!-- 리셋 버튼 비활성화 -->
