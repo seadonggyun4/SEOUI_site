@@ -8,6 +8,7 @@ interface CustomSelectElement extends HTMLElement {
   value?: string;
   selectedValues?: string[];
   multiple?: boolean;
+  showReset?: boolean;
   resetToDefaultValue?: () => void;
 }
 
@@ -26,6 +27,22 @@ export default component$(() => {
           label: `아이템 ${i.toString().padStart(4, '0')} - 상세 설명 텍스트`
         }));
       }
+
+      // 배열 방식 데모 설정
+      const arraySelect = document.getElementById('array-demo') as CustomSelectElement;
+      if (arraySelect) {
+        arraySelect.optionItems = [
+          { value: 'kia', label: '기아자동차' },
+          { value: 'hyundai', label: '현대자동차' },
+          { value: 'bmw', label: 'BMW' },
+          { value: 'benz', label: 'Mercedes-Benz' }
+        ];
+        arraySelect.value = 'hyundai';
+      }
+
+      // 자동 로딩 데모 - 계속 비어있는 상태로 유지 (로딩 상태만 보여줌)
+      const loadingSelect = document.getElementById('loading-demo') as CustomSelectElement;
+      // 이 셀렉트는 의도적으로 비어둠 - 드롭다운 열 때마다 로딩 상태만 표시
 
       // 이벤트 데모 설정
       const eventSelect = document.getElementById('event-demo') as CustomSelectElement;
@@ -51,38 +68,13 @@ export default component$(() => {
       // 다중 선택 데모 설정
       const multiSelect = document.getElementById('multi-demo') as CustomSelectElement;
       if (multiSelect) {
-        // 초기 선택값 설정
         multiSelect.selectedValues = ['js', 'ts', 'react'];
-
-        multiSelect.addEventListener('onSelect', (e: Event) => {
-          const { value, label } = (e as CustomEvent).detail;
-          const log = document.getElementById('multi-log');
-          if (log) {
-            log.innerHTML += `<div>추가 선택: ${value} (${label})</div>`;
-            log.scrollTop = log.scrollHeight;
-          }
-        });
-
-        multiSelect.addEventListener('onDeselect', (e: Event) => {
-          const { value, label } = (e as CustomEvent).detail;
-          const log = document.getElementById('multi-log');
-          if (log) {
-            log.innerHTML += `<div class="deselect">선택 해제: ${value} (${label})</div>`;
-            log.scrollTop = log.scrollHeight;
-          }
-        });
       }
 
-      // 배열 방식 데모 설정
-      const arraySelect = document.getElementById('array-demo') as CustomSelectElement;
-      if (arraySelect) {
-        arraySelect.optionItems = [
-          { value: 'kia', label: '기아자동차' },
-          { value: 'hyundai', label: '현대자동차' },
-          { value: 'bmw', label: 'BMW' },
-          { value: 'benz', label: 'Mercedes-Benz' }
-        ];
-        arraySelect.value = 'hyundai';
+      // 리셋 비활성화 데모 설정
+      const noResetSelect = document.getElementById('no-reset') as CustomSelectElement;
+      if (noResetSelect) {
+        noResetSelect.showReset = false;
       }
     });
   });
@@ -104,21 +96,39 @@ export default component$(() => {
     }
   });
 
-  const handleResetDemo = $(() => {
-    const resetSelect = document.getElementById('reset-demo') as CustomSelectElement;
-    if (resetSelect && resetSelect.resetToDefaultValue) {
-      resetSelect.resetToDefaultValue();
-    }
-  });
-
   const clearEventLog = $(() => {
     const log = document.getElementById('event-log');
     if (log) log.innerHTML = '';
   });
 
-  const clearMultiLog = $(() => {
-    const log = document.getElementById('multi-log');
-    if (log) log.innerHTML = '';
+  const triggerLoadingDemo = $(() => {
+    const loadingSelect = document.getElementById('loading-demo-manual') as CustomSelectElement;
+    if (loadingSelect) {
+      // 먼저 옵션을 빈 배열로 설정하여 로딩 상태 유도
+      loadingSelect.optionItems = [];
+      
+      // 2초 후 새로운 옵션들로 로딩 완료
+      setTimeout(() => {
+        const randomOptions = [
+          { value: 'dynamic1', label: `동적 옵션 1 - ${new Date().getSeconds()}초` },
+          { value: 'dynamic2', label: `동적 옵션 2 - ${Math.random().toString(36).substr(2, 5)}` },
+          { value: 'dynamic3', label: '동적 옵션 3 - 로딩 완료!' },
+          { value: 'dynamic4', label: '동적 옵션 4 - 추가 데이터' }
+        ];
+        loadingSelect.optionItems = randomOptions;
+      }, 2000);
+    }
+  });
+
+  const resetLoadingDemo = $(() => {
+    const loadingSelect = document.getElementById('loading-demo-manual') as CustomSelectElement;
+    if (loadingSelect) {
+      // 초기 상태로 복원
+      loadingSelect.optionItems = [
+        { value: 'initial', label: '초기 옵션 (버튼을 눌러 로딩 테스트)' }
+      ];
+      loadingSelect.value = 'initial';
+    }
   });
 
   return (
@@ -143,6 +153,18 @@ export default component$(() => {
           <div
             dangerouslySetInnerHTML={`<ag-select id="array-demo" name="brand-array" width="200px"></ag-select>`}
           />
+        </div>
+      </DocSection>
+
+      <DocSection {...docs.loading}>
+        <div class="demo-item">
+          <h4>지속적 로딩 상태 (빈 셀렉트)</h4>
+          <div
+            dangerouslySetInnerHTML={`<ag-select id="loading-demo" name="loading-auto" width="250px"></ag-select>`}
+          />
+          <p class="demo-note">
+            💫 옵션이 계속 비어있어서 드롭다운을 열 때마다 로딩 상태가 표시됩니다
+          </p>
         </div>
       </DocSection>
 
@@ -178,7 +200,7 @@ export default component$(() => {
             `}
           />
           <p class="demo-note">
-            Tab으로 포커스 이동 후 ↑↓ 키보드로 조작해보세요
+            ⌨️ Tab으로 포커스 이동 후 ↑↓ 키보드로 조작해보세요
           </p>
         </div>
       </DocSection>
@@ -196,7 +218,7 @@ export default component$(() => {
                 </ag-select>
               `}
             />
-            <button type="button" onClick$={clearEventLog} class="clear-btn">
+            <button type="button" onClick$={clearEventLog} class="gradient-btn clear">
               로그 지우기
             </button>
           </div>
@@ -204,56 +226,69 @@ export default component$(() => {
           <div class="demo-item">
             <h4>이벤트 로그</h4>
             <div id="event-log" class="event-log"></div>
+            <p class="demo-note">
+              🔍 선택과 리셋 이벤트가 실시간으로 표시됩니다
+            </p>
           </div>
         </div>
       </DocSection>
 
       <DocSection {...docs.multiple}>
-        <div class="demo-grid">
-          <div class="demo-item">
-            <h4>다중 선택 모드</h4>
-            <div
-              dangerouslySetInnerHTML={`
-                <ag-select id="multi-demo" multiple name="skills" width="400px">
-                  <option value="js">JavaScript</option>
-                  <option value="ts">TypeScript</option>
-                  <option value="react">React</option>
-                  <option value="vue">Vue.js</option>
-                  <option value="angular">Angular</option>
-                  <option value="svelte">Svelte</option>
-                  <option value="node">Node.js</option>
-                  <option value="python">Python</option>
-                  <option value="java">Java</option>
-                  <option value="go">Go</option>
-                </ag-select>
-              `}
-            />
-            <button type="button" onClick$={clearMultiLog} class="clear-btn">
-              로그 지우기
-            </button>
-          </div>
-
-          <div class="demo-item">
-            <h4>다중 선택 로그</h4>
-            <div id="multi-log" class="event-log"></div>
-          </div>
+        <div class="demo-item">
+          <h4>다중 선택 모드</h4>
+          <div
+            dangerouslySetInnerHTML={`
+              <ag-select id="multi-demo" multiple name="skills" width="400px">
+                <option value="js">JavaScript</option>
+                <option value="ts">TypeScript</option>
+                <option value="react">React</option>
+                <option value="vue">Vue.js</option>
+                <option value="angular">Angular</option>
+                <option value="svelte">Svelte</option>
+                <option value="node">Node.js</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="go">Go</option>
+              </ag-select>
+            `}
+          />
+          <p class="demo-note">
+            🏷️ 선택된 항목들이 태그로 표시되며, 태그 클릭으로 제거 가능합니다
+          </p>
         </div>
       </DocSection>
 
       <DocSection {...docs.reset}>
-        <div class="demo-grid">
-          <div class="demo-item">
-            <h4>리셋 버튼 비활성화</h4>
-            <div
-              dangerouslySetInnerHTML={`
-                <ag-select name="no-reset" width="200px">
-                  <option value="default">기본값</option>
-                  <option value="option1">옵션 1</option>
-                  <option value="option2">옵션 2</option>
-                </ag-select>
-              `}
-            />
-          </div>
+        <div class="demo-item">
+          <h4>리셋 버튼 활성화 (기본)</h4>
+          <div
+            dangerouslySetInnerHTML={`
+              <ag-select name="with-reset" width="200px">
+                <option value="default">기본값</option>
+                <option value="option1">옵션 1</option>
+                <option value="option2" selected>옵션 2</option>
+              </ag-select>
+            `}
+          />
+          <p class="demo-note">
+            현재 값이 첫 번째 옵션과 다를 때 리셋 버튼이 나타납니다
+          </p>
+        </div>
+
+        <div class="demo-item">
+          <h4>리셋 버튼 비활성화</h4>
+          <div
+            dangerouslySetInnerHTML={`
+              <ag-select id="no-reset" name="no-reset" width="200px">
+                <option value="default">기본값</option>
+                <option value="option1">옵션 1</option>
+                <option value="option2" selected>옵션 2</option>
+              </ag-select>
+            `}
+          />
+          <p class="demo-note">
+            showReset이 false로 설정되어 리셋 버튼이 표시되지 않습니다
+          </p>
         </div>
       </DocSection>
 
@@ -296,7 +331,7 @@ export default component$(() => {
             </label>
           </div>
 
-          <button type="submit" class="submit-btn">제출</button>
+          <button type="submit" class="gradient-btn submit">제출</button>
 
           <div class="form-output-container">
             <h4>폼 데이터 출력:</h4>
@@ -318,6 +353,9 @@ export default component$(() => {
                 </ag-select>
               `}
             />
+            <p class="demo-note">
+              📏 가장 긴 옵션 텍스트에 맞춰 자동으로 너비가 조절됩니다
+            </p>
           </div>
 
           <div class="demo-item">
@@ -330,6 +368,9 @@ export default component$(() => {
                 </ag-select>
               `}
             />
+            <p class="demo-note">
+              🔒 width 속성으로 고정된 너비가 적용됩니다
+            </p>
           </div>
         </div>
       </DocSection>

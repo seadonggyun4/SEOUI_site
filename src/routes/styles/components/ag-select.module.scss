@@ -14,6 +14,7 @@ ag-select-search {
     position: relative;
     padding: 0.5rem 0.8rem;
     width: 100%;
+    min-height: 2.5rem;
     border: 1px solid colors.pick(gray, 5);
     background: white;
     text-align: left;
@@ -132,6 +133,65 @@ ag-select-search {
         transform: translateY(-50%);
       }
     }
+
+    // 로딩 컨테이너 스타일
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      background: white;
+
+      .loading-dots {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+
+        .dot {
+          width: 0.5rem;
+          height: 0.5rem;
+          border-radius: 50%;
+          background-color: colors.$primary-color;
+          animation: loading-bounce 1.4s ease-in-out infinite both;
+
+          &:nth-child(1) {
+            animation-delay: -0.32s;
+          }
+
+          &:nth-child(2) {
+            animation-delay: -0.16s;
+          }
+
+          &:nth-child(3) {
+            animation-delay: 0s;
+          }
+        }
+      }
+
+      .loading-text {
+        color: colors.pick(gray, 7);
+        font-size: 0.9rem;
+        font-style: italic;
+      }
+    }
+
+    // 데이터 없음 컨테이너 스타일  
+    .no-data-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      min-height: 6rem;
+      background: white;
+
+      .no-data-text {
+        color: colors.pick(gray, 7);
+        font-size: 0.9rem;
+        font-style: normal;
+        text-align: center;
+      }
+    }
   }
 
   .ag-select-scroll {
@@ -222,5 +282,17 @@ ag-select-search {
     transform: translateY(-50%);
     transition: transform 0.2s ease;
     margin-top: -0.1rem;
+  }
+}
+
+// 로딩 애니메이션 키프레임
+@keyframes loading-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

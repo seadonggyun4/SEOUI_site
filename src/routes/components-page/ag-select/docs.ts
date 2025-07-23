@@ -38,6 +38,46 @@ export const docs = {
     lang: 'html'
   },
 
+  loading: {
+    title: '로딩 상태 및 비동기 처리',
+    description: `
+      <code>ag-select</code>는 옵션이 없을 때 무조건 스피너와 로딩 텍스트를 표시합니다.
+
+      - 옵션이 비어있는 상태에서 드롭다운을 열면 자동으로 로딩 상태가 됩니다
+      - slot 또는 <strong>optionItems</strong>를 통해 옵션이 생성되면 즉시 로딩 상태가 해제됩니다
+      - 로딩 중에는 애니메이션 도트와 "옵션 로딩 중..." 메시지가 표시됩니다
+      - 비동기 데이터 로딩이 완료되면 자동으로 가상 스크롤이 초기화됩니다
+      - 옵션이 있는 셀렉트는 로딩 상태가 표시되지 않습니다
+    `,
+    code: `
+      <!-- 옵션이 없는 빈 셀렉트 - 드롭다운 열면 로딩 상태 표시됨 -->
+      <ag-select name="loading-demo" width="250px">
+        <!-- 비어있는 상태에서 로딩이 시작됨 -->
+      </ag-select>
+
+      <!-- 옵션이 있는 셀렉트 - 로딩 상태 표시 안됨 -->
+      <ag-select name="normal-select" width="250px">
+        <option value="option1">옵션 1</option>
+        <option value="option2">옵션 2</option>
+      </ag-select>
+
+      <script>
+        const loadingSelect = document.querySelector('ag-select[name="loading-demo"]');
+        
+        // 실제 사용 시에는 API 호출 등으로 옵션을 동적 로딩
+        setTimeout(() => {
+          loadingSelect.optionItems = [
+            { value: 'loading1', label: '로딩된 옵션 1' },
+            { value: 'loading2', label: '로딩된 옵션 2' },
+            { value: 'loading3', label: '로딩된 옵션 3' }
+          ];
+          // 옵션이 설정되면 즉시 로딩 상태 해제됨
+        }, 2000);
+      </script>
+    `,
+    lang: 'html'
+  },
+
   virtual: {
     title: '가상 스크롤링과 대용량 데이터',
     description: `
@@ -113,6 +153,8 @@ export const docs = {
 
       이벤트는 <code>bubbles: true, composed: true</code>로 설정되어
       상위 요소에서도 캐치할 수 있습니다.
+
+      **참고**: 아래 예시의 셀렉트를 조작하면 브라우저 콘솔에서 이벤트 로그를 확인할 수 있습니다.
     `,
     code: `
       <ag-select id="event-demo" name="demo" width="200px">
@@ -151,6 +193,9 @@ export const docs = {
       - <strong>value</strong> 속성은 쉼표로 구분된 문자열을 반환합니다 (폼 전송용)
       - 이미 선택된 옵션은 드롭다운에서 제외되어 표시됩니다
       - 태그 제거 시 해당 옵션이 다시 드롭다운에 나타납니다
+
+      **참고**: 태그를 클릭하여 제거하거나 드롭다운에서 추가 선택하면 
+      <code>onSelect</code>, <code>onDeselect</code> 이벤트가 발생합니다.
     `,
     code: `
       <ag-select multiple name="skills" width="400px">
@@ -197,21 +242,29 @@ export const docs = {
       **다중 선택 모드**:
       - 하나 이상 선택되었을 때 리셋 버튼이 나타납니다
       - 리셋 시 모든 선택이 해제됩니다
+
+      **참고**: 부울린 속성은 JavaScript로 설정하거나 속성 제거로 제어해야 합니다.
     `,
     code: `
-      <!-- 리셋 버튼 비활성화 -->
-      <ag-select name="no-reset" width="200px" showReset="false">
-        <option value="default">기본값</option>
-        <option value="option1">옵션 1</option>
-        <option value="option2">옵션 2</option>
-      </ag-select>
-
       <!-- 리셋 버튼 활성화 (기본) -->
       <ag-select id="with-reset" name="with-reset" width="200px">
         <option value="default">기본값</option>
         <option value="option1">옵션 1</option>
-        <option value="option2">옵션 2</option>
+        <option value="option2" selected>옵션 2</option>
       </ag-select>
+
+      <!-- 리셋 버튼 비활성화 -->
+      <ag-select id="no-reset" name="no-reset" width="200px">
+        <option value="default">기본값</option>
+        <option value="option1">옵션 1</option>
+        <option value="option2" selected>옵션 2</option>
+      </ag-select>
+
+      <script>
+        // JavaScript로 showReset 부울린 값 설정
+        const noResetSelect = document.getElementById('no-reset');
+        noResetSelect.showReset = false;
+      </script>
     `,
     lang: 'html'
   },

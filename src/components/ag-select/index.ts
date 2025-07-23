@@ -22,6 +22,7 @@ export class AgSelect extends LitElement {
       showReset: { type: Boolean },
       multiple: { type: Boolean },
       _selectedValues: { type: Array, state: true },
+      _isLoading: { type: Boolean, state: true },
     };
   }
 
@@ -37,6 +38,7 @@ export class AgSelect extends LitElement {
   declare open: boolean;
   declare _labelText: string;
   declare _selectedValues: string[];
+  declare _isLoading: boolean;
 
   declare _value: string | null;
   declare _initialValue: string | null;
@@ -64,6 +66,7 @@ export class AgSelect extends LitElement {
     this.showReset = true;
     this.multiple = false;
     this._selectedValues = [];
+    this._isLoading = false;
     this._handleKeydownBound = (e) => this._virtual?.handleKeydown(e);
     this.tabIndex = 0;
   }
@@ -87,6 +90,7 @@ export class AgSelect extends LitElement {
     this.removeEventListener('keydown', this._handleKeydownBound);
     this._virtual?.destroy();
     this._virtual = null;
+    
     if (this.multiple) {
       this._selectedValues = [];
     } else {
@@ -99,7 +103,6 @@ export class AgSelect extends LitElement {
       this.initializeOptionsFromPropsOrSlot();
     }
   }
-
 
   private getCloseIcon() {
     return html`
@@ -122,6 +125,46 @@ export class AgSelect extends LitElement {
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 10L8 6L4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
+    `;
+  }
+
+  // 로딩 스피너 렌더링
+  private renderLoadingSpinner() {
+    return html`
+      <div class="loading-container">
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <span class="loading-text">옵션 로딩 중...</span>
+      </div>
+    `;
+  }
+
+  // 데이터 없음 렌더링
+  private renderNoData() {
+    return html`
+      <div class="no-data-container">
+        <span class="no-data-text">데이터 없음</span>
+      </div>
+    `;
+  }
+
+  // 드롭다운 렌더링
+  private renderDropdown() {
+    const hasOptions = this.getAllOptionData().length > 0;
+    const showNoData = this.multiple && !this._isLoading && !hasOptions;
+    
+    return html`
+      <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox">
+        ${this._isLoading 
+          ? this.renderLoadingSpinner() 
+          : showNoData 
+            ? this.renderNoData()
+            : ''
+        }
+      </div>
     `;
   }
 
@@ -171,7 +214,7 @@ export class AgSelect extends LitElement {
           }
           <span class="arrow">${this.open ? this.getChevronUpIcon() : this.getChevronDownIcon()}</span>
         </div>
-        <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox"></div>
+        ${this.renderDropdown()}
       </div>
     `;
   }
@@ -198,7 +241,7 @@ export class AgSelect extends LitElement {
           }
           <span class="arrow">${this.open ? this.getChevronUpIcon() : this.getChevronDownIcon()}</span>
         </button>
-        <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox"></div>
+        ${this.renderDropdown()}
       </div>
     `;
   }
@@ -210,16 +253,20 @@ export class AgSelect extends LitElement {
 
     const option = this._options.find(opt => opt.value === valueToRemove);
 
-    if (this.open && this._virtual) {
-      this._virtual.destroy();
+    if (this.open) {
+      this._virtual?.destroy();
       this._virtual = null;
 
-      const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
-      if (scrollEl) {
-        this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
-        requestAnimationFrame(() => {
-          this._virtual?.setActiveIndex(0);
-        });
+      // 선택 해제 후 옵션이 있으면 가상 스크롤 재생성
+      const optionData = this.getAllOptionData();
+      if (optionData.length > 0) {
+        const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+        if (scrollEl) {
+          this._virtual = this._createVirtualSelect(optionData, scrollEl);
+          requestAnimationFrame(() => {
+            this._virtual?.setActiveIndex(0);
+          });
+        }
       }
     }
 
@@ -241,13 +288,15 @@ export class AgSelect extends LitElement {
       this._selectedValues = [];
       this.updateFormValue();
 
-      if (this.open && this._virtual) {
-        this._virtual.destroy();
+      if (this.open) {
+        this._virtual?.destroy();
         this._virtual = null;
 
+        // 리셋 후 모든 옵션이 다시 사용 가능하므로 가상 스크롤 재생성
         const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
         if (scrollEl) {
-          this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
+          const optionData = this.getAllOptionData();
+          this._virtual = this._createVirtualSelect(optionData, scrollEl);
           requestAnimationFrame(() => {
             this._virtual?.setActiveIndex(0);
           });
@@ -262,15 +311,13 @@ export class AgSelect extends LitElement {
         })
       );
     } else {
-      // 단일 모드에서 리셋 시 virtual select도 함께 업데이트
       if (this._options.length > 0) {
         const firstOption = this._options[0];
         this.value = firstOption.value;
         this._labelText = firstOption.textContent || '';
 
-        // virtual select가 열려있다면 active 상태 즉시 반영
         if (this.open && this._virtual) {
-          const firstOptionIndex = 0; // 첫 번째 옵션의 인덱스
+          const firstOptionIndex = 0;
           requestAnimationFrame(() => {
             this._virtual?.setActiveIndex(firstOptionIndex);
           });
@@ -292,6 +339,12 @@ export class AgSelect extends LitElement {
     else this.openDropdown();
   };
 
+  // 옵션이 없는지 확인 - 로딩 상태 판단
+  private hasNoOptions(): boolean {
+    return this._options.length === 0;
+  }
+
+  // 옵션 초기화 - 옵션이 생성되면 즉시 로딩 상태 해제
   private initializeOptionsFromPropsOrSlot(): void {
     const optionEls = Array.from(this.querySelectorAll('option')) as HTMLOptionElement[];
 
@@ -305,15 +358,19 @@ export class AgSelect extends LitElement {
         const el = document.createElement('option');
         el.value = opt.value;
         el.textContent = opt.label;
-        el.hidden = true; // 숨기기
-        this.appendChild(el); // Light DOM에 삽입
+        el.hidden = true;
+        this.appendChild(el);
         return el;
       });
     } else {
       this._options = [];
     }
 
-    // 초기값 설정
+    // 옵션이 생성되면 즉시 로딩 상태 해제
+    if (this._options.length > 0) {
+      this._isLoading = false;
+    }
+
     if (this.multiple) {
       const selectedOptions = this._options.filter(opt => opt.selected);
       this._selectedValues = selectedOptions.map(opt => opt.value);
@@ -336,28 +393,66 @@ export class AgSelect extends LitElement {
 
   private openDropdown(): void {
     window.dispatchEvent(new CustomEvent('ag-select-open', { detail: this }));
-
-    const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
-    if (!this._virtual && scrollEl) {
-      this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
-    }
-
     this.open = true;
 
-    if (this.multiple) {
-      requestAnimationFrame(() => {
-        this._virtual?.setActiveIndex(0);
+    // 옵션이 없으면 무조건 로딩 시작
+    if (this.hasNoOptions()) {
+      this._isLoading = true;
+      this.requestUpdate();
+      
+      // 동적 로딩 시뮬레이션 (실제로는 API 호출 등)
+      this.loadOptionsAsync().then(() => {
+        // 옵션이 로드되면 initializeOptionsFromPropsOrSlot에서 자동으로 로딩 해제
+        this.initializeVirtualSelect();
+      }).catch(() => {
+        this._isLoading = false;
+        this.requestUpdate();
       });
     } else {
-      const selectedIndex = this.getAllOptionData().findIndex((opt) => opt.value === this._value);
-      requestAnimationFrame(() => {
-        this._virtual?.setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
-      });
+      // 옵션이 이미 있다면 바로 가상 스크롤 초기화
+      this.initializeVirtualSelect();
     }
   }
 
   public closeDropdown(): void {
     this.open = false;
+  }
+
+  // 가상 스크롤 초기화
+  private initializeVirtualSelect(): void {
+    const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+    const optionData = this.getAllOptionData();
+    
+    // 다중선택에서 모든 항목이 선택된 경우 가상 스크롤 생성하지 않음
+    if (this.multiple && optionData.length === 0) {
+      return;
+    }
+    
+    if (!this._virtual && scrollEl && !this._isLoading && optionData.length > 0) {
+      this._virtual = this._createVirtualSelect(optionData, scrollEl);
+      
+      if (this.multiple) {
+        requestAnimationFrame(() => {
+          this._virtual?.setActiveIndex(0);
+        });
+      } else {
+        const selectedIndex = optionData.findIndex((opt) => opt.value === this._value);
+        requestAnimationFrame(() => {
+          this._virtual?.setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+        });
+      }
+    }
+  }
+
+  // 옵션 비동기 로딩 시뮬레이션
+  private async loadOptionsAsync(): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // 실제로는 여기서 API 호출하여 옵션을 설정
+        // 예: this.optionItems = fetchedOptions;
+        resolve();
+      }, Math.random() * 1000 + 500);
+    });
   }
 
   private selectOption(value: string, label: string): void {
@@ -371,10 +466,13 @@ export class AgSelect extends LitElement {
 
       const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
       if (scrollEl) {
-        this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
-        requestAnimationFrame(() => {
-          this._virtual?.setActiveIndex(0);
-        });
+        const optionData = this.getAllOptionData();
+        if (optionData.length > 0) {
+          this._virtual = this._createVirtualSelect(optionData, scrollEl);
+          requestAnimationFrame(() => {
+            this._virtual?.setActiveIndex(0);
+          });
+        }
       }
 
       this.dispatchEvent(
