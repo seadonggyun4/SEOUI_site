@@ -1,0 +1,180 @@
+.ag-select-docs {
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .demo-item {
+
+    h4 {
+      margin: 0 0 1rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .demo-note {
+      margin: 0.75rem 0 0 0;
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-style: italic;
+    }
+  }
+
+  // 이벤트 로그 스타일링
+  .event-log {
+    height: 150px;
+    overflow-y: auto;
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 0.75rem;
+    border-radius: 5px;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    border: 1px solid #374151;
+
+    div {
+      padding: 2px 0;
+      border-bottom: 1px solid #374151;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.reset {
+        color: #fbbf24;
+        font-weight: 500;
+      }
+
+      &.deselect {
+        color: #f87171;
+        font-style: italic;
+      }
+    }
+
+    &:empty::before {
+      content: '이벤트 로그가 여기에 표시됩니다...';
+      color: #6b7280;
+      font-style: italic;
+    }
+  }
+
+  // 버튼 스타일링
+  .clear-btn,
+  .demo-btn {
+    margin-top: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: #e5e7eb;
+    }
+
+    &:active {
+      background: #d1d5db;
+    }
+  }
+
+  .clear-btn {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+
+    &:hover {
+      background: #fee2e2;
+    }
+  }
+
+  // 폼 스타일링
+  .demo-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.9rem;
+      }
+    }
+
+    .submit-btn {
+      align-self: flex-start;
+      padding: 0.75rem 1.5rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        background: #2563eb;
+      }
+
+      &:active {
+        background: #1d4ed8;
+      }
+    }
+
+    .form-output-container {
+      margin-top: 1rem;
+
+      h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.9rem;
+        color: #374151;
+      }
+
+      .form-output {
+        background: #1f2937;
+        color: #f9fafb;
+        padding: 1rem;
+        border-radius: 5px;
+        font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        min-height: 60px;
+        border: 1px solid #374151;
+
+        &:empty::before {
+          content: '폼을 제출하면 데이터가 여기에 표시됩니다...';
+          color: #6b7280;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}
+
+// 반응형 처리
+@media (max-width: 768px) {
+  .ag-select-docs {
+    .demo-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .demo-form {
+      padding: 1rem;
+    }
+  }
+}
