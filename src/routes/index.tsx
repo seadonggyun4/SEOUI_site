@@ -5,7 +5,7 @@ export default component$(() => {
   const nav = useNavigate();
 
   useVisibleTask$(() => {
-    nav('components-page/ag-datepicker');
+    nav('components-page/ag-select');
   });
 
   return null;

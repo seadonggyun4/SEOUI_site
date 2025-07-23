@@ -47,6 +47,13 @@ export const Navigation = component$(() => {
 
 const componentLinks = [
   {
+    title: 'Search Selete',
+    children: [
+      { label: '셀렉트 박스', href: '/components-page/ag-select/' },
+      { label: '검색 셀렉트 박스', href: '/components-page/ag-select-search/' },
+    ],
+  },
+  {
     title: 'DatePicker',
     children: [
       { label: '달력', href: '/components-page/ag-datepicker/' },
@@ -56,13 +63,6 @@ const componentLinks = [
     title: 'Toast Message',
     children: [
       { label: '알림 메시지', href: '/components-page/ag-toast/' },
-    ],
-  },
-  {
-    title: 'Search Selete',
-    children: [
-      { label: '셀렉트 박스', href: '/components-page/ag-select/' },
-      { label: '검색 셀렉트 박스', href: '/components-page/ag-select-search/' },
     ],
   },
   {
