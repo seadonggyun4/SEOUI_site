@@ -2,11 +2,11 @@
 @use "sass:map";
 
 $primary-color: #006dcbf2;
-$primary-hover: color.mix(#000, #006dcbf2, 55%);
-$primary-bg-color: color.mix(#fff, #006dcbf2, 55%);
+$primary-hover: #003766;
+$primary-bg-color: #e5f1fbf2;
 $secondary-color: #5f77ca;
-$secondary-hover: color.mix(#000, #5f77ca, 55%);
-$secondary-bg-color: color.mix(#fff, #5f77ca, 55%);
+$secondary-hover: #303c65f2;
+$secondary-bg-color: #eff1faf2;
 
 /**
   Open color: open-source color scheme + primary color
