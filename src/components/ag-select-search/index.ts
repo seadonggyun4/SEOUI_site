@@ -47,6 +47,34 @@ export class AgSelectSearch extends AgSelect {
     `;
   }
 
+  // 검색 기능이 있는 드롭다운 렌더링 - 부모 클래스의 로딩/데이터없음 처리 포함
+  private renderSearchDropdown() {
+    const hasOptions = this.getAllOptionData().length > 0;
+    const showNoData = this.multiple && !this._isLoading && !hasOptions;
+    
+    return html`
+      <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
+        <div class="select-search-input">
+          <span class="search-icon" aria-hidden="true">${this.getSearchIcon()}</span>
+          <input
+            type="text"
+            placeholder="검색하세요"
+            .value=${this._searchText}
+            @input=${this._handleSearchInput}
+          />
+        </div>
+        <div class="ag-select-scroll" role="listbox">
+          ${this._isLoading 
+            ? this.renderLoadingSpinner() 
+            : showNoData 
+              ? this.renderNoData()
+              : ''
+          }
+        </div>
+      </div>
+    `;
+  }
+
   render() {
     if (this.multiple) {
       return this.renderMultiSelectSearch();
@@ -93,18 +121,7 @@ export class AgSelectSearch extends AgSelect {
           }
           <span class="arrow">${this.open ? this.getChevronUpIcon() : this.getChevronDownIcon()}</span>
         </div>
-        <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
-          <div class="select-search-input">
-            <span class="search-icon" aria-hidden="true">${this.getSearchIcon()}</span>
-            <input
-              type="text"
-              placeholder="검색하세요"
-              .value=${this._searchText}
-              @input=${this._handleSearchInput}
-            />
-          </div>
-          <div class="ag-select-scroll" role="listbox"></div>
-        </div>
+        ${this.renderSearchDropdown()}
       </div>
     `;
   }
@@ -131,18 +148,7 @@ export class AgSelectSearch extends AgSelect {
           }
           <span class="arrow">${this.open ? this.getChevronUpIcon() : this.getChevronDownIcon()}</span>
         </button>
-        <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
-          <div class="select-search-input">
-            <span class="search-icon" aria-hidden="true">${this.getSearchIcon()}</span>
-            <input
-              type="text"
-              placeholder="검색하세요"
-              .value=${this._searchText}
-              @input=${this._handleSearchInput}
-            />
-          </div>
-          <div class="ag-select-scroll" role="listbox"></div>
-        </div>
+        ${this.renderSearchDropdown()}
       </div>
     `;
   }
@@ -153,15 +159,48 @@ export class AgSelectSearch extends AgSelect {
     return virtual;
   }
 
+  // 가상 스크롤 초기화 - 부모 클래스 메서드 오버라이드하여 검색 처리 추가
+  protected initializeVirtualSelect(): void {
+    const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+    const optionData = this.getAllOptionData();
+    
+    // 다중선택에서 모든 항목이 선택된 경우 가상 스크롤 생성하지 않음
+    if (this.multiple && optionData.length === 0) {
+      return;
+    }
+    
+    if (!this._virtual && scrollEl && !this._isLoading && optionData.length > 0) {
+      this._virtual = this._createVirtualSelect(optionData, scrollEl);
+      
+      // 검색 텍스트가 있으면 필터 적용
+      if (this._searchText) {
+        this._applyFilteredOptions();
+      }
+      
+      if (this.multiple) {
+        requestAnimationFrame(() => {
+          this._virtual?.setActiveIndex(0);
+        });
+      } else {
+        const selectedIndex = optionData.findIndex((opt) => opt.value === this._value);
+        requestAnimationFrame(() => {
+          this._virtual?.setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+        });
+      }
+    }
+  }
+
   private _handleSearchInput = (e: Event): void => {
     const input = e.target as HTMLInputElement;
     this._searchText = input.value;
   };
 
   private _applyFilteredOptions(): void {
+    if (!this._virtual) return;
+
     const rawInput = this._searchText.toLowerCase().replace(/\s+/g, '');
     if (!rawInput) {
-      this._virtual?.setData(this.getAllOptionData(), this.multiple ? null : this.value);
+      this._virtual.setData(this.getAllOptionData(), this.multiple ? null : this.value);
       this._noMatchVisible = false;
       return;
     }
@@ -177,14 +216,14 @@ export class AgSelectSearch extends AgSelect {
     });
 
     if (filtered.length === 0) {
-      this._virtual?.setData(
+      this._virtual.setData(
         [{ value: 'no_match', label: '데이터가 없습니다.', disabled: true }],
         this.multiple ? null : this.value,
       );
       return;
     }
 
-    this._virtual?.setData(filtered, this.multiple ? null : this.value);
+    this._virtual.setData(filtered, this.multiple ? null : this.value);
   }
 
   private removeTag = (e: Event, valueToRemove: string): void => {
@@ -194,19 +233,23 @@ export class AgSelectSearch extends AgSelect {
 
     const option = this._options.find(opt => opt.value === valueToRemove);
 
-    if (this.open && this._virtual) {
-      this._virtual.destroy();
+    if (this.open) {
+      this._virtual?.destroy();
       this._virtual = null;
 
-      const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
-      if (scrollEl) {
-        this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
-        if (this._searchText) {
-          this._applyFilteredOptions();
+      // 선택 해제 후 옵션이 있으면 가상 스크롤 재생성
+      const optionData = this.getAllOptionData();
+      if (optionData.length > 0) {
+        const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+        if (scrollEl) {
+          this._virtual = this._createVirtualSelect(optionData, scrollEl);
+          if (this._searchText) {
+            this._applyFilteredOptions();
+          }
+          requestAnimationFrame(() => {
+            this._virtual?.setActiveIndex(0);
+          });
         }
-        requestAnimationFrame(() => {
-          this._virtual?.setActiveIndex(0);
-        });
       }
     }
 
@@ -228,13 +271,15 @@ export class AgSelectSearch extends AgSelect {
       this._selectedValues = [];
       this.updateFormValue();
 
-      if (this.open && this._virtual) {
-        this._virtual.destroy();
+      if (this.open) {
+        this._virtual?.destroy();
         this._virtual = null;
 
+        // 리셋 후 모든 옵션이 다시 사용 가능하므로 가상 스크롤 재생성
         const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
         if (scrollEl) {
-          this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
+          const optionData = this.getAllOptionData();
+          this._virtual = this._createVirtualSelect(optionData, scrollEl);
           if (this._searchText) {
             this._applyFilteredOptions();
           }
