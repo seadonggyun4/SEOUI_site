@@ -43,14 +43,14 @@ export default component$(() => {
       <form
         preventdefault:submit
         onSubmit$={(ev) => {
-          const form = ev.target as HTMLFormElement;
-          const selectEl = form.querySelector('ag-select-search') as any;
-          alert(`선택된 값: ${selectEl.value}`);
+          // const form = ev.target as HTMLFormElement;
+          // const selectEl = form.querySelector('ag-select-search') as any;
+          // alert(`선택된 값: ${selectEl.value}`);
         }}
         style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
       >
-        <div dangerouslySetInnerHTML={`<ag-select-search id="search-select" name="search"></ag-select-search>`} />
-        <button type="submit">제출</button>
+        <div dangerouslySetInnerHTML={`<ag-select-search id="search-select" name="search" width="40rem" multiple></ag-select-search>`} />
+        <ag-button type="submit">제출</ag-button>
       </form>
     </DocSection>
   );

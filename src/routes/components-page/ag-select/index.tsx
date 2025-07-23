@@ -58,14 +58,14 @@ export default component$(() => {
     ev.preventDefault();
     const form = ev.target as HTMLFormElement;
     const select = form.querySelector('#location-select') as HTMLElement & { value?: string };
-    alert(`선택된 지역: ${select?.value ?? '없음'}`);
+    // alert(`선택된 지역: ${select?.value ?? '없음'}`);
   });
 
   return (
     <>
       <DocSection {...docs.virtual}>
         <div
-          dangerouslySetInnerHTML={`<ag-select id="brand-select" name="brand"></ag-select>`}
+          dangerouslySetInnerHTML={`<ag-select width="30rem" id="brand-select" name="brand" multiple></ag-select>`}
         />
       </DocSection>
 

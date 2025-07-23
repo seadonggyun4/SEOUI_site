@@ -19,7 +19,9 @@ export class AgSelect extends LitElement {
       optionItems: { type: Array },
       open: { type: Boolean, state: true },
       _labelText: { type: String, state: true },
-      showReset: { type: Boolean }, // 새로 추가: reset 버튼 표시 여부
+      showReset: { type: Boolean },
+      multiple: { type: Boolean }, // 새로 추가: 멀티셀렉트 옵션
+      _selectedValues: { type: Array, state: true }, // 새로 추가: 선택된 값들의 배열
     };
   }
 
@@ -29,14 +31,16 @@ export class AgSelect extends LitElement {
   declare width: string | null;
   declare height: string;
   declare optionItems: VirtualSelectOption[];
-  declare showReset: boolean; // 새로 추가
+  declare showReset: boolean;
+  declare multiple: boolean; // 새로 추가
 
   declare open: boolean;
   declare _labelText: string;
+  declare _selectedValues: string[]; // 새로 추가
 
   declare _value: string | null;
   declare _initialValue: string | null;
-  declare _initialLabel: string | null; // 새로 추가: 초기 라벨 저장
+  declare _initialLabel: string | null;
   declare _virtual: InteractiveVirtualSelect | null;
   declare _options: HTMLOptionElement[];
   declare _internals: ElementInternals;
@@ -48,7 +52,7 @@ export class AgSelect extends LitElement {
     this._internals = this.attachInternals();
     this._value = null;
     this._initialValue = null;
-    this._initialLabel = null; // 새로 추가
+    this._initialLabel = null;
     this._virtual = null;
     this._options = [];
     this.width = null;
@@ -57,7 +61,9 @@ export class AgSelect extends LitElement {
     this.optionItems = [];
     this.open = false;
     this._labelText = '';
-    this.showReset = true; // 기본값: reset 버튼 표시
+    this.showReset = true;
+    this.multiple = false; // 기본값: 단일 선택
+    this._selectedValues = []; // 새로 추가: 빈 배열로 초기화
     this._handleKeydownBound = (e) => this._virtual?.handleKeydown(e);
     this.tabIndex = 0;
   }
@@ -68,10 +74,7 @@ export class AgSelect extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-
-    // 초기화를 먼저 수행
     this.initializeOptionsFromPropsOrSlot();
-
     window.addEventListener('ag-select-open', this.onOtherSelectOpened);
     window.addEventListener('click', this.handleOutsideClick, true);
     this.addEventListener('keydown', this._handleKeydownBound);
@@ -84,24 +87,76 @@ export class AgSelect extends LitElement {
     this.removeEventListener('keydown', this._handleKeydownBound);
     this._virtual?.destroy();
     this._virtual = null;
-    this.value = '';
+    if (this.multiple) {
+      this._selectedValues = [];
+    } else {
+      this.value = '';
+    }
   }
 
   updated(changed: Map<string, unknown>) {
     if (changed.has('optionItems')) {
       this.initializeOptionsFromPropsOrSlot();
-      // initializeOptionsFromPropsOrSlot()에서 이미 기본값 설정이 완료됨
     }
   }
 
   render() {
-    // 현재 값이 첫 번째 옵션(기본값)과 다를 때만 reset 버튼 표시
-    // _options가 아직 초기화되지 않았을 경우를 대비해 안전하게 처리
+    if (this.multiple) {
+      return this.renderMultiSelect();
+    } else {
+      return this.renderSingleSelect();
+    }
+  }
+
+  private renderMultiSelect() {
+    const showResetButton = this.showReset && this._selectedValues.length > 0;
+
+    return html`
+      <div class="ag-select multi-select" style="width: ${this.width}; height: ${this.height};">
+        <div class="selected-container ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
+          <div class="selected-tags">
+            ${this._selectedValues.map(value => {
+              const option = this._options.find(opt => opt.value === value);
+              const label = option?.textContent || value;
+              return html`
+                <span class="tag">
+                  ${label}
+                  <button
+                    type="button"
+                    class="tag-remove"
+                    @click=${(e: Event) => this.removeTag(e, value)}
+                    title="제거"
+                  >×</button>
+                </span>
+              `;
+            })}
+            ${this._selectedValues.length === 0
+              ? html`<span class="placeholder">선택해주세요</span>`
+              : ''
+            }
+          </div>
+          ${showResetButton
+            ? html`<button
+                type="button"
+                class="reset-button"
+                @click=${this.resetToDefault}
+                title="모두 지우기"
+              >×</button>`
+            : ''
+          }
+          <span class="arrow">▼</span>
+        </div>
+        <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox"></div>
+      </div>
+    `;
+  }
+
+  private renderSingleSelect() {
     const firstOptionValue = this._options && this._options.length > 0 ? this._options[0].value : null;
     const showResetButton = this.showReset &&
-                           this._value !== null &&
-                           firstOptionValue !== null &&
-                           this._value !== firstOptionValue;
+                          this._value !== null &&
+                          firstOptionValue !== null &&
+                          this._value !== firstOptionValue;
 
     return html`
       <div class="ag-select" style="width: ${this.width}; height: ${this.height};">
@@ -123,23 +178,84 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // 새로 추가: 기본값으로 되돌리기 함수
-  private resetToDefault = (e: Event): void => {
-    e.stopPropagation(); // 드롭다운이 열리지 않도록 방지
+  private removeTag = (e: Event, valueToRemove: string): void => {
+    e.stopPropagation();
+    this._selectedValues = this._selectedValues.filter(value => value !== valueToRemove);
+    this.updateFormValue();
 
-    // 기본값은 첫 번째 옵션
-    if (this._options.length > 0) {
-      const firstOption = this._options[0];
-      this.value = firstOption.value;
-      this._labelText = firstOption.textContent || '';
+    const option = this._options.find(opt => opt.value === valueToRemove);
+
+    // Virtual select가 열려있다면 강제로 다시 생성하여 삭제된 항목을 리스트에 즉시 표시
+    if (this.open && this._virtual) {
+      this._virtual.destroy();
+      this._virtual = null;
+
+      const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+      if (scrollEl) {
+        this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
+        // 첫 번째 항목에 포커스 설정
+        requestAnimationFrame(() => {
+          this._virtual?.setActiveIndex(0);
+        });
+      }
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('onDeselect', {
+        detail: { value: valueToRemove, label: option?.textContent || '' },
+        bubbles: true,
+        composed: true,
+      })
+    );
+
+    this.requestUpdate();
+  };
+
+  private resetToDefault = (e: Event): void => {
+    e.stopPropagation();
+
+    if (this.multiple) {
+      // 멀티셀렉트의 경우 모든 선택을 해제
+      this._selectedValues = [];
+      this.updateFormValue();
+
+      // Virtual select가 열려있다면 강제로 다시 생성하여 모든 항목을 리스트에 즉시 표시
+      if (this.open && this._virtual) {
+        this._virtual.destroy();
+        this._virtual = null;
+
+        const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+        if (scrollEl) {
+          this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
+          // 첫 번째 항목에 포커스 설정
+          requestAnimationFrame(() => {
+            this._virtual?.setActiveIndex(0);
+          });
+        }
+      }
 
       this.dispatchEvent(
         new CustomEvent('onReset', {
-          detail: { value: firstOption.value, label: firstOption.textContent || '' },
+          detail: { values: [], labels: [] },
           bubbles: true,
           composed: true,
         })
       );
+    } else {
+      // 단일 선택의 경우 기본값(첫 번째 옵션)으로 설정
+      if (this._options.length > 0) {
+        const firstOption = this._options[0];
+        this.value = firstOption.value;
+        this._labelText = firstOption.textContent || '';
+
+        this.dispatchEvent(
+          new CustomEvent('onReset', {
+            detail: { value: firstOption.value, label: firstOption.textContent || '' },
+            bubbles: true,
+            composed: true,
+          })
+        );
+      }
     }
   };
 
@@ -149,17 +265,16 @@ export class AgSelect extends LitElement {
   };
 
   private initializeOptionsFromPropsOrSlot(): void {
-    this._value = null;
+    if (!this.multiple) {
+      this._value = null;
+    }
 
-    // 1. slot 기반 <option> 우선
     const optionEls = Array.from(this.querySelectorAll('option')) as HTMLOptionElement[];
 
     if (optionEls.length > 0) {
-      // slot 기반 <option> 사용
       this._options = optionEls.map(opt => opt.cloneNode(true) as HTMLOptionElement);
       optionEls.forEach(opt => opt.remove());
     }
-    // 2. fallback: 배열 기반 optionItems 사용
     else if (Array.isArray(this.optionItems) && this.optionItems.length > 0) {
       this._options = this.optionItems.map(opt => {
         const el = document.createElement('option');
@@ -171,7 +286,6 @@ export class AgSelect extends LitElement {
       this._options = [];
     }
 
-    // 3. 동적 width 계산 (width 미지정 시)
     if (!this.width) {
       const texts = this._options.map(opt => opt.textContent ?? '');
       const measured = this.getMaxOptionWidth(texts, getComputedStyle(this).font || '14px sans-serif');
@@ -184,19 +298,23 @@ export class AgSelect extends LitElement {
       }
     }
 
-    // 4. 초기 선택값 처리
-    const selected = this._options.find(opt => opt.selected);
-    if (selected) {
-      this.value = selected.value;
+    if (this.multiple) {
+      // 멀티셀렉트의 경우 selected 옵션들을 모두 수집
+      const selectedOptions = this._options.filter(opt => opt.selected);
+      this._selectedValues = selectedOptions.map(opt => opt.value);
     } else {
-      // selected가 없으면 첫 번째 옵션을 기본값으로 설정
-      const fallback = this._options[0];
-      if (fallback) {
-        this.value = fallback.value;
+      // 단일 선택의 경우 기존 로직 유지
+      const selected = this._options.find(opt => opt.selected);
+      if (selected) {
+        this.value = selected.value;
+      } else {
+        const fallback = this._options[0];
+        if (fallback) {
+          this.value = fallback.value;
+        }
       }
     }
 
-    // 5. 기본값은 항상 첫 번째 옵션으로 설정 (초기값 저장용)
     if (this._options.length > 0) {
       this._initialValue = this._options[0].value;
       this._initialLabel = this._options[0].textContent || '';
@@ -212,10 +330,18 @@ export class AgSelect extends LitElement {
     }
 
     this.open = true;
-    const selectedIndex = this.getAllOptionData().findIndex((opt) => opt.value === this._value);
-    requestAnimationFrame(() => {
-      this._virtual?.setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
-    });
+
+    if (this.multiple) {
+      // 멀티셀렉트의 경우 이용 가능한 첫 번째 항목으로 이동
+      requestAnimationFrame(() => {
+        this._virtual?.setActiveIndex(0);
+      });
+    } else {
+      const selectedIndex = this.getAllOptionData().findIndex((opt) => opt.value === this._value);
+      requestAnimationFrame(() => {
+        this._virtual?.setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+      });
+    }
   }
 
   public closeDropdown(): void {
@@ -223,17 +349,63 @@ export class AgSelect extends LitElement {
   }
 
   private selectOption(value: string, label: string): void {
-    this._labelText = label;
-    this._setValue(value);
-    this.closeDropdown();
+    if (this.multiple) {
+      // 멀티셀렉트의 경우 항상 선택만 함 (이미 선택된 항목은 리스트에 없음)
+      this._selectedValues = [...this._selectedValues, value];
+      this.updateFormValue();
+      this.requestUpdate();
 
-    this.dispatchEvent(
-      new CustomEvent('onSelect', {
-        detail: { value, label },
-        bubbles: true,
-        composed: true,
-      })
-    );
+      // Virtual select를 강제로 다시 생성하여 선택된 항목을 리스트에서 즉시 제거
+      this._virtual?.destroy();
+      this._virtual = null;
+
+      const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+      if (scrollEl) {
+        this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
+        // 첫 번째 항목에 포커스 설정
+        requestAnimationFrame(() => {
+          this._virtual?.setActiveIndex(0);
+        });
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('onSelect', {
+          detail: { value, label },
+          bubbles: true,
+          composed: true,
+        })
+      );
+
+      // 멀티셀렉트에서는 드롭다운을 닫지 않음
+    } else {
+      // 단일 선택의 경우 기존 로직
+      this._labelText = label;
+      this._setValue(value);
+      this.closeDropdown();
+
+      this.dispatchEvent(
+        new CustomEvent('onSelect', {
+          detail: { value, label },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    }
+  }
+
+  // 새로 추가: 멀티셀렉트를 위한 폼 값 업데이트
+  private updateFormValue(): void {
+    if (this.multiple) {
+      // 멀티셀렉트의 경우 배열을 JSON 문자열로 변환하거나 쉼표로 구분된 문자열로 저장
+      const formValue = this._selectedValues.join(',');
+      this._internals.setFormValue(formValue);
+
+      if (this.required && this._selectedValues.length === 0) {
+        this._internals.setValidity({ valueMissing: true }, '필수 항목입니다.');
+      } else {
+        this._internals.setValidity({});
+      }
+    }
   }
 
   private handleOutsideClick = async (e: MouseEvent) => {
@@ -258,15 +430,37 @@ export class AgSelect extends LitElement {
   }
 
   public getAllOptionData(): VirtualSelectOption[] {
-    return this._options.map((opt) => ({
-      value: opt.value,
-      label: opt.textContent ?? '',
-    }));
+    if (this.multiple) {
+      // 멀티셀렉트의 경우 원본 순서를 유지하면서 선택된 항목들만 제외
+      return this._options
+        .filter((opt) => !this._selectedValues.includes(opt.value))
+        .map((opt) => ({
+          value: opt.value,
+          label: opt.textContent ?? '',
+        }));
+    } else {
+      // 단일 선택의 경우 모든 옵션 반환
+      return this._options.map((opt) => ({
+        value: opt.value,
+        label: opt.textContent ?? '',
+      }));
+    }
   }
 
   public _createVirtualSelect(options: VirtualSelectOption[], container: HTMLDivElement) {
     return new InteractiveVirtualSelect(container, options, {
-      renderOption: (el: HTMLElement, opt: VirtualSelectOption) => (el.textContent = opt.label),
+      renderOption: (el: HTMLElement, opt: VirtualSelectOption) => {
+        el.textContent = opt.label;
+
+        // 멀티셀렉트의 경우 선택된 항목에 체크 표시
+        if (this.multiple) {
+          const isSelected = this._selectedValues.includes(opt.value);
+          el.classList.toggle('selected', isSelected);
+          if (isSelected) {
+            el.innerHTML = `<span class="check-mark">✓</span> ${opt.label}`;
+          }
+        }
+      },
       onClick: (opt: VirtualSelectOption) => setTimeout(() => this.selectOption(opt.value, opt.label), 0),
       onEscape: () => this.closeDropdown(),
     });
@@ -296,23 +490,48 @@ export class AgSelect extends LitElement {
   }
 
   get selectedIndex(): number {
+    if (this.multiple) {
+      return -1; // 멀티셀렉트에서는 의미가 없음
+    }
     return this._options.findIndex((opt) => opt.value === this._value);
   }
 
   get value(): string | null {
+    if (this.multiple) {
+      return this._selectedValues.join(',');
+    }
     return this._value;
   }
 
   set value(newVal: string) {
-    this._setValue(newVal, true);
+    if (this.multiple) {
+      // 멀티셀렉트의 경우 쉼표로 구분된 문자열을 배열로 변환
+      this._selectedValues = newVal ? newVal.split(',').filter(v => v.trim()) : [];
+      this.updateFormValue();
+      this.requestUpdate();
+    } else {
+      this._setValue(newVal, true);
+    }
   }
 
   get defaultValue(): string | null {
-    // 기본값은 항상 첫 번째 옵션
     return this._options.length > 0 ? this._options[0].value : null;
   }
 
-  // 새로 추가: 프로그래밍적으로 기본값으로 되돌리기
+  // 새로 추가: 멀티셀렉트를 위한 getter
+  get selectedValues(): string[] {
+    return this.multiple ? [...this._selectedValues] : [];
+  }
+
+  // 새로 추가: 멀티셀렉트를 위한 setter
+  set selectedValues(values: string[]) {
+    if (this.multiple) {
+      this._selectedValues = [...values];
+      this.updateFormValue();
+      this.requestUpdate();
+    }
+  }
+
   public resetToDefaultValue(): void {
     this.resetToDefault(new Event('reset'));
   }
