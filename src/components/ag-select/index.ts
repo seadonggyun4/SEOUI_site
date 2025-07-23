@@ -262,10 +262,19 @@ export class AgSelect extends LitElement {
         })
       );
     } else {
+      // 단일 모드에서 리셋 시 virtual select도 함께 업데이트
       if (this._options.length > 0) {
         const firstOption = this._options[0];
         this.value = firstOption.value;
         this._labelText = firstOption.textContent || '';
+
+        // virtual select가 열려있다면 active 상태 즉시 반영
+        if (this.open && this._virtual) {
+          const firstOptionIndex = 0; // 첫 번째 옵션의 인덱스
+          requestAnimationFrame(() => {
+            this._virtual?.setActiveIndex(firstOptionIndex);
+          });
+        }
 
         this.dispatchEvent(
           new CustomEvent('onReset', {
