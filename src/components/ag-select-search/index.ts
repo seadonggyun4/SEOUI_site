@@ -45,7 +45,7 @@ export class AgSelectSearch extends AgSelect {
           ${this._labelText}
           <span class="arrow">▼</span>
         </button>
-        <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox">
+        <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
           <div class="select-search-input">
             <i class="fas fa-search search-icon" aria-hidden="true"></i>
             <input
@@ -55,6 +55,7 @@ export class AgSelectSearch extends AgSelect {
               @input=${this._handleSearchInput}
             />
           </div>
+          <div class="ag-select-scroll" role="listbox"></div>
         </div>
       </div>
     `;
