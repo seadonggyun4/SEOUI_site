@@ -33,7 +33,9 @@ export const PageLoader = component$(() => {
   return (
     <div class="page-loder show">
       <div class="loader-content">
-        <div class="loader-spinner"></div>
+        <h2>
+          <img src='/logo.png' />
+        </h2>
         <div class="loader-text">페이지를 불러오는 중...</div>
         <div class="loader-progress"></div>
       </div>
