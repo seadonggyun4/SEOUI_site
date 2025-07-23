@@ -38,6 +38,16 @@ export class AgSelectSearch extends AgSelect {
     }
   }
 
+  // SVG 아이콘들을 반환하는 헬퍼 메서드들 (부모 클래스에서 상속받아 오버라이드)
+  private getSearchIcon() {
+    return html`
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 14L11.1 11.1" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+  }
+
   render() {
     if (this.multiple) {
       return this.renderMultiSelectSearch();
@@ -64,7 +74,7 @@ export class AgSelectSearch extends AgSelect {
                     class="tag-remove"
                     @click=${(e: Event) => this.removeTag(e, value)}
                     title="제거"
-                  >×</button>
+                  >${this.getCloseIcon()}</button>
                 </span>
               `;
             })}
@@ -79,14 +89,14 @@ export class AgSelectSearch extends AgSelect {
                 class="reset-button"
                 @click=${this.resetToDefault}
                 title="모두 지우기"
-              >×</button>`
+              >${this.getCloseIcon()}</button>`
             : ''
           }
-          <span class="arrow">▼</span>
+          <span class="arrow">${this.open ? this.getChevronUpIcon() : this.getChevronDownIcon()}</span>
         </div>
         <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
           <div class="select-search-input">
-            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+            <span class="search-icon" aria-hidden="true">${this.getSearchIcon()}</span>
             <input
               type="text"
               placeholder="검색하세요"
@@ -118,14 +128,14 @@ export class AgSelectSearch extends AgSelect {
                 class="reset-button"
                 @click=${this.resetToDefault}
                 title="기본값으로 되돌리기"
-              >×</button>`
+              >${this.getCloseIcon()}</button>`
             : ''
           }
-          <span class="arrow">▼</span>
+          <span class="arrow">${this.open ? this.getChevronUpIcon() : this.getChevronDownIcon()}</span>
         </button>
         <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
           <div class="select-search-input">
-            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+            <span class="search-icon" aria-hidden="true">${this.getSearchIcon()}</span>
             <input
               type="text"
               placeholder="검색하세요"

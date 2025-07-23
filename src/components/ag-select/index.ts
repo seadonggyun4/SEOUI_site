@@ -100,6 +100,31 @@ export class AgSelect extends LitElement {
     }
   }
 
+  // SVG 아이콘들을 반환하는 헬퍼 메서드들
+  private getCloseIcon() {
+    return html`
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+  }
+
+  private getChevronDownIcon() {
+    return html`
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+  }
+
+  private getChevronUpIcon() {
+    return html`
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 10L8 6L4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+  }
+
   render() {
     if (this.multiple) {
       return this.renderMultiSelect();
@@ -126,7 +151,7 @@ export class AgSelect extends LitElement {
                     class="tag-remove"
                     @click=${(e: Event) => this.removeTag(e, value)}
                     title="제거"
-                  >×</button>
+                  >${this.getCloseIcon()}</button>
                 </span>
               `;
             })}
@@ -141,10 +166,10 @@ export class AgSelect extends LitElement {
                 class="reset-button"
                 @click=${this.resetToDefault}
                 title="모두 지우기"
-              >×</button>`
+              >${this.getCloseIcon()}</button>`
             : ''
           }
-          <span class="arrow">▼</span>
+          <span class="arrow">${this.open ? this.getChevronUpIcon() : this.getChevronDownIcon()}</span>
         </div>
         <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox"></div>
       </div>
@@ -168,10 +193,10 @@ export class AgSelect extends LitElement {
                 class="reset-button"
                 @click=${this.resetToDefault}
                 title="기본값으로 되돌리기"
-              >×</button>`
+              >${this.getCloseIcon()}</button>`
             : ''
           }
-          <span class="arrow">▼</span>
+          <span class="arrow">${this.open ? this.getChevronUpIcon() : this.getChevronDownIcon()}</span>
         </button>
         <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox"></div>
       </div>
