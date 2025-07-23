@@ -20,16 +20,6 @@ ag-select-search {
     cursor: pointer;
     transition: border-color 0.3s ease;
 
-    .arrow {
-      position: absolute;
-      top: 50%;
-      right: 0.8rem;
-      font-size: 0.8rem;
-      color: colors.pick(gray, 9);
-      transform: translateY(-50%);
-      transition: transform 0.2s ease;
-    }
-
     &:focus {
       outline: none;
       box-shadow: none;
@@ -74,19 +64,17 @@ ag-select-search {
         .tag {
           display: inline-flex;
           align-items: center;
-          padding: 0.2rem 0.5rem;
-          background: colors.$primary-bg-color;
-          color: colors.$primary-color;
+          gap: 0.5rem;
+          padding: 0.2rem 0.3rem;
+          background: #f8f8f8;
           border-radius: 2px;
-          font-size: 1rem;
-          border: 1px solid colors.$primary-color;
+          border: 1px solid colors.pick(gray, 6);
           max-width: 15rem;
 
           .tag-remove {
-            margin-left: 0.25rem;
             background: none;
             border: none;
-            color: colors.$primary-color;
+            color: colors.$font-secondary-color;
             font-weight: bold;
             cursor: pointer;
             padding: 0;
@@ -99,7 +87,7 @@ ag-select-search {
             transition: all 0.2s ease;
 
             &:hover {
-              background: colors.$primary-color;
+              background: colors.$error-color;
               color: white;
             }
           }
@@ -109,17 +97,6 @@ ag-select-search {
           color: colors.pick(gray, 7);
           font-style: italic;
         }
-      }
-
-      .arrow {
-        position: absolute;
-        top: 50%;
-        right: 0.8rem;
-        font-size: 0.8rem;
-        color: colors.pick(gray, 9);
-        transform: translateY(-50%);
-        transition: transform 0.2s ease;
-        margin-top: -0.1rem;
       }
     }
   }
@@ -234,5 +211,16 @@ ag-select-search {
     &:hover {
       background: colors.$error-color;
     }
+  }
+
+  .arrow {
+    position: absolute;
+    top: 50%;
+    right: 0.8rem;
+    font-size: 0.8rem;
+    color: colors.pick(gray, 9);
+    transform: translateY(-50%);
+    transition: transform 0.2s ease;
+    margin-top: -0.1rem;
   }
 }

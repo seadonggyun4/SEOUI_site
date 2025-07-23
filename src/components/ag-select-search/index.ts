@@ -38,7 +38,6 @@ export class AgSelectSearch extends AgSelect {
     }
   }
 
-  // SVG 아이콘들을 반환하는 헬퍼 메서드들 (부모 클래스에서 상속받아 오버라이드)
   private getSearchIcon() {
     return html`
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -111,7 +110,6 @@ export class AgSelectSearch extends AgSelect {
   }
 
   private renderSingleSelectSearch() {
-    // 부모 클래스와 동일한 reset 버튼 로직 적용
     const firstOptionValue = this._options && this._options.length > 0 ? this._options[0].value : null;
     const showResetButton = this.showReset &&
                           this._value !== null &&
@@ -189,7 +187,6 @@ export class AgSelectSearch extends AgSelect {
     this._virtual?.setData(filtered, this.multiple ? null : this.value);
   }
 
-  // 태그 제거 함수 - 부모 클래스의 removeTag와 동일하지만 검색 필터 적용
   private removeTag = (e: Event, valueToRemove: string): void => {
     e.stopPropagation();
     this._selectedValues = this._selectedValues.filter(value => value !== valueToRemove);
@@ -197,7 +194,6 @@ export class AgSelectSearch extends AgSelect {
 
     const option = this._options.find(opt => opt.value === valueToRemove);
 
-    // Virtual select가 열려있다면 강제로 다시 생성하여 삭제된 항목을 리스트에 즉시 표시
     if (this.open && this._virtual) {
       this._virtual.destroy();
       this._virtual = null;
@@ -205,11 +201,9 @@ export class AgSelectSearch extends AgSelect {
       const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
       if (scrollEl) {
         this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
-        // 검색 텍스트가 있다면 필터 적용
         if (this._searchText) {
           this._applyFilteredOptions();
         }
-        // 첫 번째 항목에 포커스 설정
         requestAnimationFrame(() => {
           this._virtual?.setActiveIndex(0);
         });
@@ -227,16 +221,13 @@ export class AgSelectSearch extends AgSelect {
     this.requestUpdate();
   };
 
-  // resetToDefault 오버라이드 - 다중선택 지원 및 검색 필터 적용
   private resetToDefault = (e: Event): void => {
     e.stopPropagation();
 
     if (this.multiple) {
-      // 멀티셀렉트의 경우 모든 선택을 해제
       this._selectedValues = [];
       this.updateFormValue();
 
-      // Virtual select가 열려있다면 강제로 다시 생성하여 모든 항목을 리스트에 즉시 표시
       if (this.open && this._virtual) {
         this._virtual.destroy();
         this._virtual = null;
@@ -244,11 +235,9 @@ export class AgSelectSearch extends AgSelect {
         const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
         if (scrollEl) {
           this._virtual = this._createVirtualSelect(this.getAllOptionData(), scrollEl);
-          // 검색 텍스트가 있다면 필터 적용
           if (this._searchText) {
             this._applyFilteredOptions();
           }
-          // 첫 번째 항목에 포커스 설정
           requestAnimationFrame(() => {
             this._virtual?.setActiveIndex(0);
           });
@@ -263,7 +252,6 @@ export class AgSelectSearch extends AgSelect {
         })
       );
     } else {
-      // 단일 선택의 경우 기본값(첫 번째 옵션)으로 설정
       if (this._options.length > 0) {
         const firstOption = this._options[0];
         this.value = firstOption.value;
