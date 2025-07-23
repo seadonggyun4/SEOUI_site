@@ -293,51 +293,36 @@ export class AgSelect extends LitElement {
   };
 
   private initializeOptionsFromPropsOrSlot(): void {
-    if (!this.multiple) {
-      this._value = null;
-    }
-
     const optionEls = Array.from(this.querySelectorAll('option')) as HTMLOptionElement[];
 
     if (optionEls.length > 0) {
-      this._options = optionEls.map(opt => opt.cloneNode(true) as HTMLOptionElement);
-      optionEls.forEach(opt => opt.remove());
-    }
-    else if (Array.isArray(this.optionItems) && this.optionItems.length > 0) {
+      this._options = optionEls.map(opt => {
+        opt.hidden = true;
+        return opt;
+      });
+    } else if (Array.isArray(this.optionItems) && this.optionItems.length > 0) {
       this._options = this.optionItems.map(opt => {
         const el = document.createElement('option');
         el.value = opt.value;
         el.textContent = opt.label;
+        el.hidden = true; // 숨기기
+        this.appendChild(el); // Light DOM에 삽입
         return el;
       });
     } else {
       this._options = [];
     }
 
-    if (!this.width) {
-      const texts = this._options.map(opt => opt.textContent ?? '');
-      const measured = this.getMaxOptionWidth(texts, getComputedStyle(this).font || '14px sans-serif');
-      const padded = Math.ceil(measured) + 32;
-      const minWidth = 100;
-
-      const selectBox = this.querySelector('.ag-select') as HTMLDivElement;
-      if (selectBox) {
-        selectBox.style.width = `${Math.max(padded, minWidth)}px`;
-      }
-    }
-
+    // 초기값 설정
     if (this.multiple) {
       const selectedOptions = this._options.filter(opt => opt.selected);
       this._selectedValues = selectedOptions.map(opt => opt.value);
     } else {
       const selected = this._options.find(opt => opt.selected);
       if (selected) {
-        this.value = selected.value;
-      } else {
-        const fallback = this._options[0];
-        if (fallback) {
-          this.value = fallback.value;
-        }
+        this._setValue(selected.value, false);
+      } else if (this._options.length > 0) {
+        this._setValue(this._options[0].value, false);
       }
     }
 
@@ -345,6 +330,8 @@ export class AgSelect extends LitElement {
       this._initialValue = this._options[0].value;
       this._initialLabel = this._options[0].textContent || '';
     }
+
+    this.requestUpdate();
   }
 
   private openDropdown(): void {
