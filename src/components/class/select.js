@@ -9,6 +9,7 @@ export class InteractiveVirtualSelect {
     this.renderOption = options.renderOption || null;
     this.onClick = options.onClick || null;
     this.onEscape = options.onEscape || null;
+    this.isMultiple = options.isMultiple || false; // multi 모드 여부 추가
 
     this.total = data.length;
     this.focusedIndex = -1;
@@ -192,15 +193,30 @@ export class InteractiveVirtualSelect {
       }
       this._handleDisabledOption(el, option);
       this._resetClass(el);
+
+      // renderOption 콜백 호출 (있다면)
+      if (this.renderOption) {
+        this.renderOption(el, option);
+      }
+
+      // multi 모드일 때는 active 클래스 강제 제거
+      if (this.isMultiple) {
+        el.classList.remove('active');
+      }
     }
   }
 
-  // 강조 클래스 적용
+  // 강조 클래스 적용 - multi 모드일 때는 active 클래스 제외
   _applyHighlight() {
     for (const el of this.pool) {
       const idx = parseInt(el.dataset.index || '-1', 10);
       if (!Number.isFinite(idx)) continue;
-      el.classList.toggle('active', idx === this.activeIndex);
+
+      // multi 모드가 아닐 때만 active 클래스 적용
+      if (!this.isMultiple) {
+        el.classList.toggle('active', idx === this.activeIndex);
+      }
+
       el.classList.toggle('focused', idx === this.focusedIndex);
     }
   }
@@ -240,7 +256,12 @@ export class InteractiveVirtualSelect {
     const option = this.data[index];
     if (option?.value === 'no_match') return;
     this.onClick?.(option, index, e);
-    this.activeIndex = index;
+
+    // multi 모드가 아닐 때만 activeIndex 설정
+    if (!this.isMultiple) {
+      this.activeIndex = index;
+    }
+
     this.focusedIndex = index;
     this._applyHighlight();
   }
@@ -271,7 +292,12 @@ export class InteractiveVirtualSelect {
         const opt = this.getFocusedOption();
         if (opt) {
           this.onClick?.(opt, this.focusedIndex, e);
-          this.activeIndex = this.focusedIndex;
+
+          // multi 모드가 아닐 때만 activeIndex 설정
+          if (!this.isMultiple) {
+            this.activeIndex = this.focusedIndex;
+          }
+
           this._applyHighlight();
         }
         break;
@@ -316,7 +342,11 @@ export class InteractiveVirtualSelect {
       ? this.data.findIndex(opt => opt.value === activeValue)
       : -1;
 
-    this.activeIndex = matchedIndex;
+    // multi 모드가 아닐 때만 activeIndex 설정
+    if (!this.isMultiple) {
+      this.activeIndex = matchedIndex;
+    }
+
     this.focusedIndex = matchedIndex;
     this.container.scrollTop = 0;
 

@@ -456,6 +456,7 @@ export class AgSelect extends LitElement {
 
   public _createVirtualSelect(options: VirtualSelectOption[], container: HTMLDivElement) {
     return new InteractiveVirtualSelect(container, options, {
+      isMultiple: this.multiple,
       renderOption: (el: HTMLElement, opt: VirtualSelectOption) => {
         el.textContent = opt.label;
 
