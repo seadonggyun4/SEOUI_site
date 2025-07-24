@@ -1,7 +1,7 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { DocSection } from '@/widget/doc-section';
 import { docs } from './docs';
-import { GridDataTable } from '@/components/class/GridDataTable/GridDataTable';
+import { GridDataTable } from '@/components/class/GridTable/GridTable';
 import { exportExcel } from '@/utils/export';
 import './style.scss'
 
@@ -165,7 +165,7 @@ const dummyTextData = Array.from({ length: 5000 }).map((_, i) => {
 
 export default component$(() => {
   useVisibleTask$(async () => {
-    await customElements.whenDefined('ag-table');
+    await customElements.whenDefined('ag-grid-table');
 
     requestAnimationFrame(() => {
       const demoTable = document.querySelector('#demo-table') as HTMLTableElement;

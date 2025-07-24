@@ -1,5 +1,4 @@
 import formatter from '@/utils/formatter.js'
-import { GridData } from './GridData';
 
 /**
  * GridDataTable
@@ -16,7 +15,6 @@ export class GridDataTable {
     this.cancelStatus = options.cancelStatus || false;
     this.activeId = options.activeId || null;
     this.onDelete = options.onDelete || null;
-    this._ro = null;
     this._ticking = false;
     this.selectedRow = null;
     this.selectedColumns = new Map();
@@ -37,32 +35,14 @@ export class GridDataTable {
     this._dateFmt = formatter.date.format;
     this._datetimeFmt = formatter.datetime.format;
     this._lastScrollTop = 0;
-
-    this.dataController = new GridData();
-    this.dataController.initialize(data);
+    this._data = data;
 
     this._initPlaceholder();
     this._initFillHandler();
     this._bindEvents();
 
-    this._ro = new ResizeObserver(entries => {
-      for (const entry of entries) {
-        const newH = entry.contentRect.height;
-        if (Math.abs(newH - this.viewportH) > 10) {
-          this.viewportH = newH;
-          this.visibleCount = Math.ceil(this.viewportH / this.rowHeight);
-          const newPoolSize = this.visibleCount + this.overscan * 2;
-          requestAnimationFrame(() => {
-            this._adjustPoolSize(newPoolSize);
-            this.render();
-          });
-        }
-      }
-    });
-    this._ro.observe(this.container);
-
-    this.render();
     this.setupContextMenu();
+    this.render();
   }
 
   _bindEvents() {
@@ -75,45 +55,32 @@ export class GridDataTable {
   /**
    * 데이터 교체(필터 후 등) 시 호출
    */
-  setTableData(newData, shouldRender = true) {
+  setData(newData, shouldRender = true) {
     this.selectedRow = null;
-    this.dataController.setData(newData);
-    this.table.style.height = `${this.dataController.getTotal() * this.rowHeight}px`;
+    this._data = newData;
+    this.table.style.height = `${this._data.length * this.rowHeight}px`;
     if (shouldRender) this.render();
-  }
-
-  filter(searchKeys, columns) {
-    const filtered = this.dataController.filterData(searchKeys, columns);
-    this.setTableData(filtered);
-  }
-
-  setSearchData(newData) {
-    this.setTableData(newData);
-  }
-
-  reset() {
-    this.dataController.resetData();
-    this.setTableData(this.dataController.getData());
   }
 
   rowDelete() {
     if (!this.selectedRange) return;
-    const result = this.dataController.deleteRows(this.selectedRange);
-    this.dataController.setData(result.data)
+    const { start, end } = this.selectedRange;
+    const minRow = Math.min(start.row, end.row);
+    const maxRow = Math.max(start.row, end.row);
+
+    // 범위 유효성 검사
+    const safeMinRow = Math.max(0, Math.min(minRow, this._data.length - 1));
+    const safeMaxRow = Math.max(0, Math.min(maxRow, this._data.length - 1));
+
+    // 행 삭제
+    this._data.splice(safeMinRow, safeMaxRow - safeMinRow + 1);
+
     this.selectedRow = null;
     this.selectedCells.clear();
     this.selectedRange = null;
     this._shiftStartCell = null;
     this.table.style.height = `${this.total * this.rowHeight}px`;
     this.render();
-    this.table.dispatchEvent(new CustomEvent('onRowDelete', {
-      detail: {
-        rowIndexes: Array.from({ length: result.deleted.length }, (_, i) => i),
-        rows: result.deleted,
-      },
-      bubbles: true,
-      composed: true,
-    }));
     this.hideContextMenu?.();
     this._clearCellSelection();
   }
@@ -122,7 +89,7 @@ export class GridDataTable {
    * 풀 크기 조정 (리사이즈 등) & 메인 렌더 함수 & 행/셀 클릭 처리 (이벤트 위임) & 스크롤링 이벤트
    */
   _initPlaceholder (){
-    this.table.style.height = `${this.dataController.getTotal() * this.rowHeight}px`
+    this.table.style.height = `${this._data.length * this.rowHeight}px`
     this.prevStart = null
     this.prevEnd = null
 
@@ -170,40 +137,10 @@ export class GridDataTable {
     this.tbody.appendChild(this.botPH)
   }
 
-  _adjustPoolSize (newSize) {
-    const oldSize = this.trPool.length
-    if (newSize === oldSize) return
-
-    if (newSize > oldSize) {
-      // 늘이기
-      for (let i = oldSize; i < newSize; i++) {
-        const tr = document.createElement('tr')
-
-        for (let c = 0; c < this.columns.length; c++) {
-          tr.appendChild(document.createElement('td'))
-        }
-
-        // botPH 직전에 삽입
-        this.tbody.insertBefore(tr, this.botPH)
-        this.trPool.push(tr)
-      }
-    } else {
-      // 줄이기
-      for (let i = oldSize - 1; i >= newSize; i--) {
-        const tr = this.trPool.pop()
-        this.tbody.removeChild(tr)
-      }
-    }
-  }
-
-  _disconnectResizeObserver() {
-    this._ro?.disconnect();
-  }
-
   render () {
     const scrollTop = this.container.scrollTop
     const newStart = Math.max(0, Math.floor(scrollTop / this.rowHeight) - this.overscan)
-    const newEnd   = Math.min(this.dataController.getTotal(), newStart + this.trPool.length)
+    const newEnd   = Math.min(this._data.length, newStart + this.trPool.length)
 
     const poolLength = this.trPool.length
 
@@ -216,7 +153,7 @@ export class GridDataTable {
 
     // placeholder
     const topPad = newStart * this.rowHeight
-    const botPad = (this.dataController.getTotal() - newEnd) * this.rowHeight
+    const botPad = (this._data.length - newEnd) * this.rowHeight
 
     this.container.style.setProperty('--top-placeholder', `${topPad}px`)
     this.container.style.setProperty('--bottom-placeholder', `${botPad}px`)
@@ -232,11 +169,11 @@ export class GridDataTable {
   _updateRow(poolIndex, rowIdx) {
     const tr = this.trPool[poolIndex];
 
-    if (rowIdx < 0 || rowIdx >= this.dataController.getTotal()) {
+    if (rowIdx < 0 || rowIdx >= this._data.length) {
       tr.style.display = 'none';
       return;
     }
-    const rowData = this.dataController.getData()[rowIdx];
+    const rowData = this._data[rowIdx];
 
     // 렌더링 수행
     tr.style.display = '';
@@ -330,7 +267,7 @@ export class GridDataTable {
     if (isNaN(rowIdx)) return;
 
     const colIdx = td.cellIndex;
-    const rowData = this.dataController.getData()[rowIdx];
+    const rowData = this._data[rowIdx];
     const isSame = this.selectedRow === rowIdx;
 
     const key = `${rowIdx}-${colIdx}`;
@@ -681,7 +618,7 @@ export class GridDataTable {
 
     lookupMap[evt.key]?.();
 
-    if (nextRow < 0 || nextRow >= this.dataController.getTotal()) return;
+    if (nextRow < 0 || nextRow >= this._data.length) return;
     if (nextCol < 0 || nextCol >= this.columns.length) return;
 
     // Y축 스크롤 보정
@@ -721,7 +658,6 @@ export class GridDataTable {
       }
     }
 
-    // ✅ 셀 선택 갱신
     if (evt.shiftKey && this.selectedCells.size > 0) {
       // 시작점이 없다면 현재 selectedRange.start 사용
       if (!this._shiftStartCell) {
@@ -835,12 +771,20 @@ export class GridDataTable {
 
     const exportExcelBtn = `
       <button class="menu-item export-excel">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
         셀 Excel 다운로드
       </button>
     `;
 
     const exportCSVBtn = `
       <button class="menu-item export-excel-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
         전체 Excel 다운로드
       </button>
     `;
@@ -937,14 +881,14 @@ export class GridDataTable {
     const rowLen = fillHTML.length;
     const colLen = fillHTML[0]?.length || 0;
 
-    const rowEnd = Math.min(this.dataController.getTotal() - 1, rowStart + rowLen - 1);
+    const rowEnd = Math.min(this._data.length - 1, rowStart + rowLen - 1);
     const colEnd = Math.min(this.columns.length - 1, colStart + colLen - 1);
 
     for (let i = 0; i < rowLen; i++) {
       const targetRow = rowStart + i;
       if (targetRow > rowEnd) break;
 
-      const rowData = this.dataController.getData()[targetRow];
+      const rowData = this._data[targetRow];
       if (!rowData) continue;
 
       for (let j = 0; j < colLen; j++) {
@@ -1028,7 +972,7 @@ export class GridDataTable {
         }
       : {
           rowStart: 0,
-          rowEnd: this.dataController.getData().length - 1,
+          rowEnd: this._data.length - 1,
           colStart: 0,
           colEnd: columns.length - 1,
         };
@@ -1043,7 +987,7 @@ export class GridDataTable {
 
     const body = [];
     for (let r = rowsToInclude.rowStart; r <= rowsToInclude.rowEnd; r++) {
-      const rowData = this.dataController.getData()[r];
+      const rowData = this._data[r];
       if (!rowData) continue;
 
       const row = [];
@@ -1246,7 +1190,7 @@ export class GridDataTable {
         const rowOffset = (i - rowStart) % rowLen;
         const colOffset = (j - colStart) % colLen;
 
-        const rowData = this.dataController.getData()[i];
+        const rowData = this._data[i];
         if (!rowData) continue;
 
         const col = this.columns[j];
@@ -1414,7 +1358,6 @@ export class GridDataTable {
 
   // ------------------------------------------
   destroy() {
-    this._disconnectResizeObserver();
     this._unbindScrollEvents();
     this._unbindClickEvents();
     this._unbindKeyboardEvents();
