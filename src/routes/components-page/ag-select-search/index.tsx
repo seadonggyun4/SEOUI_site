@@ -57,10 +57,6 @@ export default component$(() => {
         ];
       }
 
-      // 로딩 데모는 빈 상태로 유지
-      const loadingSearchSelect = document.getElementById('loading-search-demo') as CustomSelectSearchElement;
-      // 의도적으로 비어둠 - 드롭다운 열 때마다 로딩 상태 표시
-
       // 다중 선택 검색 데모 설정
       const multiSearchSelect = document.getElementById('multi-search-demo') as CustomSelectSearchElement;
       if (multiSearchSelect) {
@@ -148,41 +144,6 @@ export default component$(() => {
     if (log) log.innerHTML = '';
   });
 
-  const triggerAsyncLoading = $(() => {
-    const loadingSelect = document.getElementById('async-loading-demo') as CustomSelectSearchElement;
-    if (loadingSelect) {
-      // 먼저 옵션을 빈 배열로 설정하여 로딩 상태 유도
-      loadingSelect.optionItems = [];
-      
-      // 2초 후 새로운 옵션들로 로딩 완료
-      setTimeout(() => {
-        const techStack = [
-          'React', 'Vue.js', 'Angular', 'Svelte', 'Next.js', 'Nuxt.js', 'Gatsby',
-          'Node.js', 'Express', 'Fastify', 'NestJS', 'Koa', 'Hapi',
-          'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch',
-          'Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP', 'Terraform'
-        ];
-        
-        loadingSelect.optionItems = techStack.map((tech, i) => ({
-          value: `tech-${i}`,
-          label: `${tech} - 동적 로딩된 기술`
-        }));
-        
-        console.log('검색 가능한 기술 스택 로딩 완료!');
-      }, 2000);
-    }
-  });
-
-  const resetAsyncDemo = $(() => {
-    const loadingSelect = document.getElementById('async-loading-demo') as CustomSelectSearchElement;
-    if (loadingSelect) {
-      loadingSelect.optionItems = [
-        { value: 'initial', label: '초기 상태 (버튼을 눌러 비동기 로딩 테스트)' }
-      ];
-      loadingSelect.value = 'initial';
-    }
-  });
-
   return (
     <>
       <DocSection {...docs.basic}>
@@ -248,34 +209,14 @@ export default component$(() => {
       </DocSection>
 
       <DocSection {...docs.loading}>
-        <div class="demo-grid">
-          <div class="demo-item">
-            <h4>지속적 로딩 상태</h4>
-            <div
-              dangerouslySetInnerHTML={`<ag-select-search id="loading-search-demo" name="loading-search" width="300px"></ag-select-search>`}
-            />
-            <p class="demo-note">
-              💫 옵션이 비어있어서 드롭다운을 열 때마다 로딩 상태가 표시됩니다
-            </p>
-          </div>
-
-          <div class="demo-item">
-            <h4>비동기 로딩 시뮬레이션</h4>
-            <div
-              dangerouslySetInnerHTML={`<ag-select-search id="async-loading-demo" name="async-search" width="350px"></ag-select-search>`}
-            />
-            <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem;">
-              <button type="button" onClick$={triggerAsyncLoading} class="gradient-btn">
-                데이터 로딩 시작
-              </button>
-              <button type="button" onClick$={resetAsyncDemo} class="gradient-btn clear">
-                초기화
-              </button>
-            </div>
-            <p class="demo-note">
-              ⚡ 2초 후 기술 스택 데이터가 로딩되어 검색 가능해집니다
-            </p>
-          </div>
+        <div class="demo-item">
+          <h4>지속적 로딩 상태</h4>
+          <div
+            dangerouslySetInnerHTML={`<ag-select-search id="loading-search-demo" name="loading-search" width="300px"></ag-select-search>`}
+          />
+          <p class="demo-note">
+            💫 옵션이 비어있어서 드롭다운을 열 때마다 로딩 상태가 표시됩니다
+          </p>
         </div>
       </DocSection>
 
@@ -425,18 +366,6 @@ export default component$(() => {
             <pre class="form-output"></pre>
           </div>
         </form>
-      </DocSection>
-
-      <DocSection {...docs.performance}>
-        <div class="demo-item">
-          <h4>성능 최적화 데모</h4>
-          <div
-            dangerouslySetInnerHTML={`<ag-select-search id="performance-demo" name="products" width="350px"></ag-select-search>`}
-          />
-          <p class="demo-note">
-            🚀 실제 프로젝트에서는 이와 같이 API 데이터를 비동기로 로딩하여 사용하세요
-          </p>
-        </div>
       </DocSection>
     </>
   );

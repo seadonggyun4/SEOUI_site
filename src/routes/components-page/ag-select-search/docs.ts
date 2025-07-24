@@ -45,7 +45,7 @@ export const docs = {
       <code>ag-select-search</code>의 핵심 기능인 초성 검색은 한글 텍스트의 효율적인 필터링을 제공합니다.
 
       - **완전 매칭**: <code>"서울"</code> 입력 시 "서울특별시" 검색됨
-      - **부분 매칭**: <code>"특별"</code> 입력 시 "서울**특별**시" 검색됨  
+      - **부분 매칭**: <code>"특별"</code> 입력 시 "서울**특별**시" 검색됨
       - **초성 검색**: <code>"ㅅㅇ"</code> 입력 시 "**서울**특별시" 검색됨
       - **혼합 검색**: <code>"ㅅ울시"</code> 입력 시 "**서울**특별**시**" 검색됨
       - 검색어가 없으면 모든 옵션이 표시되며, 매칭되는 항목이 없으면 "데이터가 없습니다." 메시지가 표시됩니다
@@ -67,7 +67,7 @@ export const docs = {
 
       <!-- 드롭다운을 열고 다음과 같이 검색해보세요:
            - "서울" → 서울특별시 매칭
-           - "ㅅㅇ" → 서울특별시 매칭  
+           - "ㅅㅇ" → 서울특별시 매칭
            - "광역" → 모든 광역시 매칭
            - "ㄱㅇ" → 광주광역시, 경기도 매칭 -->
     `,
@@ -96,7 +96,7 @@ export const docs = {
       <script>
         function loadData() {
           const select = document.getElementById('loading-demo');
-          
+
           // 시뮬레이션: 2초 후 API 데이터 로딩 완료
           setTimeout(() => {
             select.optionItems = Array.from({ length: 50 }, (_, i) => ({
@@ -139,7 +139,7 @@ export const docs = {
         });
 
         console.log('10,000개 항목 로드 완료 - 검색해보세요!');
-        
+
         // 검색 예시: "프론트", "ㅍㄹㅌ", "백엔드", "ㅂㅇㄷ" 등으로 검색 가능
       </script>
     `,
@@ -305,49 +305,4 @@ export const docs = {
     `,
     lang: 'html'
   },
-
-  performance: {
-    title: '성능 최적화 및 권장사항',
-    description: `
-      <code>ag-select-search</code>를 효율적으로 사용하기 위한 권장사항입니다.
-
-      - **대용량 데이터**: 1,000개 이상의 옵션에서 검색 기능이 특히 유용합니다
-      - **초성 검색 활용**: 한글 사용자를 위해 초성 검색 패턴을 안내하면 UX가 향상됩니다
-      - **다중 선택 최적화**: 많은 항목 중 일부를 선택할 때 검색으로 빠르게 필터링하세요
-      - **비동기 로딩**: API 데이터는 로딩 상태를 활용하여 사용자 경험을 개선하세요
-      - **메모리 관리**: 가상 스크롤링으로 대용량 데이터도 메모리 효율적으로 처리됩니다
-      - 검색어는 드롭다운 닫을 때 자동 초기화되므로 별도 관리가 불필요합니다
-    `,
-    code: `
-      <!-- 권장: 대용량 데이터에서 검색 기능 활용 -->
-      <ag-select-search id="optimized-search" name="products" width="350px" placeholder="상품을 검색하세요"></ag-select-search>
-
-      <script>
-        // 실제 프로젝트 예시: 상품 목록 검색
-        const productSelect = document.getElementById('optimized-search');
-
-        // 비동기로 상품 데이터 로딩
-        fetch('/api/products')
-          .then(response => response.json())
-          .then(products => {
-            productSelect.optionItems = products.map(product => ({
-              value: product.id,
-              label: \`[\${product.category}] \${product.name} - \${product.price}원\`
-            }));
-            console.log(\`\${products.length}개 상품 로딩 완료\`);
-          })
-          .catch(error => {
-            console.error('상품 로딩 실패:', error);
-            // 에러 처리 로직
-          });
-
-        // 성능 모니터링
-        productSelect.addEventListener('onSelect', (e) => {
-          console.log('선택된 상품:', e.detail);
-          // 선택 시 추가 로직 (장바구니 추가 등)
-        });
-      </script>
-    `,
-    lang: 'html'
-  }
 };
