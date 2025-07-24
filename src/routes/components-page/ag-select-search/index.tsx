@@ -60,8 +60,8 @@ export default component$(() => {
       const multiSearchSelect = document.getElementById('multi-search-demo') as CustomSelectSearchElement;
       if (multiSearchSelect) {
         // 이벤트 리스너 등록
-        multiSearchSelect.addEventListener('onSelect', (e: Event) => {
-          const { value, label } = (e as CustomEvent).detail;
+        multiSearchSelect.addEventListener('onSelect', (event: Event) => {
+          const { value, label } = (event as CustomEvent).detail;
           const log = document.getElementById('multi-event-log');
           if (log) {
             log.innerHTML += `<div>선택됨: ${value} (${label})</div>`;
@@ -69,8 +69,8 @@ export default component$(() => {
           }
         });
 
-        multiSearchSelect.addEventListener('onDeselect', (e: Event) => {
-          const { value, label } = (e as CustomEvent).detail;
+        multiSearchSelect.addEventListener('onDeselect', (event: Event) => {
+          const { value, label } = (event as CustomEvent).detail;
           const log = document.getElementById('multi-event-log');
           if (log) {
             log.innerHTML += `<div class="deselect">해제됨: ${value} (${label})</div>`;
@@ -78,7 +78,7 @@ export default component$(() => {
           }
         });
 
-        multiSearchSelect.addEventListener('onReset', (e: Event) => {
+        multiSearchSelect.addEventListener('onReset', () => {
           const log = document.getElementById('multi-event-log');
           if (log) {
             log.innerHTML += `<div class="reset">리셋됨 - 검색어도 초기화</div>`;
@@ -90,8 +90,8 @@ export default component$(() => {
       // 이벤트 데모 설정
       const eventSearchSelect = document.getElementById('event-search-demo') as CustomSelectSearchElement;
       if (eventSearchSelect) {
-        eventSearchSelect.addEventListener('onSelect', (e: Event) => {
-          const { value, label } = (e as CustomEvent).detail;
+        eventSearchSelect.addEventListener('onSelect', (event: Event) => {
+          const { value, label } = (event as CustomEvent).detail;
           const log = document.getElementById('search-event-log');
           if (log) {
             const time = new Date().toLocaleTimeString();
@@ -100,7 +100,7 @@ export default component$(() => {
           }
         });
 
-        eventSearchSelect.addEventListener('onReset', (e: Event) => {
+        eventSearchSelect.addEventListener('onReset', () => {
           const log = document.getElementById('search-event-log');
           if (log) {
             const time = new Date().toLocaleTimeString();
@@ -109,11 +109,11 @@ export default component$(() => {
           }
         });
 
-        eventSearchSelect.addEventListener('change', (e: Event) => {
+        eventSearchSelect.addEventListener('change', (event: Event) => {
           const log = document.getElementById('search-event-log');
           if (log) {
             const time = new Date().toLocaleTimeString();
-            log.innerHTML += `<div>[${time}] 폼 값 변경: ${(e.target as HTMLElement).getAttribute('value')}</div>`;
+            log.innerHTML += `<div>[${time}] 폼 값 변경: ${(event.target as HTMLElement).getAttribute('value')}</div>`;
             log.scrollTop = log.scrollHeight;
           }
         });
@@ -138,7 +138,7 @@ export default component$(() => {
     }
   });
 
-  const clearEventLog = $(async (logId: string) => {
+  const clearEventLog = $((logId: string) => {
     const log = document.getElementById(logId);
     if (log) log.innerHTML = '';
   });

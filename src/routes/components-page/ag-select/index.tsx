@@ -39,15 +39,15 @@ export default component$(() => {
         arraySelect.value = 'hyundai';
       }
 
-      // 자동 로딩 데모 - 계속 비어있는 상태로 유지 (로딩 상태만 보여줌)
-      const loadingSelect = document.getElementById('loading-demo') as CustomSelectElement;
-      // 이 셀렉트는 의도적으로 비어둠 - 드롭다운 열 때마다 로딩 상태만 표시
+      // 로딩 데모는 의도적으로 비어둠 - 드롭다운 열 때마다 로딩 상태만 표시
+      // const loadingSelect = document.getElementById('loading-demo') as CustomSelectElement;
+      // 이 변수는 실제로 사용되지 않으므로 주석 처리
 
       // 이벤트 데모 설정
       const eventSelect = document.getElementById('event-demo') as CustomSelectElement;
       if (eventSelect) {
-        eventSelect.addEventListener('onSelect', (e: Event) => {
-          const { value, label } = (e as CustomEvent).detail;
+        eventSelect.addEventListener('onSelect', (event: Event) => {
+          const { value, label } = (event as CustomEvent).detail;
           const log = document.getElementById('event-log');
           if (log) {
             log.innerHTML += `<div>선택됨: ${value} (${label})</div>`;
@@ -55,7 +55,7 @@ export default component$(() => {
           }
         });
 
-        eventSelect.addEventListener('onReset', (e: Event) => {
+        eventSelect.addEventListener('onReset', () => {
           const log = document.getElementById('event-log');
           if (log) {
             log.innerHTML += `<div class="reset">리셋됨</div>`;
@@ -100,35 +100,9 @@ export default component$(() => {
     if (log) log.innerHTML = '';
   });
 
-  const triggerLoadingDemo = $(() => {
-    const loadingSelect = document.getElementById('loading-demo-manual') as CustomSelectElement;
-    if (loadingSelect) {
-      // 먼저 옵션을 빈 배열로 설정하여 로딩 상태 유도
-      loadingSelect.optionItems = [];
-
-      // 2초 후 새로운 옵션들로 로딩 완료
-      setTimeout(() => {
-        const randomOptions = [
-          { value: 'dynamic1', label: `동적 옵션 1 - ${new Date().getSeconds()}초` },
-          { value: 'dynamic2', label: `동적 옵션 2 - ${Math.random().toString(36).substr(2, 5)}` },
-          { value: 'dynamic3', label: '동적 옵션 3 - 로딩 완료!' },
-          { value: 'dynamic4', label: '동적 옵션 4 - 추가 데이터' }
-        ];
-        loadingSelect.optionItems = randomOptions;
-      }, 2000);
-    }
-  });
-
-  const resetLoadingDemo = $(() => {
-    const loadingSelect = document.getElementById('loading-demo-manual') as CustomSelectElement;
-    if (loadingSelect) {
-      // 초기 상태로 복원
-      loadingSelect.optionItems = [
-        { value: 'initial', label: '초기 옵션 (버튼을 눌러 로딩 테스트)' }
-      ];
-      loadingSelect.value = 'initial';
-    }
-  });
+  // 사용하지 않는 함수들 제거
+  // const triggerLoadingDemo = $(() => { ... });
+  // const resetLoadingDemo = $(() => { ... });
 
   return (
     <>
