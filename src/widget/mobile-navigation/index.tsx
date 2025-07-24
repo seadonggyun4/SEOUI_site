@@ -1,17 +1,14 @@
 import { component$, $ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useNavigation } from '@/context/NavigationContext';
+import { menu } from '@/config/menu';
 import './style.scss';
 
 export const MobileNavigation = component$(() => {
   const nav = useNavigation();
   const loc = useLocation();
-  const path = loc.url.pathname;
+  const currentLinks = menu;
 
-  const tab = path.startsWith('/components-page') ? 'component' : '';
-  const currentLinks = tab === 'component' ? componentLinks : [];
-
-  // 네비게이션 닫기 함수 (토글 방식)
   const closeNav = $(() => {
     nav.isOpen = false;
   });
@@ -65,38 +62,3 @@ export const MobileNavigation = component$(() => {
     </aside>
   );
 });
-
-// 네비게이션 데이터 (기존과 동일)
-const componentLinks = [
-  {
-    title: 'Search Selete',
-    children: [
-      { label: '셀렉트 박스', href: '/components-page/ag-select/' },
-      { label: '검색 셀렉트 박스', href: '/components-page/ag-select-search/' },
-    ],
-  },
-  {
-    title: 'DatePicker',
-    children: [
-      { label: '달력', href: '/components-page/ag-datepicker/' },
-    ],
-  },
-  {
-    title: 'Toast Message',
-    children: [
-      { label: '알림 메시지', href: '/components-page/ag-toast/' },
-    ],
-  },
-  {
-    title: 'Grid Table',
-    children: [
-      { label: '그리드 테이블', href: '/components-page/ag-grid-table/' },
-    ],
-  },
-  {
-    title: 'CheckBox Type',
-    children: [
-      { label: '체크박스', href: '/components-page/ag-check-box/' },
-    ],
-  },
-];

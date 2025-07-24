@@ -5,7 +5,7 @@ export default component$(() => {
   const nav = useNavigate();
 
   useVisibleTask$(() => {
-    nav('components-page/ag-select');
+    nav('select/select-usecase');
   });
 
   return null;
