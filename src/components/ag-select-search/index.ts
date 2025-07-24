@@ -13,6 +13,8 @@ interface VirtualSelectOption {
   label: string;
 }
 
+// No need for global interface extension
+
 export class AgSelectSearch extends AgSelect {
   static get properties() {
     return {
@@ -99,7 +101,7 @@ export class AgSelectSearch extends AgSelect {
                   <button
                     type="button"
                     class="tag-remove"
-                    @click=${(e: Event) => this.removeTag(e, value)}
+                    @click=${(e: Event) => this.removeTagSearch(e, value)}
                     title="제거"
                   >${this.getCloseIcon()}</button>
                 </span>
@@ -114,7 +116,7 @@ export class AgSelectSearch extends AgSelect {
             ? html`<button
                 type="button"
                 class="reset-button"
-                @click=${this.resetToDefault}
+                @click=${this.resetToDefaultSearch}
                 title="모두 지우기"
               >${this.getCloseIcon()}</button>`
             : ''
@@ -141,7 +143,7 @@ export class AgSelectSearch extends AgSelect {
             ? html`<button
                 type="button"
                 class="reset-button"
-                @click=${this.resetToDefault}
+                @click=${this.resetToDefaultSearch}
                 title="기본값으로 되돌리기"
               >${this.getCloseIcon()}</button>`
             : ''
@@ -155,12 +157,15 @@ export class AgSelectSearch extends AgSelect {
 
   public override _createVirtualSelect(options: VirtualSelectOption[], container: HTMLDivElement) {
     const virtual = super._createVirtualSelect(options, container);
-    virtual.isitSearch = true;
+    if (virtual) {
+      // Use type assertion to add the property
+      (virtual as any).isitSearch = true;
+    }
     return virtual;
   }
 
   // 가상 스크롤 초기화 - 부모 클래스 메서드 오버라이드하여 검색 처리 추가
-  protected initializeVirtualSelect(): void {
+  protected override initializeVirtualSelect(): void {
     const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
     const optionData = this.getAllOptionData();
 
@@ -226,7 +231,8 @@ export class AgSelectSearch extends AgSelect {
     this._virtual.setData(filtered, this.multiple ? null : this.value);
   }
 
-  private removeTag = (e: Event, valueToRemove: string): void => {
+  // Renamed to avoid conflict with parent class method
+  private removeTagSearch = (e: Event, valueToRemove: string): void => {
     e.stopPropagation();
     this._selectedValues = this._selectedValues.filter(value => value !== valueToRemove);
     this.updateFormValue();
@@ -264,7 +270,8 @@ export class AgSelectSearch extends AgSelect {
     this.requestUpdate();
   };
 
-  private resetToDefault = (e: Event): void => {
+  // Renamed to avoid conflict with parent class method
+  private resetToDefaultSearch = (e: Event): void => {
     e.stopPropagation();
 
     if (this.multiple) {
@@ -313,7 +320,7 @@ export class AgSelectSearch extends AgSelect {
     }
   };
 
-  public closeDropdown(): void {
+  public override closeDropdown(): void {
     super.closeDropdown();
     this._searchText = '';
     this._noMatchVisible = false;

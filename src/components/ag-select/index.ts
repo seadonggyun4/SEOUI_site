@@ -104,7 +104,8 @@ export class AgSelect extends LitElement {
     }
   }
 
-  private getCloseIcon() {
+  // Changed from private to protected so child classes can access
+  protected getCloseIcon() {
     return html`
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -112,7 +113,8 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  private getChevronDownIcon() {
+  // Changed from private to protected so child classes can access
+  protected getChevronDownIcon() {
     return html`
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -120,7 +122,8 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  private getChevronUpIcon() {
+  // Changed from private to protected so child classes can access
+  protected getChevronUpIcon() {
     return html`
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 10L8 6L4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -128,8 +131,8 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // 로딩 스피너 렌더링
-  private renderLoadingSpinner() {
+  // Changed from private to protected so child classes can access
+  protected renderLoadingSpinner() {
     return html`
       <div class="loading-container">
         <div class="loading-dots">
@@ -142,8 +145,8 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // 데이터 없음 렌더링
-  private renderNoData() {
+  // Changed from private to protected so child classes can access
+  protected renderNoData() {
     return html`
       <div class="no-data-container">
         <span class="no-data-text">데이터 없음</span>
@@ -151,8 +154,8 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // 드롭다운 렌더링
-  private renderDropdown() {
+  // Changed from private to protected so child classes can access
+  protected renderDropdown() {
     const hasOptions = this.getAllOptionData().length > 0;
     const showNoData = this.multiple && !this._isLoading && !hasOptions;
 
@@ -176,7 +179,8 @@ export class AgSelect extends LitElement {
     }
   }
 
-  private renderMultiSelect() {
+  // Changed from private to protected so child classes can access
+  protected renderMultiSelect() {
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
@@ -219,7 +223,8 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  private renderSingleSelect() {
+  // Changed from private to protected so child classes can access
+  protected renderSingleSelect() {
     const firstOptionValue = this._options && this._options.length > 0 ? this._options[0].value : null;
     const showResetButton = this.showReset &&
                           this._value !== null &&
@@ -246,7 +251,8 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  private removeTag = (e: Event, valueToRemove: string): void => {
+  // Changed from private to protected so child classes can access
+  protected removeTag = (e: Event, valueToRemove: string): void => {
     e.stopPropagation();
     this._selectedValues = this._selectedValues.filter(value => value !== valueToRemove);
     this.updateFormValue();
@@ -281,7 +287,8 @@ export class AgSelect extends LitElement {
     this.requestUpdate();
   };
 
-  private resetToDefault = (e: Event): void => {
+  // Changed from private to protected so child classes can access
+  protected resetToDefault = (e: Event): void => {
     e.stopPropagation();
 
     if (this.multiple) {
@@ -420,8 +427,8 @@ export class AgSelect extends LitElement {
     this.requestUpdate(); // open 상태 변경을 위한 리렌더링
   }
 
-  // 가상 스크롤 초기화
-  private initializeVirtualSelect(): void {
+  // 가상 스크롤 초기화 - Changed from private to protected
+  protected initializeVirtualSelect(): void {
     const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
     const optionData = this.getAllOptionData();
 
@@ -500,7 +507,8 @@ export class AgSelect extends LitElement {
     }
   }
 
-  private updateFormValue(): void {
+  // Changed from private to protected so child classes can access
+  protected updateFormValue(): void {
     if (this.multiple) {
       const formValue = this._selectedValues.join(',');
       this._internals.setFormValue(formValue);
