@@ -3,7 +3,6 @@ import {
   Slot,
   PropFunction,
   useSignal,
-  useVisibleTask$,
   Resource,
   useResource$,
   $
@@ -21,6 +20,9 @@ interface DocSectionProps {
   enableStreaming?: boolean;
   streamDelay?: number;
   priority?: 'high' | 'medium' | 'low';
+  // 컴포넌트 로딩 관련 새 옵션들
+  waitForComponents?: string[]; // 대기할 custom element 이름들
+  componentTimeout?: number; // 컴포넌트 로딩 타임아웃 (ms)
 }
 
 // 들여쓰기 제거
@@ -48,13 +50,13 @@ export const DocSection = component$<DocSectionProps>(
     onClick$,
     enableStreaming = true,
     streamDelay,
-    priority = 'medium'
+    priority = 'medium',
+    waitForComponents = [],
+    componentTimeout = 10000
   }) => {
-    // 즉시 표시되는 상태들
     const sectionOpen = useSignal(open);
-
-    // 스트리밍 상태들
     const isComponentsLoaded = useSignal(false);
+    const componentLoadingError = useSignal<string | null>(null);
 
     // Description을 스트리밍으로 로드
     const descriptionResource = useResource$<string>(async ({ track, cleanup }) => {
@@ -67,7 +69,6 @@ export const DocSection = component$<DocSectionProps>(
 
       try {
         if (enableStreaming) {
-          // 인라인으로 지연 시간 계산
           const delay = streamDelay !== undefined ? streamDelay :
                       priority === 'high' ? 0 :
                       priority === 'medium' ? 300 :
@@ -110,7 +111,6 @@ export const DocSection = component$<DocSectionProps>(
 
       try {
         if (enableStreaming) {
-          // 인라인으로 지연 시간 계산 (코드는 추가 200ms)
           const delay = streamDelay !== undefined ? streamDelay + 200 :
                       priority === 'high' ? 200 :
                       priority === 'medium' ? 500 :
@@ -149,24 +149,112 @@ export const DocSection = component$<DocSectionProps>(
       }
     });
 
-    // 컴포넌트 영역 스트리밍 (Slot 콘텐츠가 로드된 후 약간의 지연)
-    useVisibleTask$(({ cleanup }) => {
-      if (!enableStreaming) {
-        isComponentsLoaded.value = true;
-        return;
+    // 컴포넌트 로딩 상태를 실제로 추적하는 Resource
+    const componentResource = useResource$<boolean>(async ({ track, cleanup }) => {
+      track(() => sectionOpen.value);
+      track(() => waitForComponents.length);
+
+      if (!sectionOpen.value) return false;
+
+      // 대기할 컴포넌트가 없으면 즉시 로딩 완료
+      if (waitForComponents.length === 0) {
+        if (!enableStreaming) return true;
+
+        // 기본 지연 시간만 적용
+        const delay = streamDelay !== undefined ? streamDelay + 100 :
+                    priority === 'high' ? 100 :
+                    priority === 'medium' ? 400 :
+                    priority === 'low' ? 900 : 400;
+
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return true;
       }
 
-      // 인라인으로 지연 시간 계산 (컴포넌트는 추가 100ms)
-      const delay = streamDelay !== undefined ? streamDelay + 100 :
-                  priority === 'high' ? 100 :
-                  priority === 'medium' ? 400 :
-                  priority === 'low' ? 900 : 400;
+      const controller = new AbortController();
+      cleanup(() => controller.abort());
 
-      const timeout = setTimeout(() => {
-        isComponentsLoaded.value = true;
-      }, delay);
+      try {
+        // 각 컴포넌트가 정의될 때까지 대기
+        const componentPromises = waitForComponents.map(async (componentName) => {
+          // 이미 정의된 컴포넌트는 즉시 해결
+          if (customElements.get(componentName)) {
+            return true;
+          }
 
-      cleanup(() => clearTimeout(timeout));
+          // 컴포넌트 정의 대기 (타임아웃 포함)
+          const definedPromise = customElements.whenDefined(componentName);
+          const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error(`${componentName} 로딩 타임아웃`)), componentTimeout)
+          );
+
+          const abortPromise = new Promise((_, reject) => {
+            controller.signal.addEventListener('abort', () => {
+              reject(new DOMException('Operation aborted', 'AbortError'));
+            });
+          });
+
+          await Promise.race([definedPromise, timeoutPromise, abortPromise]);
+          return true;
+        });
+
+        await Promise.all(componentPromises);
+
+        if (controller.signal.aborted) {
+          throw new DOMException('Operation aborted', 'AbortError');
+        }
+
+        // 모든 컴포넌트가 정의된 후 DOM 업데이트 대기
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // 실제 DOM 엘리먼트들이 업그레이드될 때까지 대기
+        const elementCheckPromises = waitForComponents.map(async (componentName) => {
+          const elements = document.querySelectorAll(componentName);
+          if (elements.length === 0) return true;
+
+          // 각 엘리먼트가 업그레이드될 때까지 대기
+          const upgradePromises = Array.from(elements).map(async (element) => {
+            // HTMLElement 타입 가드 및 constructor 체크
+            if (!(element instanceof HTMLElement) || element.constructor !== HTMLElement) {
+              return true; // 이미 업그레이드됨
+            }
+
+            // 업그레이드 대기 (폴링 방식)
+            let attempts = 0;
+            const maxAttempts = 50; // 5초 최대 대기
+
+            while (element instanceof HTMLElement && element.constructor === HTMLElement && attempts < maxAttempts) {
+              if (controller.signal.aborted) {
+                throw new DOMException('Operation aborted', 'AbortError');
+              }
+
+              await new Promise(resolve => setTimeout(resolve, 100));
+              attempts++;
+            }
+
+            return !(element instanceof HTMLElement && element.constructor === HTMLElement);
+          });
+
+          await Promise.all(upgradePromises);
+          return true;
+        });
+
+        await Promise.all(elementCheckPromises);
+        return true;
+
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return false;
+        }
+        throw error;
+      }
+    });
+
+    // 컴포넌트 재시도 핸들러
+    const retryComponentLoading = $(() => {
+      componentLoadingError.value = null;
+      // Resource 재시도를 위해 섹션을 닫았다가 다시 열기
+      sectionOpen.value = false;
+      setTimeout(() => sectionOpen.value = true, 100);
     });
 
     // 코드 복사 핸들러
@@ -189,7 +277,9 @@ export const DocSection = component$<DocSectionProps>(
     // 섹션 토글 핸들러
     const handleToggle = $(() => {
       sectionOpen.value = !sectionOpen.value;
-      if (onClick$) onClick$();
+      if (onClick$) {
+        onClick$();
+      }
     });
 
     return (
@@ -202,6 +292,11 @@ export const DocSection = component$<DocSectionProps>(
           {enableStreaming && (
             <span class="streaming-indicator">
               <i class="fas fa-stream"></i>
+            </span>
+          )}
+          {waitForComponents.length > 0 && (
+            <span class="component-indicator" title={`대기 중인 컴포넌트: ${waitForComponents.join(', ')}`}>
+              <i class="fas fa-puzzle-piece"></i>
             </span>
           )}
         </summary>
@@ -228,7 +323,6 @@ export const DocSection = component$<DocSectionProps>(
                       <button
                         class="retry-button"
                         onClick$={() => {
-                          // 리소스 재시도 트리거
                           sectionOpen.value = false;
                           setTimeout(() => sectionOpen.value = true, 100);
                         }}
@@ -248,28 +342,70 @@ export const DocSection = component$<DocSectionProps>(
             </div>
           )}
 
-          {/* Components 영역 - 스트리밍 */}
+          {/* Components 영역 - 실제 컴포넌트 로딩 상태 기반 스트리밍 */}
           <div class="doc-components-wrapper">
-            {!isComponentsLoaded.value && enableStreaming ? (
-              <div class="components-skeleton">
-                <div class="skeleton-components">
-                  <div class="skeleton-button">
-                    <i class="fas fa-spinner fa-spin"></i>
+            <Resource
+              value={componentResource}
+              onPending={() => (
+                <div class="components-skeleton">
+                  <div class="skeleton-components">
+                    {waitForComponents.map((componentName) => (
+                      <div key={componentName} class="skeleton-component" title={`${componentName} 로딩 중`}>
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span class="component-name">{componentName}</span>
+                      </div>
+                    ))}
+                    {waitForComponents.length === 0 && (
+                      <>
+                        <div class="skeleton-button">
+                          <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <div class="skeleton-button">
+                          <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <div class="skeleton-button">
+                          <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                      </>
+                    )}
                   </div>
-                  <div class="skeleton-button">
-                    <i class="fas fa-spinner fa-spin"></i>
-                  </div>
-                  <div class="skeleton-button">
-                    <i class="fas fa-spinner fa-spin"></i>
+                  <span class="loading-text">
+                    {waitForComponents.length > 0
+                      ? `컴포넌트 로딩 중: ${waitForComponents.join(', ')}`
+                      : '컴포넌트 로딩 중...'
+                    }
+                  </span>
+                </div>
+              )}
+              onRejected={(error) => (
+                <div class="components-error">
+                  <i class="fas fa-exclamation-circle error-icon"></i>
+                  <div class="error-content">
+                    <strong>컴포넌트 로딩 실패</strong>
+                    <span class="error-message">{error.message}</span>
+                    <div class="error-actions">
+                      <button class="retry-button" onClick$={retryComponentLoading}>
+                        <i class="fas fa-redo"></i> 다시 시도
+                      </button>
+                      <button
+                        class="skip-button"
+                        onClick$={() => {
+                          isComponentsLoaded.value = true;
+                          componentLoadingError.value = null;
+                        }}
+                      >
+                        <i class="fas fa-forward"></i> 건너뛰기
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <span class="loading-text">컴포넌트 로딩 중...</span>
-              </div>
-            ) : (
-              <div class={`doc-components ${isComponentsLoaded.value ? 'loaded' : ''}`}>
-                <Slot />
-              </div>
-            )}
+              )}
+              onResolved={(loaded) => (
+                <div class={`doc-components ${loaded ? 'loaded' : ''}`}>
+                  <Slot />
+                </div>
+              )}
+            />
           </div>
 
           {/* Code 영역 - 스트리밍 */}
@@ -315,7 +451,6 @@ export const DocSection = component$<DocSectionProps>(
                         <button
                           class="raw-code-button"
                           onClick$={() => {
-                            // 원본 코드 표시
                             const codeElement = document.createElement('pre');
                             codeElement.textContent = dedent(code || '');
                             codeElement.className = 'raw-code';
