@@ -1,4 +1,5 @@
 import { LitElement, html } from 'lit';
+import './style.scss'
 
 export class AgToggle extends LitElement {
   static formAssociated = true;

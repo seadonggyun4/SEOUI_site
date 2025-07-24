@@ -1,4 +1,5 @@
 import { LitElement } from 'lit';
+import './style.scss'
 
 export class AgTable extends LitElement {
   private $table: HTMLTableElement | null = null;

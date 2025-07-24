@@ -1,4 +1,4 @@
-@use '@/routes/styles/constants/colors' as colors;
+@use '@/components/styles/constants/colors' as colors;
 
 ag-datepicker {
   position: fixed;
@@ -143,10 +143,35 @@ ag-datepicker {
     }
   }
 
-  .notice{
-    padding: 0;
-    background-color: transparent;
+  .notice {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    width: fit-content;
+    border-radius: 5px;
+    background-color: colors.$primary-bg-color;
+    color: colors.$primary-color;
+    font-weight: 500;
+    line-break: anywhere;
     line-height: 2;
+
+    &.error{
+      background-color: colors.$error-bg-color;
+      color: colors.$error-color;
+    }
+
+    &.warning{
+      background-color: colors.$warning-bg-color;
+      color: colors.$warning-color;
+    }
+
+    &.success{
+      background-color: colors.$success-bg-color;
+      color: colors.$success-color;
+    }
+
+    &.small {
+      padding: 0.3rem;
+    }
   }
 
   .datepicker-controler{
