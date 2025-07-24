@@ -1,7 +1,6 @@
 import { component$, $, useVisibleTask$ } from '@builder.io/qwik';
 import { DocSection } from '@/widget/doc-section';
 import { docs } from './docs';
-import './style.scss';
 
 interface CustomSelectElement extends HTMLElement {
   optionItems?: { value: string; label: string }[];
@@ -106,7 +105,7 @@ export default component$(() => {
     if (loadingSelect) {
       // 먼저 옵션을 빈 배열로 설정하여 로딩 상태 유도
       loadingSelect.optionItems = [];
-      
+
       // 2초 후 새로운 옵션들로 로딩 완료
       setTimeout(() => {
         const randomOptions = [

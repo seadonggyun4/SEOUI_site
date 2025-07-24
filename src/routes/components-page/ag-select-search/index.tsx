@@ -1,7 +1,6 @@
 import { component$, $, useVisibleTask$ } from '@builder.io/qwik';
 import { DocSection } from '@/widget/doc-section';
 import { docs } from './docs';
-import './style.scss';
 
 interface CustomSelectSearchElement extends HTMLElement {
   optionItems?: { value: string; label: string }[];

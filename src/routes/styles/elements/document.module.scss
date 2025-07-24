@@ -7,21 +7,21 @@
 
 .demo-item {
   h4 {
-    margin: 0 0 1rem 0;
+    margin-bottom: 1rem;
     font-size: 1rem;
     font-weight: 600;
     color: #374151;
   }
 
   .demo-note {
-    margin: 0.75rem 0 0 0;
-    font-size: 0.875rem;
+    margin: 0.5rem 0 0 0;
+    font-size: 1rem;
     color: #6b7280;
     font-style: italic;
     line-height: 1.4;
 
     &::before {
-      margin-right: 0.25rem;
+      margin-right: 0.3rem;
     }
   }
 }
@@ -29,9 +29,10 @@
 // 그라데이션 버튼 스타일링
 .gradient-btn {
   position: relative;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+  padding: 0.5rem 0.8rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -39,7 +40,6 @@
   color: white;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
-  margin-top: 0.75rem;
 
   &:hover {
     transform: translateY(-1px);
@@ -47,17 +47,6 @@
     background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
   }
 
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
-  }
-
-  &:focus {
-    outline: none;
-    ring: 2px solid rgba(102, 126, 234, 0.5);
-  }
-
-  // 클리어 버튼 변형
   &.clear {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     box-shadow: 0 2px 4px rgba(240, 147, 251, 0.2);
@@ -68,12 +57,10 @@
     }
   }
 
-  // 제출 버튼 변형
   &.submit {
+    padding: 1rem 2rem;
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     box-shadow: 0 2px 4px rgba(79, 172, 254, 0.2);
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
 
     &:hover {
       background: linear-gradient(135deg, #3d93e5 0%, #00d9e5 100%);
@@ -81,19 +68,6 @@
     }
   }
 
-  // 로딩 상태 (선택사항)
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-
-    &:hover {
-      transform: none;
-      box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
-    }
-  }
-
-  // 아이콘과 텍스트 간격
   .icon {
     margin-right: 0.5rem;
   }
@@ -101,19 +75,19 @@
 
 // 이벤트 로그 스타일링
 .event-log {
-  height: 150px;
+  height: 15rem;
   overflow-y: auto;
+  border-radius: 5px;
   background: #1f2937;
   color: #f9fafb;
-  padding: 0.75rem;
-  border-radius: 8px;
+  padding: 1rem;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.4;
   border: 1px solid #374151;
 
   div {
-    padding: 3px 0;
+    padding: 0.5rem 0;
     border-bottom: 1px solid rgba(55, 65, 81, 0.5);
 
     &:last-child {
@@ -137,7 +111,6 @@
     font-style: italic;
   }
 
-  // 커스텀 스크롤바
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -165,7 +138,6 @@
   padding: 2rem;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 
   .form-field {
@@ -176,7 +148,7 @@
     label {
       font-weight: 500;
       color: #374151;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
   }
 
@@ -191,17 +163,17 @@
     }
 
     .form-output {
+      border-radius: 5px;
       background: #1f2937;
       color: #f9fafb;
       padding: 1rem;
-      border-radius: 8px;
       font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
       font-size: 0.875rem;
       line-height: 1.5;
       white-space: pre-wrap;
-      min-height: 60px;
+      min-height: 6rem;
       border: 1px solid #374151;
-      max-height: 200px;
+      max-height: 20rem;
       overflow-y: auto;
 
       &:empty::before {
@@ -210,7 +182,6 @@
         font-style: italic;
       }
 
-      // 커스텀 스크롤바
       &::-webkit-scrollbar {
         width: 6px;
       }
@@ -229,47 +200,5 @@
         }
       }
     }
-  }
-}
-
-// 반응형 처리
-@media (max-width: 768px) {
-  .demo-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .demo-form {
-    padding: 1.5rem;
-  }
-
-  .gradient-btn {
-    padding: 0.625rem 1rem;
-    font-size: 0.875rem;
-
-    &.submit {
-      padding: 0.75rem 1.25rem;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .demo-item {
-    h4 {
-      font-size: 0.95rem;
-    }
-
-    .demo-note {
-      font-size: 0.825rem;
-    }
-  }
-
-  .demo-form {
-    padding: 1rem;
-    gap: 1.25rem;
-  }
-
-  .event-log {
-    height: 120px;
-    font-size: 0.825rem;
   }
 }
