@@ -7,7 +7,6 @@ interface CustomInputElement extends HTMLElement {
   disabled?: boolean;
   value?: string | null;
   options?: { label: string; value: string }[];
-  focus?: () => void;
 }
 
 export default component$(() => {
@@ -61,7 +60,17 @@ export default component$(() => {
         });
       }
 
-      // 비활성화 라디오 설정
+      // 결제 방법 라디오 설정
+      const paymentRadio = document.getElementById('payment-method') as CustomInputElement;
+      if (paymentRadio) {
+        paymentRadio.options = [
+          { label: '신용카드', value: 'card' },
+          { label: '계좌이체', value: 'bank' },
+          { label: '무통장입금', value: 'deposit' },
+          { label: '휴대폰 결제', value: 'mobile' }
+        ];
+        paymentRadio.value = 'card';
+      }
       const regionRadio = document.getElementById('region-selector') as CustomInputElement;
       if (regionRadio) {
         regionRadio.options = [
@@ -143,7 +152,7 @@ export default component$(() => {
     // 수동으로 라디오 검증 (컴포넌트에서 지원하지 않음)
     if (!ageRadio?.value) {
       alert('연령대를 선택해주세요.');
-      ageRadio?.focus?.();
+      ageRadio?.focus();
       return;
     }
 
