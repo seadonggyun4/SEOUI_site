@@ -12,7 +12,7 @@ export default component$(() => {
     import('@/components/ag-check-box');
     import('@/components/ag-toggle');
     import('@/components/ag-radio');
-    // import('@/components/ag-datepicker');
+    import('@/components/ag-datepicker');
     import('@/components/ag-toast');
     import('@/components/ag-grid-table');
     import('@/components/ag-search-page');
