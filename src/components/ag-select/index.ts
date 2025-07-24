@@ -90,7 +90,7 @@ export class AgSelect extends LitElement {
     this.removeEventListener('keydown', this._handleKeydownBound);
     this._virtual?.destroy();
     this._virtual = null;
-    
+
     if (this.multiple) {
       this._selectedValues = [];
     } else {
@@ -155,12 +155,12 @@ export class AgSelect extends LitElement {
   private renderDropdown() {
     const hasOptions = this.getAllOptionData().length > 0;
     const showNoData = this.multiple && !this._isLoading && !hasOptions;
-    
+
     return html`
       <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox">
-        ${this._isLoading 
-          ? this.renderLoadingSpinner() 
-          : showNoData 
+        ${this._isLoading
+          ? this.renderLoadingSpinner()
+          : showNoData
             ? this.renderNoData()
             : ''
         }
@@ -180,7 +180,7 @@ export class AgSelect extends LitElement {
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
-      <div class="ag-select multi-select" style="width: ${this.width}; height: ${this.height};">
+      <div class="ag-select multi-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <div class="selected-container ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           <div class="selected-tags">
             ${this._selectedValues.map(value => {
@@ -227,7 +227,7 @@ export class AgSelect extends LitElement {
                           this._value !== firstOptionValue;
 
     return html`
-      <div class="ag-select" style="width: ${this.width}; height: ${this.height};">
+      <div class="ag-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <button type="button" class="selected ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           ${this._labelText}
           ${showResetButton
@@ -394,12 +394,13 @@ export class AgSelect extends LitElement {
   private openDropdown(): void {
     window.dispatchEvent(new CustomEvent('ag-select-open', { detail: this }));
     this.open = true;
+    this.requestUpdate(); // open 상태 변경을 위한 리렌더링
 
     // 옵션이 없으면 무조건 로딩 시작
     if (this.hasNoOptions()) {
       this._isLoading = true;
       this.requestUpdate();
-      
+
       // 동적 로딩 시뮬레이션 (실제로는 API 호출 등)
       this.loadOptionsAsync().then(() => {
         // 옵션이 로드되면 initializeOptionsFromPropsOrSlot에서 자동으로 로딩 해제
@@ -416,21 +417,22 @@ export class AgSelect extends LitElement {
 
   public closeDropdown(): void {
     this.open = false;
+    this.requestUpdate(); // open 상태 변경을 위한 리렌더링
   }
 
   // 가상 스크롤 초기화
   private initializeVirtualSelect(): void {
     const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
     const optionData = this.getAllOptionData();
-    
+
     // 다중선택에서 모든 항목이 선택된 경우 가상 스크롤 생성하지 않음
     if (this.multiple && optionData.length === 0) {
       return;
     }
-    
+
     if (!this._virtual && scrollEl && !this._isLoading && optionData.length > 0) {
       this._virtual = this._createVirtualSelect(optionData, scrollEl);
-      
+
       if (this.multiple) {
         requestAnimationFrame(() => {
           this._virtual?.setActiveIndex(0);

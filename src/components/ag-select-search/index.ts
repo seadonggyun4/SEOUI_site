@@ -51,7 +51,7 @@ export class AgSelectSearch extends AgSelect {
   private renderSearchDropdown() {
     const hasOptions = this.getAllOptionData().length > 0;
     const showNoData = this.multiple && !this._isLoading && !hasOptions;
-    
+
     return html`
       <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
         <div class="select-search-input">
@@ -64,9 +64,9 @@ export class AgSelectSearch extends AgSelect {
           />
         </div>
         <div class="ag-select-scroll" role="listbox">
-          ${this._isLoading 
-            ? this.renderLoadingSpinner() 
-            : showNoData 
+          ${this._isLoading
+            ? this.renderLoadingSpinner()
+            : showNoData
               ? this.renderNoData()
               : ''
           }
@@ -87,7 +87,7 @@ export class AgSelectSearch extends AgSelect {
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
-      <div class="ag-select multi-select" style="width: ${this.width}; height: ${this.height};">
+      <div class="ag-select multi-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <div class="selected-container ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           <div class="selected-tags">
             ${this._selectedValues.map(value => {
@@ -134,7 +134,7 @@ export class AgSelectSearch extends AgSelect {
                           this._value !== firstOptionValue;
 
     return html`
-      <div class="ag-select" style="width: ${this.width}; height: ${this.height};">
+      <div class="ag-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <button type="button" class="selected ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           ${this._labelText}
           ${showResetButton
@@ -163,20 +163,20 @@ export class AgSelectSearch extends AgSelect {
   protected initializeVirtualSelect(): void {
     const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
     const optionData = this.getAllOptionData();
-    
+
     // 다중선택에서 모든 항목이 선택된 경우 가상 스크롤 생성하지 않음
     if (this.multiple && optionData.length === 0) {
       return;
     }
-    
+
     if (!this._virtual && scrollEl && !this._isLoading && optionData.length > 0) {
       this._virtual = this._createVirtualSelect(optionData, scrollEl);
-      
+
       // 검색 텍스트가 있으면 필터 적용
       if (this._searchText) {
         this._applyFilteredOptions();
       }
-      
+
       if (this.multiple) {
         requestAnimationFrame(() => {
           this._virtual?.setActiveIndex(0);

@@ -32,6 +32,17 @@ ag-select-search {
     }
   }
 
+  // select가 open된 상태일 때 border active 스타일
+  &.open {
+    .selected {
+      border-color: colors.$primary-color;
+    }
+
+    &.multi-select .selected-container {
+      border-color: colors.$primary-color;
+    }
+  }
+
   &.multi-select {
     .selected-container {
       position: relative;
@@ -67,9 +78,10 @@ ag-select-search {
           align-items: center;
           gap: 0.5rem;
           padding: 0.2rem 0.3rem;
-          background: #f8f8f8;
-          border-radius: 2px;
-          border: 1px solid colors.pick(gray, 6);
+          color: colors.$primary-color;
+          background: colors.$primary-bg-color;
+          border-radius: 25rem;
+          border: 1px solid colors.$primary-color;
           max-width: 15rem;
 
           .tag-remove {
@@ -176,7 +188,7 @@ ag-select-search {
       }
     }
 
-    // 데이터 없음 컨테이너 스타일  
+    // 데이터 없음 컨테이너 스타일
     .no-data-container {
       display: flex;
       align-items: center;
