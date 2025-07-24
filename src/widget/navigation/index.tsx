@@ -15,7 +15,7 @@ export const Navigation = component$(() => {
     <aside class={{ nav: true, open: nav.isOpen }}>
       <div class="nav-header">
         <h2>
-          <img src='/logo.png' />
+          <img src='/logo_header.png' />
         </h2>
       </div>
 
@@ -69,6 +69,12 @@ const componentLinks = [
     title: 'Grid Table',
     children: [
       { label: '그리드 테이블', href: '/components-page/ag-grid-table/' },
+    ],
+  },
+    {
+    title: 'CheckBox Type',
+    children: [
+      { label: '체크박스', href: '/components-page/ag-check-box/' },
     ],
   },
 ];

@@ -34,7 +34,7 @@ export const PageLoader = component$(() => {
     <div class="page-loder show">
       <div class="loader-content">
         <h2>
-          <img src='/logo.png' />
+          <img src='/logo_header.png' />
         </h2>
         <div class="loader-text">페이지를 불러오는 중...</div>
         <div class="loader-progress"></div>

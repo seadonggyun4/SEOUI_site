@@ -34,7 +34,7 @@
   font-size: 1rem;
   font-weight: bold;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: white;
@@ -75,7 +75,7 @@
 
 // 이벤트 로그 스타일링
 .event-log {
-  height: 15rem;
+  height: 20rem;
   overflow-y: auto;
   border-radius: 5px;
   background: #1f2937;
@@ -168,10 +168,10 @@
       color: #f9fafb;
       padding: 1rem;
       font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-      font-size: 0.875rem;
+      font-size: 1rem;
       line-height: 1.5;
       white-space: pre-wrap;
-      min-height: 6rem;
+      min-height: 10rem;
       border: 1px solid #374151;
       max-height: 20rem;
       overflow-y: auto;
@@ -201,4 +201,9 @@
       }
     }
   }
+}
+
+.button-group{
+  display: flex;
+  gap: 1rem;
 }

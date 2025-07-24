@@ -227,26 +227,24 @@ export default component$(() => {
   return (
     <>
       <DocSection {...docs.checkboxBasic}>
-        <div class="demo-grid">
-          <div class="demo-item">
-            <h4>기본 체크박스</h4>
-            <div dangerouslySetInnerHTML={`<ag-check-box></ag-check-box>`} />
-          </div>
+        <div class="demo-item">
+          <h4>기본 체크박스</h4>
+          <div dangerouslySetInnerHTML={`<ag-check-box></ag-check-box>`} />
+        </div>
 
-          <div class="demo-item">
-            <h4>미리 선택된 상태</h4>
-            <div dangerouslySetInnerHTML={`<ag-check-box checked></ag-check-box>`} />
-          </div>
+        <div class="demo-item">
+          <h4>미리 선택된 상태</h4>
+          <div dangerouslySetInnerHTML={`<ag-check-box checked></ag-check-box>`} />
+        </div>
 
-          <div class="demo-item">
-            <h4>라벨이 있는 체크박스</h4>
-            <div dangerouslySetInnerHTML={`<ag-check-box label="이용약관에 동의합니다"></ag-check-box>`} />
-          </div>
+        <div class="demo-item">
+          <h4>라벨이 있는 체크박스</h4>
+          <div dangerouslySetInnerHTML={`<ag-check-box label="이용약관에 동의합니다"></ag-check-box>`} />
+        </div>
 
-          <div class="demo-item">
-            <h4>비활성화된 체크박스</h4>
-            <div dangerouslySetInnerHTML={`<ag-check-box checked disabled label="수정 불가 항목"></ag-check-box>`} />
-          </div>
+        <div class="demo-item">
+          <h4>비활성화된 체크박스</h4>
+          <div dangerouslySetInnerHTML={`<ag-check-box checked disabled label="수정 불가 항목"></ag-check-box>`} />
         </div>
       </DocSection>
 
@@ -271,26 +269,24 @@ export default component$(() => {
       </DocSection>
 
       <DocSection {...docs.toggleBasic}>
-        <div class="demo-grid">
-          <div class="demo-item">
-            <h4>기본 토글</h4>
-            <div dangerouslySetInnerHTML={`<ag-toggle></ag-toggle>`} />
-          </div>
+        <div class="demo-item">
+          <h4>기본 토글</h4>
+          <div dangerouslySetInnerHTML={`<ag-toggle></ag-toggle>`} />
+        </div>
 
-          <div class="demo-item">
-            <h4>활성화된 토글</h4>
-            <div dangerouslySetInnerHTML={`<ag-toggle checked></ag-toggle>`} />
-          </div>
+        <div class="demo-item">
+          <h4>활성화된 토글</h4>
+          <div dangerouslySetInnerHTML={`<ag-toggle checked></ag-toggle>`} />
+        </div>
 
-          <div class="demo-item">
-            <h4>라벨이 있는 토글</h4>
-            <div dangerouslySetInnerHTML={`<ag-toggle label="이메일 알림 수신" checked></ag-toggle>`} />
-          </div>
+        <div class="demo-item">
+          <h4>라벨이 있는 토글</h4>
+          <div dangerouslySetInnerHTML={`<ag-toggle label="이메일 알림 수신" checked></ag-toggle>`} />
+        </div>
 
-          <div class="demo-item">
-            <h4>비활성화된 토글</h4>
-            <div dangerouslySetInnerHTML={`<ag-toggle disabled label="관리자 전용 기능"></ag-toggle>`} />
-          </div>
+        <div class="demo-item">
+          <h4>비활성화된 토글</h4>
+          <div dangerouslySetInnerHTML={`<ag-toggle disabled label="관리자 전용 기능"></ag-toggle>`} />
         </div>
       </DocSection>
 
@@ -437,20 +433,7 @@ export default component$(() => {
       </DocSection>
 
       <DocSection {...docs.dynamicUpdate}>
-        <div class="control-panel">
-          <button type="button" onClick$={toggleCheckbox} class="gradient-btn">
-            체크박스 토글
-          </button>
-          <button type="button" onClick$={toggleDisabled} class="gradient-btn">
-            비활성화 토글
-          </button>
-          <button type="button" onClick$={updateRadioOptions} class="gradient-btn">
-            라디오 옵션 업데이트
-          </button>
-          <button type="button" onClick$={resetAll} class="gradient-btn clear">
-            모두 리셋
-          </button>
-        </div>
+
 
         <div class="demo-grid">
           <div class="demo-item">
@@ -467,11 +450,22 @@ export default component$(() => {
             <h4>동적 라디오</h4>
             <div dangerouslySetInnerHTML={`<ag-radio id="dynamic-radio" name="dynamic"></ag-radio>`} />
           </div>
-        </div>
 
-        <p class="demo-note">
-          🎛️ 위 버튼들로 컴포넌트들의 상태를 동적으로 변경할 수 있습니다
-        </p>
+          <div class="button-group">
+            <button type="button" onClick$={toggleCheckbox} class="gradient-btn">
+              체크박스 토글
+            </button>
+            <button type="button" onClick$={toggleDisabled} class="gradient-btn">
+              비활성화 토글
+            </button>
+            <button type="button" onClick$={updateRadioOptions} class="gradient-btn">
+              라디오 옵션 업데이트
+            </button>
+            <button type="button" onClick$={resetAll} class="gradient-btn clear">
+              모두 리셋
+            </button>
+          </div>
+        </div>
       </DocSection>
     </>
   );
