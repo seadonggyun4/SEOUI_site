@@ -27,7 +27,7 @@
     "@babel/core": "^7.27.4",
     "@babel/plugin-proposal-decorators": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
-    "@builder.io/qwik": "^1.14.1",
+    "@builder.io/qwik": "^1.15.0",
     "@builder.io/qwik-city": "^1.14.1",
     "@eslint/js": "latest",
     "@netlify/edge-functions": "^2.0.0",
