@@ -71,6 +71,7 @@ export default component$(() => {
         ];
         paymentRadio.value = 'card';
       }
+
       const regionRadio = document.getElementById('region-selector') as CustomInputElement;
       if (regionRadio) {
         regionRadio.options = [
@@ -126,15 +127,16 @@ export default component$(() => {
     });
   });
 
+  // 타입 안전한 폼 데이터 처리
   const handleFormSubmit = $((ev: SubmitEvent) => {
     ev.preventDefault();
 
     const form = ev.target as HTMLFormElement;
     const formData = new FormData(form);
-    const preferences = {};
+    const preferences: Record<string, string> = {};
 
     for (const [key, value] of formData.entries()) {
-      preferences[key] = value;
+      preferences[key] = value as string;
     }
 
     const output = form.querySelector('.form-output') as HTMLElement;
