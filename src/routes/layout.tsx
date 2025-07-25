@@ -4,6 +4,7 @@ import { NavToggleButton } from '@/widget/nav-toggle-button';
 import { useNavigationProvider } from '@/context/NavigationContext';
 import { PageLoader } from '@/widget/page-loader';
 import { MobileNavigation } from '@/widget/mobile-navigation';
+import { TopBar } from '@/widget/top-bar';
 import './layout.scss';
 import './layout-component-page.scss'
 
@@ -12,6 +13,7 @@ export default component$(() => {
 
   return (
     <>
+      <TopBar />
       <main id='main'>
         <Slot />
       </main>
