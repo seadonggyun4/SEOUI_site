@@ -38,6 +38,56 @@ export const docs = {
     lang: 'html'
   },
 
+  theme: {
+    title: '테마 시스템',
+    description: `
+      <code>seo-select</code>와 <code>seo-select-search</code>는 두 가지 테마를 지원합니다:
+
+      - <strong>basic</strong>: 기본적인 직각 모서리 스타일 (테두리 반경 없음)
+      - <strong>float</strong>: 둥근 모서리와 그림자 효과가 있는 플로팅 스타일 (기본값)
+
+      <strong>float 테마</strong>의 특징:
+      - 5px border-radius로 둥근 모서리
+      - 부드러운 드롭 섀도우 효과
+      - 드롭다운이 더 떨어진 위치(3.5rem)에서 나타남
+      - 위에서 아래로 슬라이드되는 애니메이션 효과 (0.2초)
+      - 검색 입력 필드도 상단 모서리가 둥글게 처리됨
+
+      <strong>basic 테마</strong>의 특징:
+      - 직각 모서리 (border-radius: 0)
+      - 그림자 효과 없음
+      - 즉시 나타나는 드롭다운 (애니메이션 없음)
+      - 전통적인 select 박스 스타일
+
+      **참고**: 검색 기능이 있는 컴포넌트에서 float 테마 사용 시,
+      검색 입력에 포커스하면 그라데이션 글로우 효과가 나타납니다.
+    `,
+    code: `
+      <!-- Float 테마 (기본값) - 둥근 모서리와 애니메이션 -->
+      <seo-select name="float-single" theme="float" width="200px">
+        <option value="option1">플로팅 옵션 1</option>
+        <option value="option2">플로팅 옵션 2</option>
+        <option value="option3">플로팅 옵션 3</option>
+      </seo-select>
+
+      <!-- Basic 테마 - 직각 모서리와 즉시 표시 -->
+      <seo-select name="basic-single" theme="basic" width="200px">
+        <option value="option1">베이직 옵션 1</option>
+        <option value="option2">베이직 옵션 2</option>
+        <option value="option3">베이직 옵션 3</option>
+      </seo-select>
+
+      <script>
+        // 다중 선택 초기값 설정
+        document.querySelector('[name="float-multi"]').selectedValues = ['react', 'vue'];
+
+        // 드롭다운을 열어보시면 테마별 차이를 확인할 수 있습니다
+        console.log('테마 데모 준비 완료');
+      </script>
+    `,
+    lang: 'html'
+  },
+
   loading: {
     title: '로딩 상태 및 비동기 처리',
     description: `

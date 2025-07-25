@@ -178,6 +178,46 @@ export default component$(() => {
         </div>
       </DocSection>
 
+      <DocSection {...docs.theme}>
+        <div class="demo-item">
+          <h4>Float 테마 (기본값) - 검색 기능</h4>
+          <div
+            dangerouslySetInnerHTML={`
+              <seo-select-search name="search-float" theme="float" width="250px">
+                <option value="js">JavaScript</option>
+                <option value="ts">TypeScript</option>
+                <option value="react">React</option>
+                <option value="vue">Vue.js</option>
+                <option value="angular">Angular</option>
+                <option value="svelte">Svelte</option>
+              </seo-select-search>
+            `}
+          />
+          <p class="demo-note">
+            🎨 둥근 모서리, 그라데이션 글로우, 슬라이드 애니메이션이 적용됩니다. "script", "ㅅㅋㄹㅍㅌ" 등으로 검색해보세요.
+          </p>
+        </div>
+
+        <div class="demo-item">
+          <h4>Basic 테마 - 검색 기능</h4>
+          <div
+            dangerouslySetInnerHTML={`
+              <seo-select-search name="search-basic" theme="basic" width="250px">
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="go">Go</option>
+                <option value="rust">Rust</option>
+                <option value="php">PHP</option>
+                <option value="ruby">Ruby</option>
+              </seo-select-search>
+            `}
+          />
+          <p class="demo-note">
+            📐 직각 모서리와 즉시 표시되는 전통적인 스타일입니다. "java", "ㅈㅂ" 등으로 검색해보세요.
+          </p>
+        </div>
+      </DocSection>
+
       <DocSection {...docs.search}>
         <div class="demo-item">
           <h4>초성 검색 기능 테스트</h4>

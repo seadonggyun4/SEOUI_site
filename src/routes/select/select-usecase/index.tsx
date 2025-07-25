@@ -39,10 +39,6 @@ export default component$(() => {
         arraySelect.value = 'hyundai';
       }
 
-      // 로딩 데모는 의도적으로 비어둠 - 드롭다운 열 때마다 로딩 상태만 표시
-      // const loadingSelect = document.getElementById('loading-demo') as CustomSelectElement;
-      // 이 변수는 실제로 사용되지 않으므로 주석 처리
-
       // 이벤트 데모 설정
       const eventSelect = document.getElementById('event-demo') as CustomSelectElement;
       if (eventSelect) {
@@ -100,10 +96,6 @@ export default component$(() => {
     if (log) log.innerHTML = '';
   });
 
-  // 사용하지 않는 함수들 제거
-  // const triggerLoadingDemo = $(() => { ... });
-  // const resetLoadingDemo = $(() => { ... });
-
   return (
     <>
       <DocSection {...docs.basic}>
@@ -127,6 +119,40 @@ export default component$(() => {
             dangerouslySetInnerHTML={`<seo-select id="array-demo" name="brand-array" width="200px"></seo-select>`}
           />
         </div>
+      </DocSection>
+
+      <DocSection {...docs.theme}>
+          <div class="demo-item">
+            <h4>Float 테마 (기본값)</h4>
+            <div
+              dangerouslySetInnerHTML={`
+                <seo-select name="float-single" theme="float" width="200px">
+                  <option value="option1">플로팅 옵션 1</option>
+                  <option value="option2">플로팅 옵션 2</option>
+                  <option value="option3">플로팅 옵션 3</option>
+                </seo-select>
+              `}
+            />
+            <p class="demo-note">
+              🎨 둥근 모서리와 슬라이드 애니메이션이 적용됩니다
+            </p>
+          </div>
+
+          <div class="demo-item">
+            <h4>Basic 테마</h4>
+            <div
+              dangerouslySetInnerHTML={`
+                <seo-select name="basic-single" theme="basic" width="200px">
+                  <option value="option1">베이직 옵션 1</option>
+                  <option value="option2">베이직 옵션 2</option>
+                  <option value="option3">베이직 옵션 3</option>
+                </seo-select>
+              `}
+            />
+            <p class="demo-note">
+              📐 직각 모서리와 즉시 표시되는 전통적인 스타일입니다
+            </p>
+          </div>
       </DocSection>
 
       <DocSection {...docs.loading}>

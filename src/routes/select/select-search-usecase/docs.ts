@@ -39,6 +39,58 @@ export const docs = {
     lang: 'html'
   },
 
+  theme: {
+    title: '테마 시스템',
+    description: `
+      <code>seo-select-search</code>는 부모 클래스와 동일한 테마 시스템을 지원합니다:
+
+      - <strong>basic</strong>: 기본적인 직각 모서리 스타일 (테두리 반경 없음)
+      - <strong>float</strong>: 둥근 모서리와 그림자 효과가 있는 플로팅 스타일 (기본값)
+
+      <strong>float 테마</strong>의 검색 기능 특징:
+      - 검색 입력 필드의 상단 모서리가 둥글게 처리됨 (5px border-radius)
+      - 검색 입력에 포커스 시 그라데이션 글로우 효과 적용
+      - 드롭다운이 위에서 아래로 슬라이드되는 애니메이션
+      - 전체적으로 부드럽고 모던한 사용자 경험
+
+      <strong>basic 테마</strong>의 검색 기능 특징:
+      - 직각 모서리의 전통적인 검색 입력 필드
+      - 그림자나 애니메이션 효과 없음
+      - 즉시 나타나는 드롭다운으로 빠른 반응성
+
+      **참고**: 검색 입력 필드의 포커스 효과는 float 테마에서만 적용됩니다.
+    `,
+    code: `
+      <!-- Float 테마 (기본값) - 검색 기능 포함 -->
+      <seo-select-search name="search-float" theme="float" width="250px">
+        <option value="js">JavaScript</option>
+        <option value="ts">TypeScript</option>
+        <option value="react">React</option>
+        <option value="vue">Vue.js</option>
+        <option value="angular">Angular</option>
+        <option value="svelte">Svelte</option>
+      </seo-select-search>
+
+      <!-- Basic 테마 - 검색 기능 포함 -->
+      <seo-select-search name="search-basic" theme="basic" width="250px">
+        <option value="python">Python</option>
+        <option value="java">Java</option>
+        <option value="go">Go</option>
+        <option value="rust">Rust</option>
+        <option value="php">PHP</option>
+        <option value="ruby">Ruby</option>
+      </seo-select-search>
+
+      <script>
+        // 드롭다운을 열고 검색해보세요:
+        // Float 테마: "script", "ㅅㅋㄹㅍㅌ" 등으로 검색 시 부드러운 효과
+        // Basic 테마: 동일한 검색이지만 즉시 반응하는 클래식한 느낌
+        console.log('테마별 검색 기능 데모 준비 완료');
+      </script>
+    `,
+    lang: 'html'
+  },
+
   search: {
     title: '초성 검색 기능',
     description: `
