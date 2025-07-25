@@ -1,19 +1,12 @@
 import { component$, useSignal, $ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
+import { TopBarMenu } from '@/config/menu';
 import './style.scss';
 
 export const TopBar = component$(() => {
   const loc = useLocation();
   const selectedLanguage = useSignal('ko');
   const isLanguageDropdownOpen = useSignal(false);
-
-  const menuItems = [
-    { href: '/select', label: 'Select', icon: 'fas fa-chevron-down' },
-    { href: '/toast', label: 'Toast', icon: 'fas fa-bell' },
-    { href: '/checkbox', label: 'CheckBox', icon: 'fas fa-check-square' },
-    { href: '/grid-table', label: 'Grid Table', icon: 'fas fa-table' },
-    { href: '/date-picker', label: 'Date Picker', icon: 'fas fa-calendar-alt' }
-  ];
 
   const languages = [
     { code: 'en', label: 'English', flag: '🇺🇸' },
@@ -31,6 +24,27 @@ export const TopBar = component$(() => {
     isLanguageDropdownOpen.value = !isLanguageDropdownOpen.value;
   });
 
+  // 현재 URL의 첫 번째 세그먼트 추출
+  const getCurrentFirstSegment = () => {
+    const pathname = loc.url.pathname;
+    const segments = pathname.split('/').filter(segment => segment !== '');
+    return segments[0] || '';
+  };
+
+  // TopBarMenu 링크의 첫 번째 세그먼트 추출
+  const getLinkFirstSegment = (link: string) => {
+    const segments = link.split('/').filter(segment => segment !== '');
+    return segments[0] || '';
+  };
+
+  // active 상태 확인 함수
+  const isActive = (menuLink: string) => {
+    const currentFirstSegment = getCurrentFirstSegment();
+    const linkFirstSegment = getLinkFirstSegment(menuLink);
+    
+    return currentFirstSegment === linkFirstSegment && currentFirstSegment !== '';
+  };
+
   const currentLanguage = languages.find(lang => lang.code === selectedLanguage.value);
 
   return (
@@ -44,11 +58,11 @@ export const TopBar = component$(() => {
         {/* Navigation Menu */}
         <nav class="topbar-nav">
           <ul class="topbar-menu">
-            {menuItems.map((item) => (
-              <li key={item.href} class="topbar-menu-item">
+            {TopBarMenu.map((item) => (
+              <li key={item.link} class="topbar-menu-item">
                 <Link
-                  href={item.href}
-                  class={`topbar-link ${loc.url.pathname === item.href ? 'active' : ''}`}
+                  href={item.link}
+                  class={`topbar-link ${isActive(item.link) ? 'active' : ''}`}
                 >
                   <span class="topbar-link-icon">
                     <i class={item.icon}></i>

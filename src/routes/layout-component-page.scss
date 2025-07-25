@@ -4,7 +4,7 @@
 .components-layout {
   display: grid;
   gap: 5rem;
-  padding: 2rem 0;
+  padding: 10rem 0 2rem 0;
   margin: 0 auto;
   width: 70%;
   height: 100%;
@@ -12,7 +12,7 @@
 
   &.wide{
     margin: 0 auto;
-    padding: 2rem;
+    padding: 10rem 2rem 2rem 2rem;
     width: 100%;
   }
 }

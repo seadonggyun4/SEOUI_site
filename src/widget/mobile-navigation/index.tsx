@@ -1,13 +1,49 @@
 import { component$, $ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useNavigation } from '@/context/NavigationContext';
-import { menu } from '@/config/menu';
+import { 
+  selectMenu, 
+  ToastMenu, 
+  CheckBoxMenu, 
+  GridTableMenu, 
+  DatePickerMenu 
+} from '@/config/menu';
 import './style.scss';
 
 export const MobileNavigation = component$(() => {
   const nav = useNavigation();
   const loc = useLocation();
-  const currentLinks = menu;
+  
+  // 현재 경로의 첫 번째 세그먼트 추출
+  const pathSegments = loc.url.pathname.split('/').filter(Boolean);
+  const firstSegment = pathSegments[0];
+  
+  // 첫 번째 세그먼트에 따라 적절한 메뉴 선택
+  const getCurrentMenu = () => {
+    switch (firstSegment) {
+      case 'select':
+        return selectMenu;
+      case 'toast':
+        return ToastMenu;
+      case 'check-box':
+        return CheckBoxMenu;
+      case 'grid-table':
+        return GridTableMenu;
+      case 'date-picker':
+        return DatePickerMenu;
+      default:
+        return [
+          {
+            title: 'Error',
+            children: [
+              { label: 'label에 오류가 발생했습니다.', href: '#' }
+            ]
+          }
+        ]; // 기본 더미 메뉴
+    }
+  };
+  
+  const currentLinks = getCurrentMenu();
 
   const closeNav = $(() => {
     nav.isOpen = false;
