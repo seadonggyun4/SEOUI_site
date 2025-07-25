@@ -35,6 +35,7 @@
   .label-text {
     user-select: none;
     position: relative;
+    white-space: nowrap;
 
     &::after {
       content: "";
