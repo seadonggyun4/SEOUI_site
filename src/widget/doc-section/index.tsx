@@ -319,16 +319,19 @@ export const DocSection = component$<DocSectionProps>(
       >
         <summary onClick$={handleToggle}>
           {title}
-          {enableStreaming && (
-            <span class="streaming-indicator">
-              <i class="fas fa-stream"></i>
-            </span>
-          )}
-          {waitForComponents.length > 0 && (
-            <span class="component-indicator" title={`${translations.waitingComponents}: ${waitForComponents.join(', ')}`}>
-              <i class="fas fa-puzzle-piece"></i>
-            </span>
-          )}
+
+          <div class="flex-group">
+            {waitForComponents.length > 0 && (
+              <span class="component-indicator" title={`${translations.waitingComponents}: ${waitForComponents.join(', ')}`}>
+                <i class="fas fa-puzzle-piece"></i>
+              </span>
+            )}
+            {enableStreaming && (
+              <span class="streaming-indicator">
+                <i class="fas fa-stream"></i>
+              </span>
+            )}
+          </div>
         </summary>
 
         <article class="docs-content">
