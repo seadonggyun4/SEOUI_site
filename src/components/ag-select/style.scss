@@ -269,7 +269,7 @@ ag-select-search {
     align-items: center;
     justify-content: center;
     width: fit-content;
-    padding: 0 1rem;
+    padding: 0 0.5rem;
     height: 80%;
     border: none;
     color: colors.pick(gray, 9);
@@ -283,6 +283,10 @@ ag-select-search {
 
     &:hover {
       color: colors.$error-color;
+    }
+
+    svg {
+      margin-bottom: 0.2rem;
     }
   }
 

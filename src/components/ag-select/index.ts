@@ -105,7 +105,6 @@ export class AgSelect extends LitElement {
     }
   }
 
-  // Changed from private to protected so child classes can access
   protected getCloseIcon() {
     return html`
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -114,7 +113,6 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // Changed from private to protected so child classes can access
   protected getChevronDownIcon() {
     return html`
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -123,7 +121,6 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // Changed from private to protected so child classes can access
   protected getChevronUpIcon() {
     return html`
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -132,7 +129,6 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // Changed from private to protected so child classes can access
   protected renderLoadingSpinner() {
     return html`
       <div class="loading-container">
@@ -146,7 +142,6 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // Changed from private to protected so child classes can access
   protected renderNoData() {
     return html`
       <div class="no-data-container">
@@ -155,7 +150,6 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // Changed from private to protected so child classes can access
   protected renderDropdown() {
     const hasOptions = this.getAllOptionData().length > 0;
     const showNoData = this.multiple && !this._isLoading && !hasOptions;
@@ -180,7 +174,6 @@ export class AgSelect extends LitElement {
     }
   }
 
-  // Changed from private to protected so child classes can access
   protected renderMultiSelect() {
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
@@ -224,7 +217,6 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // Changed from private to protected so child classes can access
   protected renderSingleSelect() {
     const firstOptionValue = this._options && this._options.length > 0 ? this._options[0].value : null;
     const showResetButton = this.showReset &&
@@ -252,7 +244,6 @@ export class AgSelect extends LitElement {
     `;
   }
 
-  // Changed from private to protected so child classes can access
   protected removeTag = (e: Event, valueToRemove: string): void => {
     e.stopPropagation();
     this._selectedValues = this._selectedValues.filter(value => value !== valueToRemove);
@@ -271,6 +262,7 @@ export class AgSelect extends LitElement {
         if (scrollEl) {
           this._virtual = this._createVirtualSelect(optionData, scrollEl);
           requestAnimationFrame(() => {
+            // 다중 선택 모드에서는 항상 첫 번째 옵션으로 포커스 초기화
             this._virtual?.setActiveIndex(0);
           });
         }
@@ -288,7 +280,6 @@ export class AgSelect extends LitElement {
     this.requestUpdate();
   };
 
-  // Changed from private to protected so child classes can access
   protected resetToDefault = (e: Event): void => {
     e.stopPropagation();
 
@@ -306,6 +297,7 @@ export class AgSelect extends LitElement {
           const optionData = this.getAllOptionData();
           this._virtual = this._createVirtualSelect(optionData, scrollEl);
           requestAnimationFrame(() => {
+            // 다중 선택 모드에서는 항상 첫 번째 옵션으로 포커스 초기화
             this._virtual?.setActiveIndex(0);
           });
         }
@@ -324,12 +316,14 @@ export class AgSelect extends LitElement {
         this.value = firstOption.value;
         this._labelText = firstOption.textContent || '';
 
+        // 드롭다운이 열려있는 경우에만 즉시 activeIndex 업데이트
         if (this.open && this._virtual) {
-          const firstOptionIndex = 0;
           requestAnimationFrame(() => {
-            this._virtual?.setActiveIndex(firstOptionIndex);
+            this._virtual?.setActiveIndex(0);
           });
         }
+        // 드롭다운이 닫혀있어도 다음 열기 시 첫 번째 옵션이 활성화되도록
+        // value 설정으로 충분 (initializeVirtualSelect에서 처리됨)
 
         this.dispatchEvent(
           new CustomEvent('onReset', {
@@ -428,7 +422,7 @@ export class AgSelect extends LitElement {
     this.requestUpdate(); // open 상태 변경을 위한 리렌더링
   }
 
-  // 가상 스크롤 초기화 - Changed from private to protected
+  // 가상 스크롤 초기화
   protected initializeVirtualSelect(): void {
     const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
     const optionData = this.getAllOptionData();
@@ -442,10 +436,12 @@ export class AgSelect extends LitElement {
       this._virtual = this._createVirtualSelect(optionData, scrollEl);
 
       if (this.multiple) {
+        // 다중 선택 모드에서는 항상 첫 번째 옵션으로 초기화
         requestAnimationFrame(() => {
           this._virtual?.setActiveIndex(0);
         });
       } else {
+        // 단일 선택 모드에서는 현재 선택된 값의 인덱스 찾기
         const selectedIndex = optionData.findIndex((opt) => opt.value === this._value);
         requestAnimationFrame(() => {
           this._virtual?.setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
@@ -508,7 +504,6 @@ export class AgSelect extends LitElement {
     }
   }
 
-  // Changed from private to protected so child classes can access
   protected updateFormValue(): void {
     if (this.multiple) {
       const formValue = this._selectedValues.join(',');
