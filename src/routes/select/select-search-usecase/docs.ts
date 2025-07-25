@@ -357,4 +357,91 @@ export const docs = {
     `,
     lang: 'html'
   },
+
+  darkmode: {
+    title: '다크 모드 지원',
+    description: `
+      <code>seo-select-search</code>는 <strong>dark</strong> 속성으로 다크 모드를 완벽하게 지원합니다.
+
+      <strong>검색 기능과 다크 모드</strong>:
+      - 검색 입력창도 다크 테마로 완전히 변환됩니다
+      - 검색 아이콘 색상이 다크 모드에 맞게 자동 조정됩니다
+      - 검색 입력 필드의 포커스 효과도 다크 모드 전용 스타일로 적용됩니다
+      - 초성 검색 결과 하이라이팅도 다크 모드에서 가독성을 유지합니다
+      - 로딩 스피너와 "데이터 없음" 메시지도 다크 테마로 표시됩니다
+
+      <strong>다크 모드 검색창 특징</strong>:
+      - 배경: 어두운 회색 (#2d3748)
+      - 텍스트: 밝은 회색 (#e2e8f0)
+      - 플레이스홀더: 중간 회색 (#718096)
+      - 포커스 테두리: 파란색 계열 (#63b3ed)
+      - 검색 아이콘: 보조 텍스트 색상 (#a0aec0)
+
+      **참고**: 다크 모드는 기본 셀렉트와 마찬가지로 JavaScript로 동적 변경이 가능하며,
+      검색 기능의 모든 상태(입력, 포커스, 결과 표시)에서 일관된 다크 테마를 제공합니다.
+    `,
+    code: `
+      <!-- 라이트 모드 검색 셀렉트 (기본값) -->
+      <seo-select-search name="light-search" theme="float" width="250px">
+        <option value="apple">사과 (Apple)</option>
+        <option value="banana">바나나 (Banana)</option>
+        <option value="cherry">체리 (Cherry)</option>
+        <option value="date">대추 (Date)</option>
+        <option value="elderberry">엘더베리 (Elderberry)</option>
+      </seo-select-search>
+
+      <!-- 다크 모드 검색 셀렉트 -->
+      <seo-select-search name="dark-search" theme="float" dark width="250px">
+        <option value="apple">사과 (Apple)</option>
+        <option value="banana">바나나 (Banana)</option>
+        <option value="cherry">체리 (Cherry)</option>
+        <option value="date">대추 (Date)</option>
+        <option value="elderberry">엘더베리 (Elderberry)</option>
+      </seo-select-search>
+
+      <!-- 다중 선택 + 다크 모드 + 검색 -->
+      <seo-select-search multiple name="dark-multi-search" theme="float" dark width="350px">
+        <option value="seoul">서울특별시</option>
+        <option value="busan">부산광역시</option>
+        <option value="daegu">대구광역시</option>
+        <option value="incheon">인천광역시</option>
+        <option value="gwangju">광주광역시</option>
+        <option value="daejeon">대전광역시</option>
+        <option value="ulsan">울산광역시</option>
+        <option value="sejong">세종특별자치시</option>
+        <option value="gyeonggi">경기도</option>
+        <option value="gangwon">강원특별자치도</option>
+      </seo-select-search>
+
+      <!-- Basic 테마 다크 모드 검색 -->
+      <seo-select-search name="basic-dark-search" theme="basic" dark width="250px">
+        <option value="frontend">프론트엔드</option>
+        <option value="backend">백엔드</option>
+        <option value="mobile">모바일</option>
+        <option value="ai">인공지능</option>
+        <option value="devops">데브옵스</option>
+      </seo-select-search>
+
+      <script>
+        // JavaScript로 다크 모드 동적 전환 예시
+        const lightSearchSelect = document.querySelector('[name="light-search"]');
+
+        function toggleSearchDarkMode() {
+          lightSearchSelect.dark = !lightSearchSelect.dark;
+          console.log('검색 셀렉트 다크 모드:', lightSearchSelect.dark ? '활성화' : '비활성화');
+        }
+
+        // 다중 선택 다크 모드 초기값 설정
+        const darkMultiSearch = document.querySelector('[name="dark-multi-search"]');
+        darkMultiSearch.selectedValues = ['seoul', 'busan'];
+
+        // 검색 테스트 예시:
+        // - "사과" 또는 "ㅅㄱ" 입력하여 초성 검색 테스트
+        // - "광역" 또는 "ㄱㅇ" 입력하여 여러 결과 검색 테스트
+        // - 다크 모드에서 검색창 포커스 시 글로우 효과 확인
+        console.log('다크 모드 검색 셀렉트 데모 준비 완료');
+      </script>
+    `,
+    lang: 'html'
+  }
 };

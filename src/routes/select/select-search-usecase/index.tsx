@@ -8,6 +8,7 @@ interface CustomSelectSearchElement extends HTMLElement {
   selectedValues?: string[];
   multiple?: boolean;
   showReset?: boolean;
+  dark?: boolean;
   resetToDefaultValue?: () => void;
   _searchText?: string;
 }
@@ -117,6 +118,12 @@ export default component$(() => {
             log.scrollTop = log.scrollHeight;
           }
         });
+      }
+
+      // 다크 모드 다중 선택 검색 데모 설정
+      const darkMultiSearchSelect = document.getElementById('dark-multi-search-demo') as CustomSelectSearchElement;
+      if (darkMultiSearchSelect) {
+        darkMultiSearchSelect.selectedValues = ['seoul', 'busan'];
       }
     });
   });
@@ -314,6 +321,107 @@ export default component$(() => {
             <div id="multi-event-log" class="event-log"></div>
             <p class="demo-note">
               📝 선택/해제/리셋 이벤트가 실시간으로 기록됩니다
+            </p>
+          </div>
+        </div>
+      </DocSection>
+
+      <DocSection {...docs.darkmode}>
+        <div class="demo-grid">
+          <div class="demo-item">
+            <h4>라이트 모드 vs 다크 모드 검색 비교</h4>
+            <div class="button-group">
+              <div class="comparison-item">
+                <h5>라이트 모드 검색</h5>
+                <div
+                  dangerouslySetInnerHTML={`
+                    <seo-select-search name="light-search-demo" theme="float" width="250px">
+                      <option value="apple">사과 (Apple)</option>
+                      <option value="banana">바나나 (Banana)</option>
+                      <option value="cherry">체리 (Cherry)</option>
+                      <option value="date">대추 (Date)</option>
+                      <option value="elderberry">엘더베리 (Elderberry)</option>
+                    </seo-select-search>
+                  `}
+                />
+              </div>
+
+              <div class="comparison-item">
+                <h5>다크 모드 검색</h5>
+                <div
+                  dangerouslySetInnerHTML={`
+                    <seo-select-search name="dark-search-demo" theme="float" dark width="250px">
+                      <option value="apple">사과 (Apple)</option>
+                      <option value="banana">바나나 (Banana)</option>
+                      <option value="cherry">체리 (Cherry)</option>
+                      <option value="date">대추 (Date)</option>
+                      <option value="elderberry">엘더베리 (Elderberry)</option>
+                    </seo-select-search>
+                  `}
+                />
+              </div>
+            </div>
+            <p class="demo-note">
+              🌓 검색창의 색상, 포커스 효과, 아이콘까지 모든 요소가 다크 테마로 변환됩니다. "사과", "ㅅㄱ" 등으로 검색해보세요.
+            </p>
+          </div>
+
+          <div class="demo-item">
+            <h4>테마별 다크 모드 검색 비교</h4>
+            <div class="button-group">
+              <div class="theme-item">
+                <h5>Basic 테마 + 다크 모드</h5>
+                <div
+                  dangerouslySetInnerHTML={`
+                    <seo-select-search name="basic-dark-search" theme="basic" dark width="200px">
+                      <option value="python">Python</option>
+                      <option value="java">Java</option>
+                      <option value="go">Go</option>
+                      <option value="rust">Rust</option>
+                    </seo-select-search>
+                  `}
+                />
+              </div>
+
+              <div class="theme-item">
+                <h5>Float 테마 + 다크 모드</h5>
+                <div
+                  dangerouslySetInnerHTML={`
+                    <seo-select-search name="float-dark-search" theme="float" dark width="200px">
+                      <option value="react">React</option>
+                      <option value="vue">Vue.js</option>
+                      <option value="angular">Angular</option>
+                      <option value="svelte">Svelte</option>
+                    </seo-select-search>
+                  `}
+                />
+              </div>
+            </div>
+            <p class="demo-note">
+              🎭 모든 테마에서 검색 기능과 다크 모드가 완벽하게 지원됩니다. "java", "ㅈㅂ", "react", "ㄹㅇ" 등으로 검색해보세요.
+            </p>
+          </div>
+
+          <div class="demo-item">
+            <h4>다중 선택 + 다크 모드 + 검색</h4>
+            <div
+              dangerouslySetInnerHTML={`
+                <seo-select-search id="dark-multi-search-demo" multiple name="dark-region-search" theme="float" dark width="350px">
+                  <option value="seoul">서울특별시</option>
+                  <option value="busan">부산광역시</option>
+                  <option value="daegu">대구광역시</option>
+                  <option value="incheon">인천광역시</option>
+                  <option value="gwangju">광주광역시</option>
+                  <option value="daejeon">대전광역시</option>
+                  <option value="ulsan">울산광역시</option>
+                  <option value="sejong">세종특별자치시</option>
+                  <option value="gyeonggi">경기도</option>
+                  <option value="gangwon">강원특별자치도</option>
+                </seo-select-search>
+              `}
+            />
+            <p class="demo-note">
+              🏷️ 다크 모드에서 태그, 검색창, 드롭다운이 모두 완벽하게 동작합니다. "광역", "ㄱㅇ" 등으로 검색해보세요.
             </p>
           </div>
         </div>

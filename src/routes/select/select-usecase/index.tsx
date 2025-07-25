@@ -265,91 +265,93 @@ export default component$(() => {
       </DocSection>
 
       <DocSection {...docs.darkmode}>
-        <div class="demo-item">
-          <h4>라이트 모드 vs 다크 모드 비교</h4>
-          <div class="button-group">
-            <div class="comparison-item">
-              <h5>라이트 모드 (기본값)</h5>
-              <div
-                dangerouslySetInnerHTML={`
-                  <seo-select name="light-mode-demo" theme="float" width="200px">
-                    <option value="option1">라이트 모드 옵션 1</option>
-                    <option value="option2">라이트 모드 옵션 2</option>
-                    <option value="option3">라이트 모드 옵션 3</option>
-                  </seo-select>
-                `}
-              />
-            </div>
+        <div class="demo-grid">
+          <div class="demo-item">
+            <h4>라이트 모드 vs 다크 모드 비교</h4>
+            <div class="button-group">
+              <div class="comparison-item">
+                <h5>라이트 모드 (기본값)</h5>
+                <div
+                  dangerouslySetInnerHTML={`
+                    <seo-select name="light-mode-demo" theme="float" width="200px">
+                      <option value="option1">라이트 모드 옵션 1</option>
+                      <option value="option2">라이트 모드 옵션 2</option>
+                      <option value="option3">라이트 모드 옵션 3</option>
+                    </seo-select>
+                  `}
+                />
+              </div>
 
-            <div class="comparison-item">
-              <h5>다크 모드</h5>
-              <div
-                dangerouslySetInnerHTML={`
-                  <seo-select name="dark-mode-demo" theme="float" dark width="200px">
-                    <option value="option1">다크 모드 옵션 1</option>
-                    <option value="option2">다크 모드 옵션 2</option>
-                    <option value="option3">다크 모드 옵션 3</option>
-                  </seo-select>
-                `}
-              />
+              <div class="comparison-item">
+                <h5>다크 모드</h5>
+                <div
+                  dangerouslySetInnerHTML={`
+                    <seo-select name="dark-mode-demo" theme="float" dark width="200px">
+                      <option value="option1">다크 모드 옵션 1</option>
+                      <option value="option2">다크 모드 옵션 2</option>
+                      <option value="option3">다크 모드 옵션 3</option>
+                    </seo-select>
+                  `}
+                />
+              </div>
             </div>
+            <p class="demo-note">
+              🌓 동일한 컴포넌트지만 dark 속성으로 완전히 다른 테마가 적용됩니다
+            </p>
           </div>
-          <p class="demo-note">
-            🌓 동일한 컴포넌트지만 dark 속성으로 완전히 다른 테마가 적용됩니다
-          </p>
-        </div>
 
-        <div class="demo-item">
-          <h4>다중 선택 다크 모드</h4>
-          <div
-            dangerouslySetInnerHTML={`
-              <seo-select id="dark-multi-demo" multiple name="dark-skills" theme="float" dark width="350px">
-                <option value="js">JavaScript</option>
-                <option value="ts">TypeScript</option>
-                <option value="react">React</option>
-                <option value="vue">Vue.js</option>
-                <option value="node">Node.js</option>
-                <option value="python">Python</option>
-              </seo-select>
-            `}
-          />
-          <p class="demo-note">
-            🏷️ 다크 모드에서도 태그와 모든 인터랙션이 완벽하게 동작합니다
-          </p>
-        </div>
+          <div class="demo-item">
+            <h4>테마별 다크 모드 비교</h4>
+            <div class="button-group">
+              <div class="theme-item">
+                <h5>Basic 테마 + 다크 모드</h5>
+                <div
+                  dangerouslySetInnerHTML={`
+                    <seo-select name="basic-dark" theme="basic" dark width="200px">
+                      <option value="option1">베이직 다크 1</option>
+                      <option value="option2">베이직 다크 2</option>
+                      <option value="option3">베이직 다크 3</option>
+                    </seo-select>
+                  `}
+                />
+              </div>
 
-        <div class="demo-item">
-          <h4>테마별 다크 모드 비교</h4>
-          <div class="button-group">
-            <div class="theme-item">
-              <h5>Basic 테마 + 다크 모드</h5>
-              <div
-                dangerouslySetInnerHTML={`
-                  <seo-select name="basic-dark" theme="basic" dark width="200px">
-                    <option value="option1">베이직 다크 1</option>
-                    <option value="option2">베이직 다크 2</option>
-                    <option value="option3">베이직 다크 3</option>
-                  </seo-select>
-                `}
-              />
+              <div class="theme-item">
+                <h5>Float 테마 + 다크 모드</h5>
+                <div
+                  dangerouslySetInnerHTML={`
+                    <seo-select name="float-dark" theme="float" dark width="200px">
+                      <option value="option1">플로팅 다크 1</option>
+                      <option value="option2">플로팅 다크 2</option>
+                      <option value="option3">플로팅 다크 3</option>
+                    </seo-select>
+                  `}
+                />
+              </div>
             </div>
-
-            <div class="theme-item">
-              <h5>Float 테마 + 다크 모드</h5>
-              <div
-                dangerouslySetInnerHTML={`
-                  <seo-select name="float-dark" theme="float" dark width="200px">
-                    <option value="option1">플로팅 다크 1</option>
-                    <option value="option2">플로팅 다크 2</option>
-                    <option value="option3">플로팅 다크 3</option>
-                  </seo-select>
-                `}
-              />
-            </div>
+            <p class="demo-note">
+              🎭 모든 테마에서 다크 모드가 지원되며, 각각의 특색을 유지합니다
+            </p>
           </div>
-          <p class="demo-note">
-            🎭 모든 테마에서 다크 모드가 지원되며, 각각의 특색을 유지합니다
-          </p>
+
+          <div class="demo-item">
+            <h4>다중 선택 다크 모드</h4>
+            <div
+              dangerouslySetInnerHTML={`
+                <seo-select id="dark-multi-demo" multiple name="dark-skills" theme="float" dark width="350px">
+                  <option value="js">JavaScript</option>
+                  <option value="ts">TypeScript</option>
+                  <option value="react">React</option>
+                  <option value="vue">Vue.js</option>
+                  <option value="node">Node.js</option>
+                  <option value="python">Python</option>
+                </seo-select>
+              `}
+            />
+            <p class="demo-note">
+              🏷️ 다크 모드에서도 태그와 모든 인터랙션이 완벽하게 동작합니다
+            </p>
+          </div>
         </div>
       </DocSection>
 
