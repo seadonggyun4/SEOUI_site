@@ -157,14 +157,18 @@ export class InteractiveVirtualSelect {
   setActiveIndex(index) {
     if (index < 0 || index >= this.total) return;
 
-    // 다중 선택 모드가 아닐 때만 activeIndex 설정
+    // focusedIndex는 모든 모드에서 설정
+    this.focusedIndex = index;
+
+    // 단일 선택 모드일 때만 activeIndex 설정
     if (!this.isMultiple) {
       this.activeIndex = index;
     }
 
-    // focusedIndex는 모든 모드에서 설정
-    this.focusedIndex = index;
     this.renderToIndex(index);
+
+    // 즉시 하이라이트 적용
+    this._applyHighlight();
   }
 
   // padding 영역 설정

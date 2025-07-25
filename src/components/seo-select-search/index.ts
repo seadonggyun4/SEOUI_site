@@ -317,6 +317,19 @@ export class AgSelectSearch extends AgSelect {
         this.value = firstOption.value;
         this._labelText = firstOption.textContent || '';
 
+        // 드롭다운이 열려있는 경우 즉시 activeIndex와 focusedIndex를 첫 번째로 설정
+        if (this.open && this._virtual) {
+          requestAnimationFrame(() => {
+            this._virtual?.setActiveIndex(0);
+            // 가상 스크롤의 내부 상태도 첫 번째 옵션으로 설정
+            if (this._virtual) {
+              this._virtual.activeIndex = 0;
+              this._virtual.focusedIndex = 0;
+              this._virtual._applyHighlight();
+            }
+          });
+        }
+
         this.dispatchEvent(
           new CustomEvent('onReset', {
             detail: { value: firstOption.value, label: firstOption.textContent || '' },

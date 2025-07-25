@@ -51,6 +51,7 @@ export class AgSelect extends LitElement {
   declare _virtual: InteractiveVirtualSelect | null;
   declare _options: HTMLOptionElement[];
   declare _internals: ElementInternals;
+  declare _pendingActiveIndex: number | null;
 
   private _handleKeydownBound: (e: KeyboardEvent) => void;
 
@@ -75,6 +76,7 @@ export class AgSelect extends LitElement {
     this.theme = 'float'; // 기본값은 float
     this._handleKeydownBound = (e) => this._virtual?.handleKeydown(e);
     this.tabIndex = 0;
+    this._pendingActiveIndex = null;
   }
 
   createRenderRoot() {
@@ -310,6 +312,9 @@ export class AgSelect extends LitElement {
             this._virtual?.setActiveIndex(0);
           });
         }
+      } else {
+        // 드롭다운이 닫혀있을 때는 다음번 열기에 첫 번째 옵션으로 활성화되도록 설정
+        this._pendingActiveIndex = 0;
       }
 
       this.dispatchEvent(
@@ -325,14 +330,22 @@ export class AgSelect extends LitElement {
         this.value = firstOption.value;
         this._labelText = firstOption.textContent || '';
 
-        // 드롭다운이 열려있는 경우에만 즉시 activeIndex 업데이트
+        // 드롭다운이 열려있는 경우 즉시 activeIndex와 focusedIndex를 첫 번째로 설정
         if (this.open && this._virtual) {
           requestAnimationFrame(() => {
             this._virtual?.setActiveIndex(0);
+            // 가상 스크롤의 내부 상태도 첫 번째 옵션으로 설정
+            if (this._virtual) {
+              this._virtual.activeIndex = 0;
+              this._virtual.focusedIndex = 0;
+              this._virtual._applyHighlight();
+            }
           });
         }
-        // 드롭다운이 닫혀있어도 다음 열기 시 첫 번째 옵션이 활성화되도록
-        // value 설정으로 충분 (initializeVirtualSelect에서 처리됨)
+
+        // 드롭다운이 닫혀있든 열려있든 항상 pendingActiveIndex 설정
+        // 이는 다음번 드롭다운 열기에 첫 번째 옵션이 활성화되도록 보장
+        this._pendingActiveIndex = 0;
 
         this.dispatchEvent(
           new CustomEvent('onReset', {
