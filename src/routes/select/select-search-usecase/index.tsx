@@ -330,7 +330,7 @@ export default component$(() => {
         <div class="demo-grid">
           <div class="demo-item">
             <h4>라이트 모드 vs 다크 모드 검색 비교</h4>
-            <div class="button-group">
+            <div class="flex-group">
               <div class="comparison-item">
                 <h5>라이트 모드 검색</h5>
                 <div
@@ -368,7 +368,7 @@ export default component$(() => {
 
           <div class="demo-item">
             <h4>테마별 다크 모드 검색 비교</h4>
-            <div class="button-group">
+            <div class="flex-group">
               <div class="theme-item">
                 <h5>Basic 테마 + 다크 모드</h5>
                 <div

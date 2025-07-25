@@ -72,3 +72,20 @@ $font-color: color.mix(#000, pick(indigo, 10), 70%);
 $font-secondary-color: pick(gray, 5);
 $border-color: pick(gray, 3);
 $box-head-border-color: color.mix(#fff, pick(gray, 2), 35%);
+
+
+// ============================================
+// 다크 모드 전용 추가 변수들
+// ============================================
+
+// 다크 모드에서 더 나은 구분을 위한 추가 색상
+$dark-accent-bg: #1f2937 !default;           // 더 어두운 배경 (특별한 요소용)
+$dark-card-bg: #374151 !default;             // 카드/컨테이너 배경
+$dark-surface-bg: #4b5563 !default;          // 표면 요소 배경
+$dark-highlight-color: #fbbf24 !default;     // 하이라이트/강조 색상
+
+// 다크 모드 상태별 색상
+$dark-success-color: #10b981 !default;       // 성공 상태
+$dark-warning-color: #f59e0b !default;       // 경고 상태
+$dark-error-color: #ef4444 !default;         // 에러 상태
+$dark-info-color: #3b82f6 !default;          // 정보 상태

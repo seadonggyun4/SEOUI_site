@@ -1,4 +1,5 @@
 @use '@/styles/constants/colors' as colors;
+@use '@/styles/constants/breakpoint' as breakpoint;
 
 .page-loder{
   position: fixed;
@@ -213,7 +214,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: breakpoint.$breakpoint) {
   .components-layout {
     width: 100%;
     margin: 0;

@@ -1,3 +1,5 @@
+@use '@/styles/constants/breakpoint' as breakpoint;
+
 .demo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -203,7 +205,13 @@
   }
 }
 
-.button-group{
+.flex-group{
   display: flex;
   gap: 1rem;
+}
+
+@media (max-width: breakpoint.$breakpoint) {
+  .flex-group{
+    flex-direction: column;
+  }
 }

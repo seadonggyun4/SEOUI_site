@@ -451,7 +451,7 @@ export default component$(() => {
             <div dangerouslySetInnerHTML={`<seo-radio id="dynamic-radio" name="dynamic"></seo-radio>`} />
           </div>
 
-          <div class="button-group">
+          <div class="flex-group">
             <button type="button" onClick$={toggleCheckbox} class="gradient-btn">
               체크박스 토글
             </button>

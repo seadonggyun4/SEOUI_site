@@ -190,7 +190,7 @@ export default component$(() => {
         <div class="demo-grid">
           <div class="demo-item">
             <h4>기본 토스트 타입들</h4>
-            <div class="button-group">
+            <div class="flex-group">
               <button type="button" onClick$={showBasicInfo} class="gradient-btn">
                 정보 메시지
               </button>
@@ -214,7 +214,7 @@ export default component$(() => {
 
       <DocSection {...docs.timing}>
         <div class="demo-item">
-          <div class="button-group">
+          <div class="flex-group">
             <button type="button" onClick$={showDefaultTiming} class="gradient-btn">
               기본 시간 (5초)
             </button>
@@ -237,7 +237,7 @@ export default component$(() => {
 
       <DocSection {...docs.duplicate}>
         <div class="demo-item">
-          <div class="button-group">
+          <div class="flex-group">
             <button type="button" onClick$={showDuplicateMessage} class="gradient-btn">
               같은 메시지 반복
             </button>
@@ -259,7 +259,7 @@ export default component$(() => {
         <div class="demo-grid">
           <div class="demo-item">
             <h4>이벤트 발생 테스트</h4>
-            <div class="button-group">
+            <div class="flex-group">
               <button type="button" onClick$={showEventTest} class="gradient-btn">
                 단일 이벤트
               </button>
@@ -285,7 +285,7 @@ export default component$(() => {
 
       <DocSection {...docs.positioning}>
         <div class="demo-item">
-          <div class="button-group">
+          <div class="flex-group">
             <button type="button" onClick$={showStyledToast} class="gradient-btn">
               스타일 토스트
             </button>
@@ -370,7 +370,7 @@ export default component$(() => {
 
       <DocSection {...docs.advanced}>
         <div class="demo-item">
-          <div class="button-group">
+          <div class="flex-group">
             <button type="button" onClick$={simulateApiCall} class="gradient-btn">
               API 호출 시뮬레이션
             </button>

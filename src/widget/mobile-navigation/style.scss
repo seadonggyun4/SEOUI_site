@@ -1,4 +1,5 @@
 @use '@/styles/constants/colors' as colors;
+@use '@/styles/constants/breakpoint' as breakpoint;
 
 .mobile-nav {
   position: fixed;
@@ -78,7 +79,7 @@
 
   &-logo {
     width: auto;
-    height: 4rem;
+    height: 10rem;
     object-fit: contain;
   }
 
@@ -226,27 +227,8 @@
 }
 
 // 데스크톱에서는 모바일 네비게이션 숨김
-@media (min-width: 901px) {
+@media (min-width: breakpoint.$breakpoint) {
   .mobile-nav {
     display: none;
-  }
-}
-
-// 매우 작은 화면에서 패널 너비 조정
-@media (max-width: 480px) {
-  .mobile-nav-panel {
-    width: 95%;
-  }
-  
-  .mobile-nav-header {
-    padding: 1rem 1.5rem;
-  }
-  
-  .mobile-nav-link {
-    padding: 1rem 1.5rem;
-  }
-  
-  .mobile-nav-group-title {
-    padding: 1rem 1.5rem 0.5rem;
   }
 }

@@ -1,4 +1,6 @@
 @use '@/styles/constants/colors' as colors;
+@use '@/styles/constants/breakpoint' as breakpoint;
+
 
 .nav {
   position: fixed;
@@ -192,7 +194,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: breakpoint.$breakpoint) {
   .nav {
     display: none;
   }
