@@ -1,0 +1,79 @@
+// constants/select.scss
+// Select 컴포넌트 스타일 상수
+
+// 기본 선택 영역 관련
+$select-padding: 0.5rem 0.8rem !default;
+$select-min-height: 2.5rem !default;
+$select-border-width: 1px !default;
+$select-transition-duration: 0.3s !default;
+$select-transition-easing: ease !default;
+
+// 멀티 셀렉트 관련
+$select-multi-padding-right: 3rem !default;
+$select-tags-gap: 0.25rem !default;
+$select-tags-padding: 0.25rem 0 !default;
+$select-tags-min-height: 1.5rem !default;
+
+// 태그 관련
+$tag-padding: 0.2rem 0.3rem !default;
+$tag-gap: 0.5rem !default;
+$tag-border-radius: 25rem !default;
+$tag-border-width: 1px !default;
+$tag-max-width: 15rem !default;
+
+// 태그 제거 버튼
+$tag-remove-size: 1rem !default;
+$tag-remove-border-radius: 50% !default;
+$tag-remove-transition: all 0.2s ease !default;
+
+// 드롭다운 관련
+$dropdown-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1) !default;
+$dropdown-border-width: 1px !default;
+$dropdown-z-index: 1000 !default;
+
+// 검색 입력 관련
+$search-input-padding: 0.3rem !default;
+$search-input-text-indent: 1.5rem !default;
+$search-icon-left: 0.7rem !default;
+$search-icon-size: 1rem !default;
+
+// 로딩 관련
+$loading-container-padding: 1rem 2rem !default;
+$loading-dots-gap: 0.5rem !default;
+$loading-dots-margin-bottom: 1rem !default;
+$loading-dot-size: 0.5rem !default;
+$loading-animation-duration: 1.4s !default;
+$loading-text-font-size: 0.9rem !default;
+
+// 로딩 애니메이션 지연
+$loading-dot-delay-1: -0.32s !default;
+$loading-dot-delay-2: -0.16s !default;
+$loading-dot-delay-3: 0s !default;
+
+// 데이터 없음 컨테이너
+$no-data-container-padding: 1rem 2rem !default;
+$no-data-text-font-size: 0.9rem !default;
+
+// 옵션 관련
+$option-padding: 0 0.8rem !default;
+$option-line-height: 300% !default;
+$option-check-mark-margin: 0.5rem !default;
+
+// 리셋 버튼 관련
+$reset-button-right: 3rem !default;
+$reset-button-padding: 0 0.5rem !default;
+$reset-button-height: 80% !default;
+$reset-button-font-size: 0.9rem !default;
+$reset-button-transition: all 0.2s ease !default;
+
+// 멀티 리셋 버튼
+$multi-reset-button-size: 1.5rem !default;
+$multi-reset-button-position: -0.6rem !default;
+$multi-reset-button-border-radius: 50% !default;
+$multi-reset-button-font-size: 0.9rem !default;
+
+// 화살표 관련
+$arrow-right: 0.8rem !default;
+$arrow-font-size: 0.9rem !default;
+$arrow-margin-top: -0.1rem !default;
+$arrow-transition: transform 0.2s ease !default;

@@ -1,0 +1,30 @@
+// constants/toggle.scss
+// Toggle 컴포넌트 스타일 상수
+
+// 토글 스위치 크기
+$toggle-width: 4rem !default;
+$toggle-height: 2rem !default;
+$toggle-border-radius: 2rem !default;
+$toggle-gap: 1rem !default;
+
+// 슬라이더 내부 원형 버튼
+$toggle-slider-size: 15px !default;
+$toggle-slider-margin: 2px !default;
+$toggle-slider-border-radius: 50% !default;
+$toggle-slider-translate-distance: 20px !default;
+
+// 그림자 관련
+$toggle-slider-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !default;
+
+// 애니메이션 관련
+$toggle-transition-duration: 0.3s !default;
+$toggle-transition-easing: ease !default;
+
+// 라벨 언더라인 관련
+$toggle-label-underline-height: 1px !default;
+$toggle-label-underline-bottom: -2px !default;
+$toggle-label-underline-duration: 0.3s !default;
+$toggle-label-underline-checked-duration: 0.4s !default;
+
+// 비활성화 상태
+$toggle-disabled-opacity: 0.5 !default;

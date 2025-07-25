@@ -1,0 +1,54 @@
+// constants/grid-table.scss
+// Grid Table 컴포넌트 스타일 상수
+
+// 테이블 기본 크기
+$table-header-height: 3.5rem !default;
+$table-row-height: 3.5rem !default; // CSS 변수로 오버라이드 가능
+$table-padding: 0 0.8rem !default;
+
+// 헤더 관련
+$table-header-font-weight: 500 !default;
+$table-header-z-index: 5 !default;
+$table-scrolling-shadow: 0 4px 4px rgba(0,0,0,.12) !default;
+$table-scrolling-transition: filter 0.2s ease !default;
+
+// 셀 보더 관련
+$cell-border-width: 1px !default;
+$cell-active-border-color: #006dcbf2 !default;
+$cell-preview-border: 1px dashed #006dcbf2 !default;
+
+// 활성 상태 관련
+$cell-active-opacity: 0.3 !default;
+$cell-copy-flash-duration: 1s !default;
+
+// 필 핸들러 관련
+$fill-handler-size: 6px !default;
+$fill-handler-color: #007aff !default;
+$fill-handler-border-radius: 1px !default;
+
+// 컨텍스트 메뉴 관련
+$context-menu-position: 1rem !default;
+$context-menu-padding: 0.5rem 0.8rem !default;
+$context-menu-min-width: 8rem !default;
+$context-menu-border-radius: 5px !default;
+$context-menu-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !default;
+$context-menu-z-index: 1000 !default;
+
+// 메뉴 아이템 관련
+$menu-item-padding: 0.5rem 0.8rem !default;
+$menu-item-gap: 0.5rem !default;
+$menu-item-transition: 0.3s ease-in-out !default;
+
+// 드래그 박스 관련
+$drag-box-background: rgba(128, 128, 128, 0.2) !default;
+$drag-box-border: 1px solid rgba(128, 128, 128, 0.6) !default;
+$drag-box-z-index: 9999 !default;
+
+// 애니메이션 관련
+$fade-in-duration: 0.3s !default;
+$fade-in-easing: ease-out !default;
+$fade-in-initial-scale: 0.8 !default;
+$fade-in-final-scale: 1 !default;
+
+// 박스 그림자
+$table-box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px !default;

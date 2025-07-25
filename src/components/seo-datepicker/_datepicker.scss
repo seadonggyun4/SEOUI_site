@@ -1,0 +1,52 @@
+// constants/datepicker.scss
+// Datepicker 컴포넌트 스타일 상수
+
+// 레이아웃 관련
+$datepicker-min-width: 40rem !default;
+$datepicker-padding: 1rem 2rem !default;
+$datepicker-z-index: 10001 !default;
+
+// 헤더 관련
+$datepicker-header-font-size: 1.8rem !default;
+$datepicker-header-font-weight: 500 !default;
+$datepicker-header-line-height: 3 !default;
+
+// 캘린더 그리드 관련
+$calendar-grid-columns: 7 !default;
+$calendar-grid-gap: 1rem 2rem !default;
+$calendar-padding: 1rem 0 !default;
+$calendar-weekdays-gap: 2rem !default;
+$calendar-weekdays-line-height: 2 !default;
+
+// 날짜 셀 관련
+$day-cell-line-height: 2.5 !default;
+$day-cell-border-radius: 0.25rem !default;
+$empty-cell-height: 4rem !default;
+
+// 시간 선택기 관련
+$time-picker-width: 8rem !default;
+$time-picker-height: 30rem !default;
+$time-picker-item-line-height: 2.5 !default;
+
+// 공지사항 관련
+$notice-margin-bottom: 1rem !default;
+$notice-padding: 0.5rem !default;
+$notice-small-padding: 0.3rem !default;
+$notice-border-radius: 5px !default;
+$notice-font-weight: 500 !default;
+$notice-line-height: 2 !default;
+
+// 컨트롤러 관련
+$datepicker-controller-gap: 1rem !default;
+$datepicker-input-padding: 1rem 2rem !default;
+$datepicker-input-text-indent: 2rem !default;
+$datepicker-icon-left: 2rem !default;
+
+// 애니메이션 관련
+$datepicker-animation-duration: 0.3s !default;
+$datepicker-animation-easing: ease-in-out !default;
+$datepicker-enter-scale: 1 !default;
+$datepicker-initial-scale: 0.5 !default;
+
+// 그림자 관련
+$datepicker-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !default;

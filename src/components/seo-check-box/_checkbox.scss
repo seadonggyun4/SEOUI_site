@@ -1,0 +1,40 @@
+// constants/checkbox.scss
+// Checkbox 컴포넌트 스타일 상수
+
+// 크기 관련
+$checkbox-size: 2rem !default;
+$checkbox-border-radius: 3px !default;
+$checkbox-gap: 1rem !default;
+
+// 체크마크 관련
+$checkbox-checkmark-scale: 0.6 !default;
+$checkbox-checkmark-stroke-width: 2 !default;
+
+// 애니메이션 관련
+$checkbox-transition-duration: 0.3s !default;
+$checkbox-transition-easing: ease !default;
+$checkbox-check-animation-duration: 0.4s !default;
+$checkbox-check-animation-delay: 0.1s !default;
+$checkbox-ripple-animation-duration: 0.6s !default;
+$checkbox-ripple-animation-delay: 0.7s !default;
+
+// 라벨 언더라인 관련
+$checkbox-label-underline-height: 1px !default;
+$checkbox-label-underline-bottom: -2px !default;
+$checkbox-label-underline-duration: 0.4s !default;
+
+// 비활성화 상태
+$checkbox-disabled-opacity: 0.5 !default;
+
+// 체크박스 내 원형 효과 (ripple)
+$checkbox-ripple-size: 5px !default;
+$checkbox-ripple-positions: (
+  0 -18px,
+  12px -12px,
+  18px 0,
+  12px 12px,
+  0 18px,
+  -12px 12px,
+  -18px 0,
+  -12px -12px
+) !default;
