@@ -1,4 +1,14 @@
-export type TranslationData = Record<string, Record<string, string>>;
+import { useComputed$, type Signal } from '@builder.io/qwik';
+
+type TranslationData = Record<string, Record<string, string>>;
+type Docs = Record<string, any>;
+
+export interface DocItem {
+  title: string;
+  description: string;
+  code: string;
+  lang: string;
+}
 
 /**
  * 번역 함수
@@ -16,22 +26,27 @@ export const translate = (
 };
 
 /**
- * 여러 키를 한 번에 번역하는 헬퍼 함수
- * @param translationData - 번역 데이터 객체
- * @param keys - 번역할 키들의 배열
- * @param langCode - 언어 코드
- * @returns 키-값 쌍의 객체
+ * 성능 최적화된 문서 번역 훅
+ * - 깊은 복사 대신 객체 참조만 변경하여 성능 향상
+ * - 반응성 트리거를 위한 __lang 필드 추가
+ * - 원본 데이터는 그대로 유지하여 메모리 효율성 확보
  */
-export const translateMultiple = (
-  translationData: TranslationData,
-  keys: string[],
-  langCode: string = 'ko'
-): Record<string, string> => {
-  const result: Record<string, string> = {};
-  keys.forEach(key => {
-    result[key] = translate(translationData, key, langCode);
+export const useTranslateDocs = (
+  docs: Docs,
+  selectedLanguage: Signal<string>
+) => {
+  return useComputed$(() => {
+    const currentLang = selectedLanguage.value;
+    const fallback = docs['ko'] || {};
+    const selected = docs[currentLang] || fallback;
+    
+    // 반응성 트리거용 언어 코드와 함께 원본 데이터 참조 반환
+    // 깊은 복사 없이 새로운 참조 생성으로 성능 최적화
+    return {
+      __lang: currentLang, // 반응성 트리거용 필드
+      ...selected
+    };
   });
-  return result;
 };
 
 /**
@@ -52,3 +67,6 @@ export const createTranslations = (
   });
   return result;
 };
+
+
+
