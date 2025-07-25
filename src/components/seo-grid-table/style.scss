@@ -1,4 +1,5 @@
 @use '../styles/constants/colors' as colors;
+@use './grid-table' as grid;
 @use "sass:color";
 
 .seo-grid-table {
@@ -7,7 +8,7 @@
   height: 100%;
   display: grid;
   overflow: hidden;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
+  box-shadow: grid.$table-box-shadow;
 
   .ag-table-scroll {
     // 스크롤 가능 영역
@@ -36,14 +37,14 @@
       border-spacing: 0;
 
       th {
-        height: 3.5rem;
-        border-bottom: 1px solid colors.$border-color;
+        height: grid.$table-header-height;
+        border-bottom: grid.$cell-border-width solid colors.$border-color;
         color: colors.$font-secondary-color;
-        font-weight: 500;
+        font-weight: grid.$table-header-font-weight;
       }
 
       th, td {
-        padding: 0 .8rem;
+        padding: grid.$table-padding;
         text-align: left;
         white-space: nowrap;
         overflow: hidden;
@@ -68,11 +69,11 @@
         position: sticky;
         top: 0;
         background-color: colors.$box-head-border-color;
-        z-index: 5;
-        transition: filter .2s ease;
+        z-index: grid.$table-header-z-index;
+        transition: grid.$table-scrolling-transition;
 
         &.scrolling {
-          filter: drop-shadow(0 4px 4px rgba(0,0,0,.12));
+          filter: drop-shadow(grid.$table-scrolling-shadow);
         }
       }
 
@@ -80,26 +81,26 @@
         tr {
           td {
             position: relative;
-            border: 1px solid transparent;
-            height: var(--row-height, 3.5rem); // 기본높이 제어 가능
+            border: grid.$cell-border-width solid transparent;
+            height: var(--row-height, grid.$table-row-height); // 기본높이 제어 가능
 
-            &.fill-preview-top    { border-top: 1px dashed #006dcbf2; }
-            &.fill-preview-bottom { border-bottom: 1px dashed #006dcbf2 !important;}
-            &.fill-preview-left   { border-left: 1px dashed #006dcbf2; }
-            &.fill-preview-right  { border-right: 1px dashed #006dcbf2; }
+            &.fill-preview-top    { border-top: grid.$cell-preview-border; }
+            &.fill-preview-bottom { border-bottom: grid.$cell-preview-border !important;}
+            &.fill-preview-left   { border-left: grid.$cell-preview-border; }
+            &.fill-preview-right  { border-right: grid.$cell-preview-border; }
 
-            &.active { background-color:  colors.$primary-bg-color }
-            &.active.no-selecte { opacity: 0.3; }
+            &.active { background-color: colors.$primary-bg-color }
+            &.active.no-selecte { opacity: grid.$cell-active-opacity; }
             &.start-cell { background-color: transparent;}
-            &.active-top { border-top: 1px solid #006dcbf2; }
-            &.active-bottom { border-bottom: 1px solid #006dcbf2 !important; }
-            &.active-left { border-left: 1px solid #006dcbf2; }
-            &.active-right { border-right: 1px solid #006dcbf2; }
-            &.copy-flash { animation: copyFlash 1s ease-out; }
+            &.active-top { border-top: grid.$cell-border-width solid grid.$cell-active-border-color; }
+            &.active-bottom { border-bottom: grid.$cell-border-width solid grid.$cell-active-border-color !important; }
+            &.active-left { border-left: grid.$cell-border-width solid grid.$cell-active-border-color; }
+            &.active-right { border-right: grid.$cell-border-width solid grid.$cell-active-border-color; }
+            &.copy-flash { animation: copyFlash grid.$cell-copy-flash-duration ease-out; }
 
             @keyframes copyFlash {
               0% {
-                opacity: 0.3;
+                opacity: grid.$cell-active-opacity;
               }
               100% {
                 opacity: 1;
@@ -127,7 +128,7 @@
         }
         tr:not(:last-child) {
           td {
-            border-bottom: 1px solid colors.$border-color;
+            border-bottom: grid.$cell-border-width solid colors.$border-color;
           }
         }
         tr.active {
@@ -142,44 +143,44 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 6px;
-    height: 6px;
-    background: #007aff;
-    border-radius: 1px;
+    width: grid.$fill-handler-size;
+    height: grid.$fill-handler-size;
+    background: grid.$fill-handler-color;
+    border-radius: grid.$fill-handler-border-radius;
     cursor: crosshair;
     display: none;
   }
 
   .context-menu {
     position: absolute;
-    right: 1rem;
-    top: 1rem;
+    right: grid.$context-menu-position;
+    top: grid.$context-menu-position;
     display: none;
-    padding: 0.5rem 0.8rem;
-    min-width: 8rem;
+    padding: grid.$context-menu-padding;
+    min-width: grid.$context-menu-min-width;
     background: #fff;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: grid.$context-menu-border-radius;
+    box-shadow: grid.$context-menu-box-shadow;
     opacity: 0;
     transform: scale(0.9);
-    z-index: 1000;
+    z-index: grid.$context-menu-z-index;
 
     &.show {
       display: grid;
-      animation: fadeIn 0.3s ease-out forwards;
+      animation: fadeIn grid.$fade-in-duration grid.$fade-in-easing forwards;
     }
 
     .menu-item {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 0.8rem;
+      gap: grid.$menu-item-gap;
+      padding: grid.$menu-item-padding;
       background: none;
       border: none;
       text-align: center;
       cursor: pointer;
-      transition: 0.3s ease-in-out;
+      transition: grid.$menu-item-transition;
 
       &:hover {
         background-color: colors.pick(gray, 3)
@@ -190,19 +191,19 @@
   .ag-drag-box {
     position: absolute;
     pointer-events: none;
-    background-color: rgba(128, 128, 128, 0.2);
-    border: 1px solid rgba(128, 128, 128, 0.6);
-    z-index: 9999;
+    background-color: grid.$drag-box-background;
+    border: grid.$drag-box-border;
+    z-index: grid.$drag-box-z-index;
   }
 
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: scale(0.8);
+      transform: scale(grid.$fade-in-initial-scale);
     }
     to {
       opacity: 1;
-      transform: scale(1);
+      transform: scale(grid.$fade-in-final-scale);
     }
   }
 }

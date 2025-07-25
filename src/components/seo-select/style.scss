@@ -1,4 +1,5 @@
 @use '../styles/constants/colors' as colors;
+@use './select' as select;
 
 seo-select,
 seo-select-search {
@@ -12,14 +13,14 @@ seo-select-search {
 
   .selected {
     position: relative;
-    padding: 0.5rem 0.8rem;
+    padding: select.$select-padding;
     width: 100%;
-    min-height: 2.5rem;
-    border: 1px solid colors.pick(gray, 5);
+    min-height: select.$select-min-height;
+    border: select.$select-border-width solid colors.pick(gray, 5);
     background: white;
     text-align: left;
     cursor: pointer;
-    transition: border-color 0.3s ease;
+    transition: border-color select.$select-transition-duration select.$select-transition-easing;
 
     &:focus {
       outline: none;
@@ -46,18 +47,18 @@ seo-select-search {
   &.multi-select {
     .selected-container {
       position: relative;
-      min-height: 2.5rem;
-      padding: 0.5rem 0.8rem;
+      min-height: select.$select-min-height;
+      padding: select.$select-padding;
       width: 100%;
-      border: 1px solid colors.pick(gray, 5);
+      border: select.$select-border-width solid colors.pick(gray, 5);
       background: white;
       cursor: pointer;
-      transition: border-color 0.3s ease;
+      transition: border-color select.$select-transition-duration select.$select-transition-easing;
       display: flex;
       align-items: flex-start;
 
       &.with-reset {
-        padding-right: 3rem;
+        padding-right: select.$select-multi-padding-right;
       }
 
       &:hover {
@@ -68,21 +69,21 @@ seo-select-search {
         flex: 1;
         display: flex;
         flex-wrap: wrap;
-        gap: 0.25rem;
+        gap: select.$select-tags-gap;
         align-items: center;
-        min-height: 1.5rem;
-        padding: 0.25rem 0;
+        min-height: select.$select-tags-min-height;
+        padding: select.$select-tags-padding;
 
         .tag {
           display: inline-flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.2rem 0.3rem;
+          gap: select.$tag-gap;
+          padding: select.$tag-padding;
           color: colors.$primary-color;
           background: colors.$primary-bg-color;
-          border-radius: 25rem;
-          border: 1px solid colors.$primary-color;
-          max-width: 15rem;
+          border-radius: select.$tag-border-radius;
+          border: select.$tag-border-width solid colors.$primary-color;
+          max-width: select.$tag-max-width;
 
           .tag-remove {
             background: none;
@@ -91,13 +92,13 @@ seo-select-search {
             font-weight: bold;
             cursor: pointer;
             padding: 0;
-            width: 1rem;
-            height: 1rem;
+            width: select.$tag-remove-size;
+            height: select.$tag-remove-size;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: all 0.2s ease;
+            border-radius: select.$tag-remove-border-radius;
+            transition: select.$tag-remove-transition;
 
             &:hover {
               background: colors.$error-color;
@@ -119,10 +120,10 @@ seo-select-search {
     top: 100%;
     left: 0;
     width: 100%;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid colors.$border-color;
+    box-shadow: select.$dropdown-box-shadow;
+    border: select.$dropdown-border-width solid colors.$border-color;
     background-color: #fff;
-    z-index: 1000;
+    z-index: select.$dropdown-z-index;
 
     &.hidden {
       display: none;
@@ -130,17 +131,19 @@ seo-select-search {
 
     .select-search-input {
       position: relative;
-      padding: 0.3rem;
+      padding: select.$search-input-padding;
       background-color: #fff;
 
-      input {  text-indent: 1.5rem; }
+      input {
+        text-indent: select.$search-input-text-indent;
+      }
 
       .search-icon {
         position: absolute;
         top: 50%;
-        left: 0.7rem;
+        left: select.$search-icon-left;
         color: #999;
-        font-size: 1rem;
+        font-size: select.$search-icon-size;
         pointer-events: none;
         transform: translateY(-50%);
       }
@@ -152,38 +155,38 @@ seo-select-search {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1rem 2rem;
+      padding: select.$loading-container-padding;
       background: white;
 
       .loading-dots {
         display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
+        gap: select.$loading-dots-gap;
+        margin-bottom: select.$loading-dots-margin-bottom;
 
         .dot {
-          width: 0.5rem;
-          height: 0.5rem;
+          width: select.$loading-dot-size;
+          height: select.$loading-dot-size;
           border-radius: 50%;
           background-color: colors.$primary-color;
-          animation: loading-bounce 1.4s ease-in-out infinite both;
+          animation: loading-bounce select.$loading-animation-duration ease-in-out infinite both;
 
           &:nth-child(1) {
-            animation-delay: -0.32s;
+            animation-delay: select.$loading-dot-delay-1;
           }
 
           &:nth-child(2) {
-            animation-delay: -0.16s;
+            animation-delay: select.$loading-dot-delay-2;
           }
 
           &:nth-child(3) {
-            animation-delay: 0s;
+            animation-delay: select.$loading-dot-delay-3;
           }
         }
       }
 
       .loading-text {
         color: colors.pick(gray, 7);
-        font-size: 0.9rem;
+        font-size: select.$loading-text-font-size;
         font-style: italic;
       }
     }
@@ -193,12 +196,12 @@ seo-select-search {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem 2rem;
+      padding: select.$no-data-container-padding;
       background: white;
 
       .no-data-text {
         color: colors.pick(gray, 7);
-        font-size: 0.9rem;
+        font-size: select.$no-data-text-font-size;
         font-style: normal;
         text-align: center;
       }
@@ -227,8 +230,8 @@ seo-select-search {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        line-height: 300%;
-        padding: 0 0.8rem;
+        line-height: select.$option-line-height;
+        padding: select.$option-padding;
         display: flex;
         align-items: center;
 
@@ -238,7 +241,7 @@ seo-select-search {
           color: colors.$primary-color;
 
           .check-mark {
-            margin-right: 0.5rem;
+            margin-right: select.$option-check-mark-margin;
             font-weight: bold;
           }
         }
@@ -264,22 +267,22 @@ seo-select-search {
   .reset-button {
     position: absolute;
     top: 50%;
-    right: 3rem;
+    right: select.$reset-button-right;
     display: flex;
     align-items: center;
     justify-content: center;
     width: fit-content;
-    padding: 0 0.5rem;
-    height: 80%;
+    padding: select.$reset-button-padding;
+    height: select.$reset-button-height;
     border: none;
     color: colors.pick(gray, 9);
     background-color: transparent;
-    border-right: 1px solid colors.pick(gray, 6);
+    border-right: select.$select-border-width solid colors.pick(gray, 6);
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: select.$reset-button-font-size;
     cursor: pointer;
     transform: translateY(-50%);
-    transition: all 0.2s ease;
+    transition: select.$reset-button-transition;
 
     &:hover {
       color: colors.$error-color;
@@ -292,21 +295,21 @@ seo-select-search {
 
   .multi-reset-button {
     position: absolute;
-    top: -0.6rem;
-    right: -0.6rem;
-    width: 1.5rem;
-    height: 1.5rem;
+    top: select.$multi-reset-button-position;
+    right: select.$multi-reset-button-position;
+    width: select.$multi-reset-button-size;
+    height: select.$multi-reset-button-size;
     border: none;
     background: colors.pick(gray, 6);
     color: white;
-    border-radius: 50%;
+    border-radius: select.$multi-reset-button-border-radius;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: select.$multi-reset-button-font-size;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: select.$tag-remove-transition;
 
     &:hover {
       background: colors.$error-color;
@@ -316,15 +319,15 @@ seo-select-search {
   .arrow {
     position: absolute;
     top: 50%;
-    right: 0.8rem;
+    right: select.$arrow-right;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
+    font-size: select.$arrow-font-size;
     color: colors.pick(gray, 9);
     transform: translateY(-50%);
-    transition: transform 0.2s ease;
-    margin-top: -0.1rem;
+    transition: select.$arrow-transition;
+    margin-top: select.$arrow-margin-top;
   }
 }
 

@@ -1,27 +1,28 @@
 @use '../styles/constants/colors' as colors;
+@use './radio' as radio;
 
 .seo-radio {
   display: inline-grid;
   grid-auto-flow: column;
   align-items: center;
-  gap: 1rem;
+  gap: radio.$radio-group-gap;
 
   .radio-label {
     position: relative;
     display: inline-grid;
     grid-auto-flow: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: radio.$radio-gap;
     cursor: pointer;
     height: 100%;
 
     svg {
-      width: 2rem;
-      height: 2rem;
+      width: radio.$radio-size;
+      height: radio.$radio-size;
       fill: none;
 
       circle {
-        stroke-width: 2;
+        stroke-width: radio.$radio-stroke-width;
         stroke: colors.pick(gray, 5);
       }
 
@@ -29,15 +30,15 @@
         stroke: colors.$secondary-color;
 
         &.inner {
-          stroke-width: 6;
-          stroke-dasharray: 19;
-          stroke-dashoffset: 19;
+          stroke-width: radio.$radio-inner-stroke-width;
+          stroke-dasharray: radio.$radio-inner-dash-array;
+          stroke-dashoffset: radio.$radio-inner-dash-offset;
         }
 
         &.outer {
-          stroke-width: 2;
-          stroke-dasharray: 57;
-          stroke-dashoffset: 57;
+          stroke-width: radio.$radio-outer-stroke-width;
+          stroke-dasharray: radio.$radio-outer-dash-array;
+          stroke-dashoffset: radio.$radio-outer-dash-offset;
         }
       }
     }
@@ -49,12 +50,12 @@
       &::after {
         content: "";
         position: absolute;
-        bottom: -2px;
+        bottom: radio.$radio-label-underline-bottom;
         left: 0;
         width: 0%;
-        height: 1px;
+        height: radio.$radio-label-underline-height;
         background: colors.$secondary-color;
-        transition: width 0.3s ease;
+        transition: width radio.$radio-label-underline-duration radio.$radio-transition-easing;
       }
     }
 
@@ -64,15 +65,15 @@
 
     input[type='radio']:checked + svg {
       path {
-        transition: all 0.4s ease;
+        transition: all radio.$radio-transition-duration radio.$radio-transition-easing;
 
         &.inner {
-          stroke-dashoffset: 38;
-          transition-delay: 0.3s;
+          stroke-dashoffset: radio.$radio-inner-dash-offset-checked;
+          transition-delay: radio.$radio-inner-transition-delay;
         }
 
         &.outer {
-          stroke-dashoffset: 0;
+          stroke-dashoffset: radio.$radio-outer-dash-offset-checked;
         }
       }
     }
@@ -82,14 +83,14 @@
 
       &::after {
         width: 100%;
-        transition: all 0.4s ease;
+        transition: all radio.$radio-label-underline-checked-duration radio.$radio-transition-easing;
       }
     }
   }
 
   &.is-disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: radio.$radio-disabled-opacity;
     pointer-events: none;
   }
 }

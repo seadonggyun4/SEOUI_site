@@ -1,34 +1,35 @@
 @use '../styles/constants/colors' as colors;
+@use './datepicker' as datepicker;
 
 seo-datepicker {
   position: fixed;
   top: -9999px;
   left: -9999px;
-  z-index: 10001;
+  z-index: datepicker.$datepicker-z-index;
 }
 
 // Layout
 .seo-datepicker-wrapper{
   position: fixed;
   display: grid;
-  min-width: 40rem;
-  padding: 1rem 2rem;
+  min-width: datepicker.$datepicker-min-width;
+  padding: datepicker.$datepicker-padding;
   background-color: #ffff;
   border: 1px solid colors.$border-color;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  box-shadow: datepicker.$datepicker-box-shadow;
   opacity: 0;
-  transform: translate3D(-50%, -50%, 0) scale(0.5);
+  transform: translate3D(-50%, -50%, 0) scale(datepicker.$datepicker-initial-scale);
   will-change: transform;
-  // transition: all .3s ease-in-out; => JS에서 제어
+  // transition: all datepicker.$datepicker-animation-duration datepicker.$datepicker-animation-easing; => JS에서 제어
 
   .datepicker-header {
     display: grid;
     align-items: center;
     grid-template-columns: auto 1fr auto;
-    font-size: 1.8rem;
-    font-weight: 500;
+    font-size: datepicker.$datepicker-header-font-size;
+    font-weight: datepicker.$datepicker-header-font-weight;
     text-align: center;
-    line-height: 3;
+    line-height: datepicker.$datepicker-header-line-height;
 
     button {
       background: none;
@@ -41,17 +42,17 @@ seo-datepicker {
   .calendar-time {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 1rem;
+    gap: datepicker.$datepicker-controller-gap;
   }
 
   .calendar {
     .calendar-body {
       .calendar-weekdays {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(datepicker.$calendar-grid-columns, 1fr);
         text-align: center;
-        line-height: 2;
-        gap: 2rem;
+        line-height: datepicker.$calendar-weekdays-line-height;
+        gap: datepicker.$calendar-weekdays-gap;
         border-top: 1px solid colors.$border-color;
         border-bottom: 1px solid colors.$border-color;
         color: colors.$font-secondary-color;
@@ -59,51 +60,51 @@ seo-datepicker {
 
       .calendar-grid {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 1rem 2rem;
-        padding: 1rem 0;
+        grid-template-columns: repeat(datepicker.$calendar-grid-columns, 1fr);
+        gap: datepicker.$calendar-grid-gap;
+        padding: datepicker.$calendar-padding;
         height: 100%;
 
-      .day {
-        width: 100%;
-        line-height: 2.5;
-        border: 1px solid transparent;
-        border-radius: 0.25rem;
-        text-align: center;
-        cursor: pointer;
-        color: inherit;
+        .day {
+          width: 100%;
+          line-height: datepicker.$day-cell-line-height;
+          border: 1px solid transparent;
+          border-radius: datepicker.$day-cell-border-radius;
+          text-align: center;
+          cursor: pointer;
+          color: inherit;
 
-        &.weekend,
-        &.holiday {
-          color: #C73E68;
-        }
+          &.weekend,
+          &.holiday {
+            color: #C73E68;
+          }
 
-        &.selected {
-          background-color: colors.$primary-color;
-          color: white;
-          border: none;
-        }
+          &.selected {
+            background-color: colors.$primary-color;
+            color: white;
+            border: none;
+          }
 
-        &.criteria:not(.selected) {
-          background-color: colors.$primary-bg-color;
-          color: colors.$primary-color;
-        }
+          &.criteria:not(.selected) {
+            background-color: colors.$primary-bg-color;
+            color: colors.$primary-color;
+          }
 
-        &.disabled {
-          pointer-events: none;
-          cursor: not-allowed;
-          background-color: colors.$disabled-color;
-          color: colors.$font-secondary-color;
-          border: none;
-        }
+          &.disabled {
+            pointer-events: none;
+            cursor: not-allowed;
+            background-color: colors.$disabled-color;
+            color: colors.$font-secondary-color;
+            border: none;
+          }
 
-        &.today {
-          border: 1px solid colors.$primary-color;
+          &.today {
+            border: 1px solid colors.$primary-color;
+          }
         }
-      }
 
         .empty {
-          height: 4rem;
+          height: datepicker.$empty-cell-height;
         }
       }
     }
@@ -112,12 +113,12 @@ seo-datepicker {
   .time-picker {
     display: grid;
     grid-template-rows: auto 1fr;
-    width: 8rem;
-    height: 30rem;
+    width: datepicker.$time-picker-width;
+    height: datepicker.$time-picker-height;
 
     .time-title {
-      line-height: 2;
-      font-weight: 500;
+      line-height: datepicker.$calendar-weekdays-line-height;
+      font-weight: datepicker.$notice-font-weight;
       text-align: center;
       border-top: 1px solid colors.$border-color;
       border-bottom: 1px solid colors.$border-color;
@@ -130,9 +131,9 @@ seo-datepicker {
       display: block;
 
       li {
-        line-height: 2.5;
+        line-height: datepicker.$time-picker-item-line-height;
         text-align: center;
-        border-radius: 0.25rem;
+        border-radius: datepicker.$day-cell-border-radius;
         cursor: pointer;
 
         &.selected {
@@ -144,15 +145,15 @@ seo-datepicker {
   }
 
   .notice {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
+    margin-bottom: datepicker.$notice-margin-bottom;
+    padding: datepicker.$notice-padding;
     width: fit-content;
-    border-radius: 5px;
+    border-radius: datepicker.$notice-border-radius;
     background-color: colors.$primary-bg-color;
     color: colors.$primary-color;
-    font-weight: 500;
+    font-weight: datepicker.$notice-font-weight;
     line-break: anywhere;
-    line-height: 2;
+    line-height: datepicker.$notice-line-height;
 
     &.error{
       background-color: colors.$error-bg-color;
@@ -170,13 +171,13 @@ seo-datepicker {
     }
 
     &.small {
-      padding: 0.3rem;
+      padding: datepicker.$notice-small-padding;
     }
   }
 
   .datepicker-controler{
     display: grid;
-    gap: 1rem;
+    gap: datepicker.$datepicker-controller-gap;
     grid-template-columns: 1fr 1fr 80px;
 
     &.no-time{
@@ -190,7 +191,7 @@ seo-datepicker {
       i {
         position: absolute;
         transform: translateY(-50%);
-        left: 2rem;
+        left: datepicker.$datepicker-icon-left;
         top: 50%;
         color: colors.$font-secondary-color;
       }
@@ -198,8 +199,8 @@ seo-datepicker {
       input {
         background: transparent;
         width: 100%;
-        text-indent: 2rem;
-        padding: 1rem 2rem;
+        text-indent: datepicker.$datepicker-input-text-indent;
+        padding: datepicker.$datepicker-input-padding;
         border: 1px solid colors.$border-color;
 
         &:focus {
@@ -233,6 +234,6 @@ seo-datepicker {
     opacity: 1;
     left: 50% !important;
     top: 50% !important;
-    transform: translate3D(-50%, -50%, 0) scale(1) !important;
+    transform: translate3D(-50%, -50%, 0) scale(datepicker.$datepicker-enter-scale) !important;
   }
 }

@@ -1,23 +1,24 @@
 @use '../styles/constants/colors' as colors;
+@use './checkbox' as checkbox;
 
 .checkbox-container {
   display: inline-grid;
   grid-auto-flow: column;
   align-items: center;
-  column-gap: 1rem;
+  column-gap: checkbox.$checkbox-gap;
   height: 100%;
   cursor: pointer;
   position: relative;
 
   .styled-checkbox {
     position: relative;
-    width: 2rem;
-    height: 2rem;
+    width: checkbox.$checkbox-size;
+    height: checkbox.$checkbox-size;
     border: 1px solid colors.pick(gray, 5);
     background-color: #ffffff;
-    border-radius: 3px;
+    border-radius: checkbox.$checkbox-border-radius;
     cursor: pointer;
-    transition: border-color 0.3s ease;
+    transition: border-color checkbox.$checkbox-transition-duration checkbox.$checkbox-transition-easing;
 
     svg {
       width: 100%;
@@ -28,7 +29,7 @@
       stroke-linejoin: round;
 
       polyline {
-        stroke-width: 2;
+        stroke-width: checkbox.$checkbox-checkmark-stroke-width;
         stroke: white;
       }
     }
@@ -38,20 +39,20 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 5px;
-      height: 5px;
-      border-radius: 5px;
+      width: checkbox.$checkbox-ripple-size;
+      height: checkbox.$checkbox-ripple-size;
+      border-radius: checkbox.$checkbox-ripple-size;
       box-shadow:
-        0 -18px 0 colors.$secondary-color,
-        12px -12px 0 colors.$secondary-color,
-        18px 0 0 colors.$secondary-color,
-        12px 12px 0 colors.$secondary-color,
-        0 18px 0 colors.$secondary-color,
-        -12px 12px 0 colors.$secondary-color,
-        -18px 0 0 colors.$secondary-color,
-        -12px -12px 0 colors.$secondary-color;
+        #{nth(checkbox.$checkbox-ripple-positions, 1)} colors.$secondary-color,
+        #{nth(checkbox.$checkbox-ripple-positions, 2)} colors.$secondary-color,
+        #{nth(checkbox.$checkbox-ripple-positions, 3)} colors.$secondary-color,
+        #{nth(checkbox.$checkbox-ripple-positions, 4)} colors.$secondary-color,
+        #{nth(checkbox.$checkbox-ripple-positions, 5)} colors.$secondary-color,
+        #{nth(checkbox.$checkbox-ripple-positions, 6)} colors.$secondary-color,
+        #{nth(checkbox.$checkbox-ripple-positions, 7)} colors.$secondary-color,
+        #{nth(checkbox.$checkbox-ripple-positions, 8)} colors.$secondary-color;
       transform: translate(-50%, -50%) scale(0);
-      transition: all 0.6s ease;
+      transition: all checkbox.$checkbox-ripple-animation-duration checkbox.$checkbox-transition-easing;
     }
   }
 
@@ -59,22 +60,22 @@
     position: relative;
     cursor: pointer;
     white-space: nowrap;
-    transition: color 0.3s ease;
+    transition: color checkbox.$checkbox-transition-duration checkbox.$checkbox-transition-easing;
 
     &:after {
       content: "";
       position: absolute;
-      bottom: -2px;
+      bottom: checkbox.$checkbox-label-underline-bottom;
       left: 0;
       width: 0;
-      height: 1px;
+      height: checkbox.$checkbox-label-underline-height;
       background: colors.$secondary-color;
     }
   }
 
   &.is-disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: checkbox.$checkbox-disabled-opacity;
     pointer-events: none;
   }
 
@@ -85,14 +86,14 @@
     background-color: colors.$secondary-color;
 
     svg {
-      transform: scale(0.6);
-      transition: all 0.4s ease 0.1s;
+      transform: scale(checkbox.$checkbox-checkmark-scale);
+      transition: all checkbox.$checkbox-check-animation-duration checkbox.$checkbox-transition-easing checkbox.$checkbox-check-animation-delay;
     }
 
     &:after {
       transform: translate(-50%, -50%) scale(1);
       opacity: 0;
-      transition: all 0.7s ease;
+      transition: all checkbox.$checkbox-ripple-animation-delay checkbox.$checkbox-transition-easing;
     }
   }
 
@@ -101,8 +102,7 @@
 
     &:after {
       width: 100%;
-      transition: all 0.4s ease;
+      transition: all checkbox.$checkbox-label-underline-duration checkbox.$checkbox-transition-easing;
     }
   }
 }
-

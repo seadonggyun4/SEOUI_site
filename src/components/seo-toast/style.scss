@@ -1,12 +1,13 @@
 @use '../styles/constants/colors' as colors;
+@use './toast' as toast;
 
 .toast-container {
   position: fixed;
-  top: 6rem;
-  right: 1rem;
+  top: toast.$toast-container-top;
+  right: toast.$toast-container-right;
   display: flex;
   flex-direction: column;
-  z-index: 200000;
+  z-index: toast.$toast-container-z-index;
   will-change: transform, height;
 }
 
@@ -14,81 +15,81 @@
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding: 1rem 3rem 1rem 1rem;
+  gap: toast.$toast-gap;
+  margin-bottom: toast.$toast-margin-bottom;
+  padding: toast.$toast-padding;
   background-color: white;
-  filter: drop-shadow(0 4px 4px rgba(0,0,0,.12));
-  border: 1px solid colors.$border-color;
-  min-width: 30rem;
-  max-width: 40rem;
+  filter: drop-shadow(toast.$toast-box-shadow);
+  border: toast.$toast-border-width solid colors.$border-color;
+  min-width: toast.$toast-min-width;
+  max-width: toast.$toast-max-width;
   transition:
-    margin-bottom 0.3s ease-out 0s,
-    opacity 0.3s ease-out 0.2s,
-    transform 0.3s ease-out 0.2s;
+    margin-bottom toast.$toast-enter-duration toast.$toast-enter-easing 0s,
+    opacity toast.$toast-enter-duration toast.$toast-enter-easing toast.$toast-enter-delay,
+    transform toast.$toast-enter-duration toast.$toast-enter-easing toast.$toast-enter-delay;
 
   // 진입 애니메이션
   &.toast--enter {
     margin: 0;
     opacity: 0;
-    transform: translateX(10%);
+    transform: toast.$toast-enter-transform;
   }
 
   // 퇴장 애니메이션
   &.toast--exit {
     opacity: 0;
-    transform: translateY(10%);
+    transform: toast.$toast-exit-transform;
     transition:
-      opacity 0.2s ease-out 0s,
-      transform 0.2s ease-out 0s,
-      margin-bottom 0.3s ease-out 0.2s;
+      opacity toast.$toast-exit-duration toast.$toast-exit-easing 0s,
+      transform toast.$toast-exit-duration toast.$toast-exit-easing 0s,
+      margin-bottom toast.$toast-exit-margin-duration toast.$toast-exit-easing toast.$toast-exit-delay;
   }
 
   // 타입별 왼쪽 아이콘 배경 색상
   &--success .toast__icon-wrapper {
-    background-color: #dcfce7;
+    background-color: toast.$toast-success-bg;
     color: colors.$success-color;
   }
 
   &--error .toast__icon-wrapper {
-    background-color: #fee2e2;
+    background-color: toast.$toast-error-bg;
     color: colors.$error-color;
   }
 
   &--warning .toast__icon-wrapper {
-    background-color: #fef3c7;
+    background-color: toast.$toast-warning-bg;
     color: colors.$warning-color;
   }
 
   &--info .toast__icon-wrapper {
-    background-color: #dbeafe;
+    background-color: toast.$toast-info-bg;
     color: colors.$primary-color;
   }
 
   // 아이콘 배경 원형 스타일
   &__icon-wrapper {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
+    width: toast.$toast-icon-size;
+    height: toast.$toast-icon-size;
+    border-radius: toast.$toast-icon-border-radius;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: toast.$toast-icon-font-size;
   }
 
   // 메시지 텍스트 블록
   &__message {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: toast.$toast-message-gap;
 
     .toast__title {
-      font-weight: bold;
+      font-weight: toast.$toast-title-font-weight;
     }
 
     .toast__count{
-      font-size: 1.2rem;
-      font-weight: 500;
+      font-size: toast.$toast-count-font-size;
+      font-weight: toast.$toast-count-font-weight;
       color: colors.pick(gray, 9);
     }
   }
@@ -96,8 +97,8 @@
   // 닫기 버튼
   &__close {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
+    top: toast.$toast-close-top;
+    right: toast.$toast-close-right;
     background: none;
     border: none;
     color: colors.$font-secondary-color;
