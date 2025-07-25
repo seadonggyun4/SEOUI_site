@@ -115,7 +115,7 @@ export class AgSelectSearch extends AgSelect {
           ${showResetButton
             ? html`<button
                 type="button"
-                class="reset-button"
+                class="multi-reset-button"
                 @click=${this.resetToDefaultSearch}
                 title="모두 지우기"
               >${this.getCloseIcon()}</button>`

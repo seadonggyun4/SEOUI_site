@@ -211,7 +211,7 @@ export class AgSelect extends LitElement {
           ${showResetButton
             ? html`<button
                 type="button"
-                class="reset-button"
+                class="multi-reset-button"
                 @click=${this.resetToDefault}
                 title="모두 지우기"
               >${this.getCloseIcon()}</button>`
