@@ -5,6 +5,7 @@ import { useNavigationProvider } from '@/context/NavigationContext';
 import { PageLoader } from '@/widget/page-loader';
 import { MobileNavigation } from '@/widget/mobile-navigation';
 import './layout.scss';
+import './layout-component-page.scss'
 
 export default component$(() => {
   useNavigationProvider();

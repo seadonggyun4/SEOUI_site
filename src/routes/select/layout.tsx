@@ -1,7 +1,6 @@
 import { component$, Slot, useVisibleTask$ } from '@builder.io/qwik';
 import { useNavigation } from '@/context/NavigationContext'
 import { useNavigate, useLocation } from '@builder.io/qwik-city';
-import './layout.scss';
 
 export default component$(() => {
   const location = useLocation();
