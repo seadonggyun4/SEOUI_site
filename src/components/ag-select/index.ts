@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import { InteractiveVirtualSelect } from '@/components/class/select';
+import { InteractiveVirtualSelect } from '@/components/class/Select';
 import './style.scss'
 
 interface VirtualSelectOption {
