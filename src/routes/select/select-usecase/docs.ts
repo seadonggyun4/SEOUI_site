@@ -975,7 +975,29 @@ export const docs = {
         <strong>selected</strong>属性があるオプションが初期選択として設定され、
         指定がない場合は最初のオプションがデフォルトとなります。
       `,
-      code: `（原文 그대로 유지）`,
+      code: `
+        <!-- slot方式（推奨） -->
+        <seo-select name="brand" width="200px">
+          <option value="toyota">トヨタ</option>
+          <option value="honda" selected>ホンダ</option>
+          <option value="nissan">日産</option>
+          <option value="mazda">マツダ</option>
+        </seo-select>
+
+        <!-- 配列方式（フォールバック） -->
+        <seo-select name="brand-alt" width="200px"></seo-select>
+
+        <script>
+          const select = document.querySelector('seo-select[name="brand-alt"]');
+          select.optionItems = [
+            { value: 'toyota', label: 'トヨタ' },
+            { value: 'honda', label: 'ホンダ' },
+            { value: 'nissan', label: '日産' },
+            { value: 'mazda', label: 'マツダ' }
+          ];
+          select.value = 'honda'; // 初期値設定
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1003,7 +1025,29 @@ export const docs = {
         **備考**：検索付きセレクトでfloatテーマを使用する場合、
         フォーカス時にグラデーションのグロー効果が表示されます。
       `,
-      code: `（原文 그대로 유지）`,
+      code: `
+        <!-- Floatテーマ（デフォルト）- 丸い角とアニメーション -->
+        <seo-select name="float-single" theme="float" width="200px">
+          <option value="option1">フロートオプション1</option>
+          <option value="option2">フロートオプション2</option>
+          <option value="option3">フロートオプション3</option>
+        </seo-select>
+
+        <!-- Basicテーマ - 角張った角と即座に表示 -->
+        <seo-select name="basic-single" theme="basic" width="200px">
+          <option value="option1">ベーシックオプション1</option>
+          <option value="option2">ベーシックオプション2</option>
+          <option value="option3">ベーシックオプション3</option>
+        </seo-select>
+
+        <script>
+          // 複数選択の初期値設定
+          document.querySelector('[name="float-multi"]').selectedValues = ['react', 'vue'];
+
+          // ドロップダウンを開くとテーマごとの違いが確認できます
+          console.log('テーマデモ準備完了');
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1030,7 +1074,59 @@ export const docs = {
         **補足**：システムテーマとは独立しており、
         JavaScriptで動的に切り替え可能です。
       `,
-      code: `（原文 그대로 유지）`,
+      code: `
+        <!-- ライトモード（デフォルト） -->
+        <seo-select name="light-mode" theme="float" width="200px">
+          <option value="option1">ライトモードオプション1</option>
+          <option value="option2">ライトモードオプション2</option>
+          <option value="option3">ライトモードオプション3</option>
+        </seo-select>
+
+        <!-- ダークモード -->
+        <seo-select name="dark-mode" theme="float" dark width="200px">
+          <option value="option1">ダークモードオプション1</option>
+          <option value="option2">ダークモードオプション2</option>
+          <option value="option3">ダークモードオプション3</option>
+        </seo-select>
+
+        <!-- 複数選択ダークモード -->
+        <seo-select multiple name="dark-multi" theme="float" dark width="300px">
+          <option value="js">JavaScript</option>
+          <option value="ts">TypeScript</option>
+          <option value="react">React</option>
+          <option value="vue">Vue.js</option>
+          <option value="node">Node.js</option>
+        </seo-select>
+
+        <!-- 検索機能付きダークモード -->
+        <seo-select-search name="dark-search" theme="float" dark width="250px">
+          <option value="apple">りんご</option>
+          <option value="banana">バナナ</option>
+          <option value="cherry">さくらんぼ</option>
+          <option value="date">なつめ</option>
+          <option value="elderberry">エルダーベリー</option>
+        </seo-select-search>
+
+        <script>
+          // JavaScriptでダークモードを動的に変更
+          const lightSelect = document.querySelector('[name="light-mode"]');
+          const darkSelect = document.querySelector('[name="dark-mode"]');
+
+          // ダークモード切り替えの例
+          function toggleDarkMode() {
+            lightSelect.dark = !lightSelect.dark;
+            console.log('ダークモード:', lightSelect.dark ? '有効' : '無効');
+          }
+
+          // 初期選択値の設定
+          document.querySelector('[name="dark-multi"]').selectedValues = ['js', 'react'];
+
+          // 5秒後にライトモードセレクトをダークモードに変更
+          setTimeout(() => {
+            toggleDarkMode();
+          }, 5000);
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1046,7 +1142,32 @@ export const docs = {
         - 非同期でデータ読み込みが完了すると、仮想スクロールも初期化されます
         - オプションがある状態ではローディングは発生しません
       `,
-      code: `（原文 그대로 유지）`,
+      code: `
+        <!-- オプションがない空のセレクト - ドロップダウンを開くとローディング状態が表示される -->
+        <seo-select name="loading-demo" width="250px">
+          <!-- 空の状態からローディングが開始される -->
+        </seo-select>
+
+        <!-- オプションがあるセレクト - ローディング状態は表示されない -->
+        <seo-select name="normal-select" width="250px">
+          <option value="option1">オプション1</option>
+          <option value="option2">オプション2</option>
+        </seo-select>
+
+        <script>
+          const loadingSelect = document.querySelector('seo-select[name="loading-demo"]');
+
+          // 実際の使用時にはAPI呼び出しなどでオプションを動的に読み込み
+          setTimeout(() => {
+            loadingSelect.optionItems = [
+              { value: 'loading1', label: '読み込まれたオプション1' },
+              { value: 'loading2', label: '読み込まれたオプション2' },
+              { value: 'loading3', label: '読み込まれたオプション3' }
+            ];
+            // オプションが設定されると即座にローディング状態が解除される
+          }, 2000);
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1061,7 +1182,22 @@ export const docs = {
         - キーボードナビゲーション時にも仮想スクロールが連動します
         - <strong>width</strong>を指定しない場合、オプションの文字列長に合わせて自動調整されます
       `,
-      code: `（原文 그대로 유지）`,
+      code: `
+        <seo-select id="large-dataset" name="item" width="300px"></seo-select>
+
+        <script>
+          const select = document.getElementById('large-dataset');
+
+          // 10,000個のオプションを生成
+          select.optionItems = Array.from({ length: 10000 }, (_, i) => ({
+            value: \`item-\${i.toString().padStart(4, '0')}\`,
+            label: \`アイテム \${i.toString().padStart(4, '0')} - 長いテキスト説明\`
+          }));
+
+          // パフォーマンスに影響なく即座にレンダリングされる
+          console.log('大容量データの読み込み完了');
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1079,7 +1215,22 @@ export const docs = {
         フォーカスされたオプションは自動的に表示領域へスクロールされ、
         <strong>InteractiveVirtualSelect</strong>がキーイベントを処理します。
       `,
-      code: `（原文 그대로 유지）`,
+      code: `
+        <seo-select name="navigation-test" width="250px">
+          <option value="option1">オプション1</option>
+          <option value="option2">オプション2</option>
+          <option value="option3">オプション3</option>
+          <option value="option4">オプション4</option>
+          <option value="option5">オプション5</option>
+          <option value="option6">オプション6</option>
+          <option value="option7">オプション7</option>
+          <option value="option8">オプション8</option>
+          <option value="option9">オプション9</option>
+          <option value="option10">オプション10</option>
+        </seo-select>
+
+        <!-- Tabでフォーカス移動後、キーボードで操作可能 -->
+      `,
       lang: 'html'
     },
 
@@ -1098,7 +1249,30 @@ export const docs = {
 
         **備考**：以下のデモを操作すると、ブラウザのコンソールでログが確認できます。
       `,
-      code: `（原문 그대로 유지）`,
+      code: `
+        <seo-select id="event-demo" name="demo" width="200px">
+          <option value="a">オプションA</option>
+          <option value="b">オプションB</option>
+          <option value="c">オプションC</option>
+        </seo-select>
+
+        <script>
+          const select = document.getElementById('event-demo');
+
+          select.addEventListener('onSelect', (e) => {
+            const { value, label } = e.detail;
+            console.log('選択された:', value, label);
+          });
+
+          select.addEventListener('onReset', (e) => {
+            console.log('リセットされた:', e.detail);
+          });
+
+          select.addEventListener('change', (e) => {
+            console.log('フォーム値が変更された:', e.target.value);
+          });
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1116,7 +1290,36 @@ export const docs = {
         **備考**：タグクリックやドロップダウンでの選択に応じて、
         <code>onSelect</code>や<code>onDeselect</code>イベントが発生します。
       `,
-      code: `（原문 그대로 유지）`,
+      code: `
+        <seo-select multiple name="skills" width="400px">
+          <option value="js">JavaScript</option>
+          <option value="ts">TypeScript</option>
+          <option value="react">React</option>
+          <option value="vue">Vue.js</option>
+          <option value="angular">Angular</option>
+          <option value="svelte">Svelte</option>
+          <option value="node">Node.js</option>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="go">Go</option>
+        </seo-select>
+
+        <script>
+          const multiSelect = document.querySelector('seo-select[multiple]');
+
+          // 初期選択値の設定
+          multiSelect.selectedValues = ['js', 'ts', 'react'];
+
+          multiSelect.addEventListener('onSelect', (e) => {
+            console.log('追加選択:', e.detail);
+            console.log('現在のすべての選択値:', multiSelect.selectedValues);
+          });
+
+          multiSelect.addEventListener('onDeselect', (e) => {
+            console.log('選択解除:', e.detail);
+          });
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1135,7 +1338,27 @@ export const docs = {
 
         **補足**：boolean属性はJavaScriptで制御または属性削除により変更します。
       `,
-      code: `（原文 그대로 유지）`,
+      code: `
+        <!-- リセットボタン有効（デフォルト） -->
+        <seo-select id="with-reset" name="with-reset" width="200px">
+          <option value="default">デフォルト値</option>
+          <option value="option1">オプション1</option>
+          <option value="option2" selected>オプション2</option>
+        </seo-select>
+
+        <!-- リセットボタン無効 -->
+        <seo-select id="no-reset" name="no-reset" width="200px">
+          <option value="default">デフォルト値</option>
+          <option value="option1">オプション1</option>
+          <option value="option2" selected>オプション2</option>
+        </seo-select>
+
+        <script>
+          // JavaScriptでshowResetブール値を設定
+          const noResetSelect = document.getElementById('no-reset');
+          noResetSelect.showReset = false;
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1151,7 +1374,43 @@ export const docs = {
         - 複数選択：カンマ区切りの文字列で1つのフィールドに送信されます
         - HTMLフォームのバリデーションAPIにも対応しています
       `,
-      code: `（原문 그대로 유지）`,
+      code: `
+        <form id="demo-form">
+          <label>
+            好みの言語（必須）:
+            <seo-select name="language" required width="200px">
+              <option value="">選択してください</option>
+              <option value="ko">한국어</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </seo-select>
+          </label>
+
+          <label>
+            関心のある技術（複数選択）:
+            <seo-select name="interests" multiple width="300px">
+              <option value="frontend">フロントエンド</option>
+              <option value="backend">バックエンド</option>
+              <option value="mobile">モバイル</option>
+              <option value="ai">人工知能</option>
+              <option value="blockchain">ブロックチェーン</option>
+            </seo-select>
+          </label>
+
+          <button type="submit">送信</button>
+        </form>
+
+        <script>
+          document.getElementById('demo-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            for (const [key, value] of formData.entries()) {
+              console.log(\`\${key}: \${value}\`);
+            }
+          });
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1167,7 +1426,20 @@ export const docs = {
         最も長いテキストに合わせて自動調整されます（最小幅100px）。
         CSSクラスやスタイルを使って追加のカスタマイズも可能です。
       `,
-      code: `（原문 그대로 유지）`,
+      code: `
+        <!-- 自動幅調整 -->
+        <seo-select name="auto-width">
+          <option value="short">短い</option>
+          <option value="very-long-option">とても長いオプションテキストです</option>
+          <option value="medium">中程度の長さ</option>
+        </seo-select>
+
+        <!-- 固定幅 -->
+        <seo-select name="fixed-width" width="150px">
+          <option value="a">オプションA</option>
+          <option value="b">オプションB</option>
+        </seo-select>
+      `,
       lang: 'html'
     },
   },
@@ -1185,7 +1457,29 @@ export const docs = {
         含有 <strong>selected</strong> 属性的选项会被设为初始选中项，
         否则默认选中第一个选项。
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <!-- slot方式（推荐） -->
+        <seo-select name="brand" width="200px">
+          <option value="byd">比亚迪</option>
+          <option value="geely" selected>吉利汽车</option>
+          <option value="nio">蔚来</option>
+          <option value="xpeng">小鹏汽车</option>
+        </seo-select>
+
+        <!-- 数组方式（备用） -->
+        <seo-select name="brand-alt" width="200px"></seo-select>
+
+        <script>
+          const select = document.querySelector('seo-select[name="brand-alt"]');
+          select.optionItems = [
+            { value: 'byd', label: '比亚迪' },
+            { value: 'geely', label: '吉利汽车' },
+            { value: 'nio', label: '蔚来' },
+            { value: 'xpeng', label: '小鹏汽车' }
+          ];
+          select.value = 'geely'; // 设置初始值
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1213,7 +1507,29 @@ export const docs = {
         **提示**：启用搜索功能时使用 float 主题，
         聚焦输入框时会出现渐变发光效果。
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <!-- Float主题（默认）- 圆角和动画效果 -->
+        <seo-select name="float-single" theme="float" width="200px">
+          <option value="option1">浮动选项1</option>
+          <option value="option2">浮动选项2</option>
+          <option value="option3">浮动选项3</option>
+        </seo-select>
+
+        <!-- Basic主题 - 直角和立即显示 -->
+        <seo-select name="basic-single" theme="basic" width="200px">
+          <option value="option1">基础选项1</option>
+          <option value="option2">基础选项2</option>
+          <option value="option3">基础选项3</option>
+        </seo-select>
+
+        <script>
+          // 设置多选初始值
+          document.querySelector('[name="float-multi"]').selectedValues = ['react', 'vue'];
+
+          // 打开下拉菜单可以看到不同主题的差异
+          console.log('主题演示准备完成');
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1238,7 +1554,59 @@ export const docs = {
 
         **说明**：暗黑模式不依赖系统主题，可通过 JavaScript 动态切换。
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <!-- 浅色模式（默认） -->
+        <seo-select name="light-mode" theme="float" width="200px">
+          <option value="option1">浅色模式选项1</option>
+          <option value="option2">浅色模式选项2</option>
+          <option value="option3">浅色模式选项3</option>
+        </seo-select>
+
+        <!-- 暗黑模式 -->
+        <seo-select name="dark-mode" theme="float" dark width="200px">
+          <option value="option1">暗黑模式选项1</option>
+          <option value="option2">暗黑模式选项2</option>
+          <option value="option3">暗黑模式选项3</option>
+        </seo-select>
+
+        <!-- 多选暗黑模式 -->
+        <seo-select multiple name="dark-multi" theme="float" dark width="300px">
+          <option value="js">JavaScript</option>
+          <option value="ts">TypeScript</option>
+          <option value="react">React</option>
+          <option value="vue">Vue.js</option>
+          <option value="node">Node.js</option>
+        </seo-select>
+
+        <!-- 带搜索功能的暗黑模式 -->
+        <seo-select-search name="dark-search" theme="float" dark width="250px">
+          <option value="apple">苹果</option>
+          <option value="banana">香蕉</option>
+          <option value="cherry">樱桃</option>
+          <option value="date">枣子</option>
+          <option value="elderberry">接骨木莓</option>
+        </seo-select-search>
+
+        <script>
+          // 用JavaScript动态改变暗黑模式
+          const lightSelect = document.querySelector('[name="light-mode"]');
+          const darkSelect = document.querySelector('[name="dark-mode"]');
+
+          // 暗黑模式切换示例
+          function toggleDarkMode() {
+            lightSelect.dark = !lightSelect.dark;
+            console.log('暗黑模式:', lightSelect.dark ? '启用' : '禁用');
+          }
+
+          // 设置初始选择值
+          document.querySelector('[name="dark-multi"]').selectedValues = ['js', 'react'];
+
+          // 5秒后将浅色模式选择器切换为暗黑模式
+          setTimeout(() => {
+            toggleDarkMode();
+          }, 5000);
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1249,11 +1617,36 @@ export const docs = {
 
         - 打开下拉框时若无选项，则自动显示加载动画
         - 通过 slot 或 <strong>optionItems</strong> 设置选项后，立即退出加载状态
-        - 加载中会显示动画点和“正在加载选项...”提示
+        - 加载中会显示动画点和"正在加载选项..."提示
         - 异步加载完成后会自动初始化虚拟滚动
         - 若已有选项则不会进入加载状态
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <!-- 无选项的空选择器 - 打开下拉菜单时显示加载状态 -->
+        <seo-select name="loading-demo" width="250px">
+          <!-- 空状态下开始加载 -->
+        </seo-select>
+
+        <!-- 有选项的选择器 - 不显示加载状态 -->
+        <seo-select name="normal-select" width="250px">
+          <option value="option1">选项1</option>
+          <option value="option2">选项2</option>
+        </seo-select>
+
+        <script>
+          const loadingSelect = document.querySelector('seo-select[name="loading-demo"]');
+
+          // 实际使用中通过API调用等方式动态加载选项
+          setTimeout(() => {
+            loadingSelect.optionItems = [
+              { value: 'loading1', label: '已加载选项1' },
+              { value: 'loading2', label: '已加载选项2' },
+              { value: 'loading3', label: '已加载选项3' }
+            ];
+            // 设置选项后立即退出加载状态
+          }, 2000);
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1268,7 +1661,22 @@ export const docs = {
         - 键盘导航与虚拟滚动联动
         - 若未设置 <strong>width</strong> 属性，会根据选项内容自动调整宽度
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <seo-select id="large-dataset" name="item" width="300px"></seo-select>
+
+        <script>
+          const select = document.getElementById('large-dataset');
+
+          // 生成10,000个选项
+          select.optionItems = Array.from({ length: 10000 }, (_, i) => ({
+            value: \`item-\${i.toString().padStart(4, '0')}\`,
+            label: \`项目 \${i.toString().padStart(4, '0')} - 长文本描述\`
+          }));
+
+          // 立即渲染，不影响性能
+          console.log('大数据量加载完成');
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1286,7 +1694,22 @@ export const docs = {
         当前聚焦选项会自动滚动到可见区域，
         键盘事件由 <strong>InteractiveVirtualSelect</strong> 处理。
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <seo-select name="navigation-test" width="250px">
+          <option value="option1">选项1</option>
+          <option value="option2">选项2</option>
+          <option value="option3">选项3</option>
+          <option value="option4">选项4</option>
+          <option value="option5">选项5</option>
+          <option value="option6">选项6</option>
+          <option value="option7">选项7</option>
+          <option value="option8">选项8</option>
+          <option value="option9">选项9</option>
+          <option value="option10">选项10</option>
+        </seo-select>
+
+        <!-- 用Tab移动焦点后可用键盘操作 -->
+      `,
       lang: 'html'
     },
 
@@ -1305,7 +1728,30 @@ export const docs = {
 
         **提示**：通过控制台可查看各事件日志。
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <seo-select id="event-demo" name="demo" width="200px">
+          <option value="a">选项A</option>
+          <option value="b">选项B</option>
+          <option value="c">选项C</option>
+        </seo-select>
+
+        <script>
+          const select = document.getElementById('event-demo');
+
+          select.addEventListener('onSelect', (e) => {
+            const { value, label } = e.detail;
+            console.log('已选择:', value, label);
+          });
+
+          select.addEventListener('onReset', (e) => {
+            console.log('已重置:', e.detail);
+          });
+
+          select.addEventListener('change', (e) => {
+            console.log('表单值已更改:', e.target.value);
+          });
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1322,7 +1768,36 @@ export const docs = {
 
         **说明**：选择或移除标签时会触发 <code>onSelect</code> 和 <code>onDeselect</code> 事件。
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <seo-select multiple name="skills" width="400px">
+          <option value="js">JavaScript</option>
+          <option value="ts">TypeScript</option>
+          <option value="react">React</option>
+          <option value="vue">Vue.js</option>
+          <option value="angular">Angular</option>
+          <option value="svelte">Svelte</option>
+          <option value="node">Node.js</option>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="go">Go</option>
+        </seo-select>
+
+        <script>
+          const multiSelect = document.querySelector('seo-select[multiple]');
+
+          // 设置初始选择值
+          multiSelect.selectedValues = ['js', 'ts', 'react'];
+
+          multiSelect.addEventListener('onSelect', (e) => {
+            console.log('新增选择:', e.detail);
+            console.log('当前所有选择值:', multiSelect.selectedValues);
+          });
+
+          multiSelect.addEventListener('onDeselect', (e) => {
+            console.log('取消选择:', e.detail);
+          });
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1341,7 +1816,27 @@ export const docs = {
 
         **说明**：布尔属性可通过 JavaScript 设置或删除属性来控制。
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <!-- 重置按钮启用（默认） -->
+        <seo-select id="with-reset" name="with-reset" width="200px">
+          <option value="default">默认值</option>
+          <option value="option1">选项1</option>
+          <option value="option2" selected>选项2</option>
+        </seo-select>
+
+        <!-- 重置按钮禁用 -->
+        <seo-select id="no-reset" name="no-reset" width="200px">
+          <option value="default">默认值</option>
+          <option value="option1">选项1</option>
+          <option value="option2" selected>选项2</option>
+        </seo-select>
+
+        <script>
+          // 用JavaScript设置showReset布尔值
+          const noResetSelect = document.getElementById('no-reset');
+          noResetSelect.showReset = false;
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1356,7 +1851,43 @@ export const docs = {
         - 多选：以逗号分隔字符串提交多个值
         - 支持原生表单验证 API，显示默认验证消息
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <form id="demo-form">
+          <label>
+            首选语言（必填）:
+            <seo-select name="language" required width="200px">
+              <option value="">请选择</option>
+              <option value="ko">한국어</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </seo-select>
+          </label>
+
+          <label>
+            感兴趣的技术（多选）:
+            <seo-select name="interests" multiple width="300px">
+              <option value="frontend">前端开发</option>
+              <option value="backend">后端开发</option>
+              <option value="mobile">移动开发</option>
+              <option value="ai">人工智能</option>
+              <option value="blockchain">区块链</option>
+            </seo-select>
+          </label>
+
+          <button type="submit">提交</button>
+        </form>
+
+        <script>
+          document.getElementById('demo-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            for (const [key, value] of formData.entries()) {
+              console.log(\`\${key}: \${value}\`);
+            }
+          });
+        </script>
+      `,
       lang: 'html'
     },
 
@@ -1372,8 +1903,21 @@ export const docs = {
         根据最长项自适应宽度（最小为 100px）。
         也可以通过 CSS 类或样式进一步自定义。
       `,
-      code: `（代码部分保持原样）`,
+      code: `
+        <!-- 自动宽度调整 -->
+        <seo-select name="auto-width">
+          <option value="short">短</option>
+          <option value="very-long-option">非常长的选项文本内容</option>
+          <option value="medium">中等长度</option>
+        </seo-select>
+
+        <!-- 固定宽度 -->
+        <seo-select name="fixed-width" width="150px">
+          <option value="a">选项A</option>
+          <option value="b">选项B</option>
+        </seo-select>
+      `,
       lang: 'html'
-    }
+    },
   }
 };
