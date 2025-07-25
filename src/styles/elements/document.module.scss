@@ -107,12 +107,6 @@
     }
   }
 
-  &:empty::before {
-    content: '이벤트 로그가 여기에 표시됩니다...';
-    color: #6b7280;
-    font-style: italic;
-  }
-
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -178,12 +172,6 @@
       max-height: 20rem;
       overflow-y: auto;
 
-      &:empty::before {
-        content: '폼을 제출하면 데이터가 여기에 표시됩니다...';
-        color: #6b7280;
-        font-style: italic;
-      }
-
       &::-webkit-scrollbar {
         width: 6px;
       }
@@ -208,6 +196,19 @@
 .flex-group{
   display: flex;
   gap: 1rem;
+}
+
+.comparison-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  h5 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+  }
 }
 
 @media (max-width: breakpoint.$breakpoint) {
