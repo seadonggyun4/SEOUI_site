@@ -1,10 +1,14 @@
 import { component$, Slot } from '@builder.io/qwik';
+
 import { Navigation } from '@/widget/navigation';
 import { NavToggleButton } from '@/widget/nav-toggle-button';
-import { useNavigationProvider } from '@/context/NavigationContext';
 import { PageLoader } from '@/widget/page-loader';
 import { MobileNavigation } from '@/widget/mobile-navigation';
 import { TopBar } from '@/widget/top-bar';
+
+import { useNavigationProvider } from '@/context/NavigationContext';
+import { LanguageProvider } from '@/context/LanguageContext';
+
 import './layout.scss';
 import './layout-component-page.scss'
 
@@ -12,7 +16,7 @@ export default component$(() => {
   useNavigationProvider();
 
   return (
-    <>
+    <LanguageProvider defaultLanguage="en">
       <TopBar />
       <main id='main'>
         <Slot />
@@ -22,6 +26,6 @@ export default component$(() => {
       <Navigation />
       <NavToggleButton />
       <PageLoader />
-    </>
+    </LanguageProvider>
   );
 });

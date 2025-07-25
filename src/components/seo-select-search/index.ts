@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { getChosungAll } from '@/utils/search';
+import { getChosungAll } from '@/components/seo-select-search/search';
 import { AgSelect } from '../seo-select';
 
 interface OptionItem {

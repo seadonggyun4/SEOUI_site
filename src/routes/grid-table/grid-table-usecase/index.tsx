@@ -1,8 +1,8 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { DocSection } from '@/widget/doc-section';
 import { docs } from './docs';
-import { GridDataTable } from '@/components/class/GridTable/GridTable';
-import { exportExcel } from '@/utils/export';
+import { GridDataTable } from '@/components/seo-grid-table/GridTable';
+import { exportExcel } from '@/components/seo-grid-table/export';
 import './style.scss'
 
 const familyNames = ['김', '이', '박', '최', '정', '강', '조', '윤', '장', '임'];

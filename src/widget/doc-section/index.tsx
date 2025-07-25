@@ -7,6 +7,9 @@ import {
   useResource$,
   $
 } from '@builder.io/qwik';
+import { useLanguage } from '@/context/LanguageContext';
+import { createTranslations } from '@/utils/translate';
+import { docSectionTranslations } from './translations';
 import './style.scss';
 
 interface DocSectionProps {
@@ -57,6 +60,33 @@ export const DocSection = component$<DocSectionProps>(
     const sectionOpen = useSignal(open);
     const isComponentsLoaded = useSignal(false);
     const componentLoadingError = useSignal<string | null>(null);
+    
+    // 언어 컨텍스트 가져오기
+    const context = useLanguage();
+    
+    // 번역된 텍스트들을 미리 계산
+    const translations = createTranslations(
+      docSectionTranslations,
+      {
+        markdownProcessFailed: 'markdown.process.failed',
+        unknownError: 'unknown.error',
+        codeHighlightFailed: 'code.highlight.failed',
+        componentTimeout: 'component.timeout',
+        descriptionLoadFailed: 'description.load.failed',
+        descriptionRetry: 'description.retry',
+        componentLoading: 'component.loading',
+        componentLoadFailed: 'component.load.failed',
+        componentRetry: 'component.retry',
+        componentSkip: 'component.skip',
+        codeLoadFailed: 'code.load.failed',
+        codeRetry: 'code.retry',
+        codeViewRaw: 'code.view.raw',
+        codeCopy: 'code.copy',
+        codeCopyFailed: 'code.copy.failed',
+        waitingComponents: 'waiting.components'
+      },
+      context.selectedLanguage.value
+    );
 
     // Description을 스트리밍으로 로드
     const descriptionResource = useResource$<string>(async ({ track, cleanup }) => {
@@ -96,7 +126,7 @@ export const DocSection = component$<DocSectionProps>(
         if (error instanceof DOMException && error.name === 'AbortError') {
           return '';
         }
-        throw new Error(`Markdown 처리 실패: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
+        throw new Error(`${translations.markdownProcessFailed}: ${error instanceof Error ? error.message : translations.unknownError}`);
       }
     });
 
@@ -145,7 +175,7 @@ export const DocSection = component$<DocSectionProps>(
         if (error instanceof DOMException && error.name === 'AbortError') {
           return '';
         }
-        throw new Error(`코드 하이라이팅 실패: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
+        throw new Error(`${translations.codeHighlightFailed}: ${error instanceof Error ? error.message : translations.unknownError}`);
       }
     });
 
@@ -184,7 +214,7 @@ export const DocSection = component$<DocSectionProps>(
           // 컴포넌트 정의 대기 (타임아웃 포함)
           const definedPromise = customElements.whenDefined(componentName);
           const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error(`${componentName} 로딩 타임아웃`)), componentTimeout)
+            setTimeout(() => reject(new Error(`${componentName} ${translations.componentTimeout}`)), componentTimeout)
           );
 
           const abortPromise = new Promise((_, reject) => {
@@ -263,7 +293,7 @@ export const DocSection = component$<DocSectionProps>(
         await navigator.clipboard.writeText(dedent(code || ''));
         // 복사 성공 피드백 (선택사항)
       } catch (error) {
-        console.error('코드 복사 실패:', error);
+        console.error(`${translations.codeCopyFailed}:`, error);
         // 폴백: 텍스트 선택
         const textArea = document.createElement('textarea');
         textArea.value = dedent(code || '');
@@ -295,7 +325,7 @@ export const DocSection = component$<DocSectionProps>(
             </span>
           )}
           {waitForComponents.length > 0 && (
-            <span class="component-indicator" title={`대기 중인 컴포넌트: ${waitForComponents.join(', ')}`}>
+            <span class="component-indicator" title={`${translations.waitingComponents}: ${waitForComponents.join(', ')}`}>
               <i class="fas fa-puzzle-piece"></i>
             </span>
           )}
@@ -318,7 +348,7 @@ export const DocSection = component$<DocSectionProps>(
                   <div class="description-error">
                     <i class="fas fa-exclamation-triangle error-icon"></i>
                     <div class="error-content">
-                      <strong>설명 로드 실패</strong>
+                      <strong>{translations.descriptionLoadFailed}</strong>
                       <span class="error-message">{error.message}</span>
                       <button
                         class="retry-button"
@@ -327,7 +357,7 @@ export const DocSection = component$<DocSectionProps>(
                           setTimeout(() => sectionOpen.value = true, 100);
                         }}
                       >
-                        <i class="fas fa-redo"></i> 다시 시도
+                        <i class="fas fa-redo"></i> {translations.descriptionRetry}
                       </button>
                     </div>
                   </div>
@@ -350,7 +380,7 @@ export const DocSection = component$<DocSectionProps>(
                 <div class="components-skeleton">
                   <div class="skeleton-components">
                     {waitForComponents.map((componentName) => (
-                      <div key={componentName} class="skeleton-component" title={`${componentName} 로딩 중`}>
+                      <div key={componentName} class="skeleton-component" title={`${componentName} ${translations.componentLoading}`}>
                         <i class="fas fa-spinner fa-spin"></i>
                         <span class="component-name">{componentName}</span>
                       </div>
@@ -371,8 +401,8 @@ export const DocSection = component$<DocSectionProps>(
                   </div>
                   <span class="loading-text">
                     {waitForComponents.length > 0
-                      ? `컴포넌트 로딩 중: ${waitForComponents.join(', ')}`
-                      : '컴포넌트 로딩 중...'
+                      ? `${translations.componentLoading}: ${waitForComponents.join(', ')}`
+                      : translations.componentLoading
                     }
                   </span>
                 </div>
@@ -381,11 +411,11 @@ export const DocSection = component$<DocSectionProps>(
                 <div class="components-error">
                   <i class="fas fa-exclamation-circle error-icon"></i>
                   <div class="error-content">
-                    <strong>컴포넌트 로딩 실패</strong>
+                    <strong>{translations.componentLoadFailed}</strong>
                     <span class="error-message">{error.message}</span>
                     <div class="error-actions">
                       <button class="retry-button" onClick$={retryComponentLoading}>
-                        <i class="fas fa-redo"></i> 다시 시도
+                        <i class="fas fa-redo"></i> {translations.componentRetry}
                       </button>
                       <button
                         class="skip-button"
@@ -394,7 +424,7 @@ export const DocSection = component$<DocSectionProps>(
                           componentLoadingError.value = null;
                         }}
                       >
-                        <i class="fas fa-forward"></i> 건너뛰기
+                        <i class="fas fa-forward"></i> {translations.componentSkip}
                       </button>
                     </div>
                   </div>
@@ -436,7 +466,7 @@ export const DocSection = component$<DocSectionProps>(
                   <div class="code-error">
                     <i class="fas fa-exclamation-circle error-icon"></i>
                     <div class="error-content">
-                      <strong>코드 하이라이팅 실패</strong>
+                      <strong>{translations.codeLoadFailed}</strong>
                       <span class="error-message">{error.message}</span>
                       <div class="error-actions">
                         <button
@@ -446,7 +476,7 @@ export const DocSection = component$<DocSectionProps>(
                             setTimeout(() => sectionOpen.value = true, 100);
                           }}
                         >
-                          <i class="fas fa-redo"></i> 다시 시도
+                          <i class="fas fa-redo"></i> {translations.codeRetry}
                         </button>
                         <button
                           class="raw-code-button"
@@ -460,7 +490,7 @@ export const DocSection = component$<DocSectionProps>(
                             }
                           }}
                         >
-                          <i class="fas fa-file-code"></i> 원본 코드 보기
+                          <i class="fas fa-file-code"></i> {translations.codeViewRaw}
                         </button>
                       </div>
                     </div>
@@ -476,7 +506,7 @@ export const DocSection = component$<DocSectionProps>(
                         class="copy-button"
                         onClick$={copyCode}
                       >
-                        <i class="fas fa-copy"></i> 복사
+                        <i class="fas fa-copy"></i> {translations.codeCopy}
                       </button>
                     </div>
                     <div
