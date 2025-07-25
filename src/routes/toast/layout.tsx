@@ -9,7 +9,7 @@ export default component$(() => {
   const nav = useNavigation()
 
   useVisibleTask$(() => {
-    import('@/components/ag-toast');
+    import('@/components/seo-toast');
 
 
     const $loader = document.querySelector('.document-loder') as HTMLElement;

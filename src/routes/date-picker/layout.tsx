@@ -9,7 +9,7 @@ export default component$(() => {
   const nav = useNavigation()
 
   useVisibleTask$(() => {
-    import('@/components/ag-datepicker');
+    import('@/components/seo-datepicker');
 
 
     const $loader = document.querySelector('.document-loder') as HTMLElement;

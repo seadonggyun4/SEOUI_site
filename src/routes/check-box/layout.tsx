@@ -9,9 +9,9 @@ export default component$(() => {
   const nav = useNavigation()
 
   useVisibleTask$(() => {
-    import('@/components/ag-check-box');
-    import('@/components/ag-toggle');
-    import('@/components/ag-radio');
+    import('@/components/seo-check-box');
+    import('@/components/seo-toggle');
+    import('@/components/seo-radio');
 
 
     const $loader = document.querySelector('.document-loder') as HTMLElement;

@@ -13,7 +13,7 @@ interface AgToastElement extends HTMLElement {
 
 export default component$(() => {
   useVisibleTask$(() => {
-    import('@/components/ag-toast').then((mod) => {
+    import('@/components/seo-toast').then((mod) => {
       if (!customElements.get('ag-toast')) {
         customElements.define('ag-toast', mod.AgToast);
       }

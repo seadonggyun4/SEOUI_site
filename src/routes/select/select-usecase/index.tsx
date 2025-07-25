@@ -13,7 +13,7 @@ interface CustomSelectElement extends HTMLElement {
 
 export default component$(() => {
   useVisibleTask$(() => {
-    import('@/components/ag-select').then((mod) => {
+    import('@/components/seo-select').then((mod) => {
       if (!customElements.get('ag-select')) {
         customElements.define('ag-select', mod.AgSelect);
       }

@@ -9,7 +9,7 @@ export default component$(() => {
   const nav = useNavigation()
 
   useVisibleTask$(() => {
-    import('@/components/ag-grid-table');
+    import('@/components/seo-grid-table');
 
 
     const $loader = document.querySelector('.document-loder') as HTMLElement;

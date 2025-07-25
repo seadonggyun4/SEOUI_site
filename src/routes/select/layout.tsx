@@ -9,8 +9,8 @@ export default component$(() => {
   const nav = useNavigation()
 
   useVisibleTask$(() => {
-    import('@/components/ag-select');
-    import('@/components/ag-select-search');
+    import('@/components/seo-select');
+    import('@/components/seo-select-search');
 
 
     const $loader = document.querySelector('.document-loder') as HTMLElement;

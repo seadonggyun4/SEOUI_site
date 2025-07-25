@@ -14,7 +14,7 @@ interface CustomSelectSearchElement extends HTMLElement {
 
 export default component$(() => {
   useVisibleTask$(() => {
-    import('@/components/ag-select-search').then((mod) => {
+    import('@/components/seo-select-search').then((mod) => {
       if (!customElements.get('ag-select-search')) {
         customElements.define('ag-select-search', mod.AgSelectSearch);
       }

@@ -1,5 +1,5 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
-import { AgDatePicker } from '@/components/ag-datepicker';
+import { AgDatePicker } from '@/components/seo-datepicker';
 
 export const AgDatepickerHost = component$(() => {
   useVisibleTask$(() => {

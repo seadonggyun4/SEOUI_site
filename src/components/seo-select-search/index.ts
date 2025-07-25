@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { getChosungAll } from '@/utils/search';
-import { AgSelect } from '../ag-select';
+import { AgSelect } from '../seo-select';
 
 interface OptionItem {
   value: string;

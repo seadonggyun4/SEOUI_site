@@ -13,9 +13,9 @@ export default component$(() => {
   useVisibleTask$(() => {
     // Lit 컴포넌트들을 동적으로 로드하고 등록
     Promise.all([
-      import('@/components/ag-check-box'),
-      import('@/components/ag-toggle'),
-      import('@/components/ag-radio')
+      import('@/components/seo-check-box'),
+      import('@/components/seo-toggle'),
+      import('@/components/seo-radio')
     ]).then(([checkboxMod, toggleMod, radioMod]) => {
       if (!customElements.get('ag-check-box')) {
         customElements.define('ag-check-box', checkboxMod.CheckBox);
