@@ -1,13 +1,19 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useComputed$ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { TopBarMenu } from '@/config/menu';
-import { useLanguage, useCurrentLanguage } from '@/context/LanguageContext';
+import { useLanguage } from '@/context/LanguageContext';
 import './style.scss';
 
 export const TopBar = component$(() => {
   const loc = useLocation();
   const context = useLanguage();
-  const currentLanguage = useCurrentLanguage();
+  
+  // useComputed$를 사용하여 반응형 계산 보장
+  const currentLanguage = useComputed$(() => {
+    return context.languages.find(
+      lang => lang.code === context.selectedLanguage.value
+    ) || context.languages[0];
+  });
 
   // 현재 URL의 첫 번째 세그먼트 추출
   const getCurrentFirstSegment = () => {
@@ -26,7 +32,7 @@ export const TopBar = component$(() => {
   const isActive = (menuLink: string) => {
     const currentFirstSegment = getCurrentFirstSegment();
     const linkFirstSegment = getLinkFirstSegment(menuLink);
-    
+        
     return currentFirstSegment === linkFirstSegment && currentFirstSegment !== '';
   };
 
@@ -63,8 +69,8 @@ export const TopBar = component$(() => {
               class={`topbar-language-trigger ${context.isDropdownOpen.value ? 'open' : ''}`}
               onClick$={context.toggleDropdown}
             >
-              <span class="topbar-language-flag">{currentLanguage.flag}</span>
-              <span class="topbar-language-label">{currentLanguage.label}</span>
+              <span class="topbar-language-flag">{currentLanguage.value.flag}</span>
+              <span class="topbar-language-label">{currentLanguage.value.label}</span>
               <span class="topbar-language-arrow">
                 <i class="fas fa-chevron-down"></i>
               </span>
