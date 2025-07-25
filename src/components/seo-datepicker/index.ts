@@ -497,7 +497,7 @@ export class AgDatePicker extends LitElement {
   }
 
   private get datepickerEl (): HTMLDivElement {
-    return this.querySelector('.ag-datepicker-wrapper')!;
+    return this.querySelector('.seo-datepicker-wrapper')!;
   }
 
   private get _minDateObj (): Date | null {
@@ -514,7 +514,7 @@ export class AgDatePicker extends LitElement {
     const times = Array.from({ length: 48 }).map((_, i) => `${String(Math.floor(i / 2)).padStart(2, '0')}:${i % 2 === 0 ? '00' : '30'}`)
 
     return html`
-      <div class="ag-datepicker-wrapper">
+      <div class="seo-datepicker-wrapper">
         <header class="datepicker-header">
           <button class="prev" type="button" @click=${this.moveToPrevMonth}>
             <i class="fa-solid fa-chevron-left"></i>
@@ -595,4 +595,4 @@ export class AgDatePicker extends LitElement {
   }
 }
 
-customElements.define('ag-datepicker', AgDatePicker);
+customElements.define('seo-datepicker', AgDatePicker);

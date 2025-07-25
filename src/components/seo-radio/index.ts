@@ -50,7 +50,7 @@ export class AgRadio extends LitElement {
 
   render () {
     return html`
-      <div class="ag-radio ${this.disabled ? 'is-disabled' : ''}">
+      <div class="seo-radio ${this.disabled ? 'is-disabled' : ''}">
         ${this.options.map((opt) => html`
           <label class="radio-label" for="${opt.value}">
             <input
@@ -76,4 +76,4 @@ export class AgRadio extends LitElement {
   }
 }
 
-customElements.define('ag-radio', AgRadio)
+customElements.define('seo-radio', AgRadio)

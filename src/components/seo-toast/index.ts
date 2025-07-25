@@ -140,4 +140,4 @@ export class AgToast extends LitElement {
   }
 }
 
-customElements.define('ag-toast', AgToast);
+customElements.define('seo-toast', AgToast);

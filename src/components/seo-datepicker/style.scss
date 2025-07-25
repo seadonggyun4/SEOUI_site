@@ -1,6 +1,6 @@
 @use '@/components/styles/constants/colors' as colors;
 
-ag-datepicker {
+seo-datepicker {
   position: fixed;
   top: -9999px;
   left: -9999px;
@@ -8,7 +8,7 @@ ag-datepicker {
 }
 
 // Layout
-.ag-datepicker-wrapper{
+.seo-datepicker-wrapper{
   position: fixed;
   display: grid;
   min-width: 40rem;

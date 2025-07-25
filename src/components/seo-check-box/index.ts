@@ -112,4 +112,4 @@ connectedCallback() {
   }
 }
 
-customElements.define('ag-check-box', CheckBox)
+customElements.define('seo-check-box', CheckBox)

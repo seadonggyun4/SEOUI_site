@@ -91,7 +91,7 @@ export class AgToggle extends LitElement {
 
   render () {
     return html`
-      <label class="ag-toggle ${this.disabled ? 'is-disabled' : ''}">
+      <label class="seo-toggle ${this.disabled ? 'is-disabled' : ''}">
         <input
           type="checkbox"
           .checked=${this.checked}
@@ -108,4 +108,4 @@ export class AgToggle extends LitElement {
   }
 }
 
-customElements.define('ag-toggle', AgToggle);
+customElements.define('seo-toggle', AgToggle);

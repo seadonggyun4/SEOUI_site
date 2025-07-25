@@ -55,7 +55,7 @@ export class AgSelectSearch extends AgSelect {
     const showNoData = this.multiple && !this._isLoading && !hasOptions;
 
     return html`
-      <div class="ag-select-listbox ${this.open ? '' : 'hidden'}">
+      <div class="seo-select-listbox ${this.open ? '' : 'hidden'}">
         <div class="select-search-input">
           <span class="search-icon" aria-hidden="true">${this.getSearchIcon()}</span>
           <input
@@ -65,7 +65,7 @@ export class AgSelectSearch extends AgSelect {
             @input=${this._handleSearchInput}
           />
         </div>
-        <div class="ag-select-scroll" role="listbox">
+        <div class="seo-select-scroll" role="listbox">
           ${this._isLoading
             ? this.renderLoadingSpinner()
             : showNoData
@@ -89,7 +89,7 @@ export class AgSelectSearch extends AgSelect {
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
-      <div class="ag-select multi-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
+      <div class="seo-select multi-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <div class="selected-container ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           <div class="selected-tags">
             ${this._selectedValues.map(value => {
@@ -136,7 +136,7 @@ export class AgSelectSearch extends AgSelect {
                           this._value !== firstOptionValue;
 
     return html`
-      <div class="ag-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
+      <div class="seo-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <button type="button" class="selected ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           ${this._labelText}
           ${showResetButton
@@ -166,7 +166,7 @@ export class AgSelectSearch extends AgSelect {
 
   // 가상 스크롤 초기화 - 부모 클래스 메서드 오버라이드하여 검색 처리 추가
   protected override initializeVirtualSelect(): void {
-    const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+    const scrollEl = this.querySelector('.seo-select-scroll') as HTMLDivElement;
     const optionData = this.getAllOptionData();
 
     // 다중선택에서 모든 항목이 선택된 경우 가상 스크롤 생성하지 않음
@@ -246,7 +246,7 @@ export class AgSelectSearch extends AgSelect {
       // 선택 해제 후 옵션이 있으면 가상 스크롤 재생성
       const optionData = this.getAllOptionData();
       if (optionData.length > 0) {
-        const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+        const scrollEl = this.querySelector('.seo-select-scroll') as HTMLDivElement;
         if (scrollEl) {
           this._virtual = this._createVirtualSelect(optionData, scrollEl);
           if (this._searchText) {
@@ -283,7 +283,7 @@ export class AgSelectSearch extends AgSelect {
         this._virtual = null;
 
         // 리셋 후 모든 옵션이 다시 사용 가능하므로 가상 스크롤 재생성
-        const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+        const scrollEl = this.querySelector('.seo-select-scroll') as HTMLDivElement;
         if (scrollEl) {
           const optionData = this.getAllOptionData();
           this._virtual = this._createVirtualSelect(optionData, scrollEl);
@@ -327,4 +327,4 @@ export class AgSelectSearch extends AgSelect {
   }
 }
 
-customElements.define('ag-select-search', AgSelectSearch);
+customElements.define('seo-select-search', AgSelectSearch);

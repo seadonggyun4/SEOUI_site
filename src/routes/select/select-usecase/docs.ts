@@ -2,7 +2,7 @@ export const docs = {
   basic: {
     title: '기본 셀렉트 사용법',
     description: `
-      <code>ag-select</code>는 두 가지 방법으로 옵션을 정의할 수 있습니다:
+      <code>seo-select</code>는 두 가지 방법으로 옵션을 정의할 수 있습니다:
 
       1. **slot 방식**: <code>&lt;option&gt;</code> 태그를 직접 자식으로 선언 (우선 적용)
       2. **배열 방식**: <strong>optionItems</strong> 속성으로 배열 전달 (slot이 없을 때 fallback)
@@ -14,18 +14,18 @@ export const docs = {
     `,
     code: `
       <!-- slot 방식 (권장) -->
-      <ag-select name="brand" width="200px">
+      <seo-select name="brand" width="200px">
         <option value="kia">기아자동차</option>
         <option value="hyundai" selected>현대자동차</option>
         <option value="bmw">BMW</option>
         <option value="benz">Mercedes-Benz</option>
-      </ag-select>
+      </seo-select>
 
       <!-- 배열 방식 (fallback) -->
-      <ag-select name="brand-alt" width="200px"></ag-select>
+      <seo-select name="brand-alt" width="200px"></seo-select>
 
       <script>
-        const select = document.querySelector('ag-select[name="brand-alt"]');
+        const select = document.querySelector('seo-select[name="brand-alt"]');
         select.optionItems = [
           { value: 'kia', label: '기아자동차' },
           { value: 'hyundai', label: '현대자동차' },
@@ -41,7 +41,7 @@ export const docs = {
   loading: {
     title: '로딩 상태 및 비동기 처리',
     description: `
-      <code>ag-select</code>는 옵션이 없을 때 무조건 스피너와 로딩 텍스트를 표시합니다.
+      <code>seo-select</code>는 옵션이 없을 때 무조건 스피너와 로딩 텍스트를 표시합니다.
 
       - 옵션이 비어있는 상태에서 드롭다운을 열면 자동으로 로딩 상태가 됩니다
       - slot 또는 <strong>optionItems</strong>를 통해 옵션이 생성되면 즉시 로딩 상태가 해제됩니다
@@ -51,19 +51,19 @@ export const docs = {
     `,
     code: `
       <!-- 옵션이 없는 빈 셀렉트 - 드롭다운 열면 로딩 상태 표시됨 -->
-      <ag-select name="loading-demo" width="250px">
+      <seo-select name="loading-demo" width="250px">
         <!-- 비어있는 상태에서 로딩이 시작됨 -->
-      </ag-select>
+      </seo-select>
 
       <!-- 옵션이 있는 셀렉트 - 로딩 상태 표시 안됨 -->
-      <ag-select name="normal-select" width="250px">
+      <seo-select name="normal-select" width="250px">
         <option value="option1">옵션 1</option>
         <option value="option2">옵션 2</option>
-      </ag-select>
+      </seo-select>
 
       <script>
-        const loadingSelect = document.querySelector('ag-select[name="loading-demo"]');
-        
+        const loadingSelect = document.querySelector('seo-select[name="loading-demo"]');
+
         // 실제 사용 시에는 API 호출 등으로 옵션을 동적 로딩
         setTimeout(() => {
           loadingSelect.optionItems = [
@@ -81,7 +81,7 @@ export const docs = {
   virtual: {
     title: '가상 스크롤링과 대용량 데이터',
     description: `
-      <code>ag-select</code>는 <strong>InteractiveVirtualSelect</strong> 유틸을 사용해
+      <code>seo-select</code>는 <strong>InteractiveVirtualSelect</strong> 유틸을 사용해
       수천 개의 옵션도 성능 저하 없이 처리할 수 있습니다.
 
       - 실제 DOM에는 가시 영역의 옵션만 렌더링되어 메모리 효율적입니다
@@ -90,7 +90,7 @@ export const docs = {
       - <strong>width</strong> 속성을 지정하지 않으면 옵션 텍스트 길이를 측정해 자동 조절됩니다
     `,
     code: `
-      <ag-select id="large-dataset" name="item" width="300px"></ag-select>
+      <seo-select id="large-dataset" name="item" width="300px"></seo-select>
 
       <script>
         const select = document.getElementById('large-dataset');
@@ -111,7 +111,7 @@ export const docs = {
   keyboard: {
     title: '키보드 네비게이션',
     description: `
-      <code>ag-select</code>는 완전한 키보드 접근성을 제공합니다:
+      <code>seo-select</code>는 완전한 키보드 접근성을 제공합니다:
 
       - <strong>Tab</strong>: 셀렉트 포커스 이동
       - <strong>↓ (아래 화살표)</strong>: 다음 옵션으로 이동
@@ -123,7 +123,7 @@ export const docs = {
       <strong>InteractiveVirtualSelect</strong>가 키보드 이벤트를 처리합니다.
     `,
     code: `
-      <ag-select name="navigation-test" width="250px">
+      <seo-select name="navigation-test" width="250px">
         <option value="option1">옵션 1</option>
         <option value="option2">옵션 2</option>
         <option value="option3">옵션 3</option>
@@ -134,7 +134,7 @@ export const docs = {
         <option value="option8">옵션 8</option>
         <option value="option9">옵션 9</option>
         <option value="option10">옵션 10</option>
-      </ag-select>
+      </seo-select>
 
       <!-- Tab으로 포커스 이동 후 키보드로 조작 가능 -->
     `,
@@ -144,7 +144,7 @@ export const docs = {
   events: {
     title: '이벤트 처리',
     description: `
-      <code>ag-select</code>는 다음과 같은 커스텀 이벤트를 발생시킵니다:
+      <code>seo-select</code>는 다음과 같은 커스텀 이벤트를 발생시킵니다:
 
       - <strong>onSelect</strong>: 옵션 선택 시 발생 (<code>{ value, label }</code> 전달)
       - <strong>onDeselect</strong>: 다중 선택에서 태그 제거 시 발생 (다중 모드만)
@@ -157,11 +157,11 @@ export const docs = {
       **참고**: 아래 예시의 셀렉트를 조작하면 브라우저 콘솔에서 이벤트 로그를 확인할 수 있습니다.
     `,
     code: `
-      <ag-select id="event-demo" name="demo" width="200px">
+      <seo-select id="event-demo" name="demo" width="200px">
         <option value="a">옵션 A</option>
         <option value="b">옵션 B</option>
         <option value="c">옵션 C</option>
-      </ag-select>
+      </seo-select>
 
       <script>
         const select = document.getElementById('event-demo');
@@ -194,11 +194,11 @@ export const docs = {
       - 이미 선택된 옵션은 드롭다운에서 제외되어 표시됩니다
       - 태그 제거 시 해당 옵션이 다시 드롭다운에 나타납니다
 
-      **참고**: 태그를 클릭하여 제거하거나 드롭다운에서 추가 선택하면 
+      **참고**: 태그를 클릭하여 제거하거나 드롭다운에서 추가 선택하면
       <code>onSelect</code>, <code>onDeselect</code> 이벤트가 발생합니다.
     `,
     code: `
-      <ag-select multiple name="skills" width="400px">
+      <seo-select multiple name="skills" width="400px">
         <option value="js">JavaScript</option>
         <option value="ts">TypeScript</option>
         <option value="react">React</option>
@@ -209,10 +209,10 @@ export const docs = {
         <option value="python">Python</option>
         <option value="java">Java</option>
         <option value="go">Go</option>
-      </ag-select>
+      </seo-select>
 
       <script>
-        const multiSelect = document.querySelector('ag-select[multiple]');
+        const multiSelect = document.querySelector('seo-select[multiple]');
 
         // 초기 선택값 설정
         multiSelect.selectedValues = ['js', 'ts', 'react'];
@@ -247,18 +247,18 @@ export const docs = {
     `,
     code: `
       <!-- 리셋 버튼 활성화 (기본) -->
-      <ag-select id="with-reset" name="with-reset" width="200px">
+      <seo-select id="with-reset" name="with-reset" width="200px">
         <option value="default">기본값</option>
         <option value="option1">옵션 1</option>
         <option value="option2" selected>옵션 2</option>
-      </ag-select>
+      </seo-select>
 
       <!-- 리셋 버튼 비활성화 -->
-      <ag-select id="no-reset" name="no-reset" width="200px">
+      <seo-select id="no-reset" name="no-reset" width="200px">
         <option value="default">기본값</option>
         <option value="option1">옵션 1</option>
         <option value="option2" selected>옵션 2</option>
-      </ag-select>
+      </seo-select>
 
       <script>
         // JavaScript로 showReset 부울린 값 설정
@@ -272,7 +272,7 @@ export const docs = {
   form: {
     title: '폼 연동',
     description: `
-      <code>ag-select</code>는 <strong>formAssociated = true</strong>로 설정되어
+      <code>seo-select</code>는 <strong>formAssociated = true</strong>로 설정되어
       표준 HTML 폼과 완전히 호환됩니다.
 
       - <strong>name</strong> 속성으로 폼 필드명을 지정합니다
@@ -285,23 +285,23 @@ export const docs = {
       <form id="demo-form">
         <label>
           선호 언어 (필수):
-          <ag-select name="language" required width="200px">
+          <seo-select name="language" required width="200px">
             <option value="">선택해주세요</option>
             <option value="ko">한국어</option>
             <option value="en">English</option>
             <option value="ja">日本語</option>
-          </ag-select>
+          </seo-select>
         </label>
 
         <label>
           관심 기술 (다중 선택):
-          <ag-select name="interests" multiple width="300px">
+          <seo-select name="interests" multiple width="300px">
             <option value="frontend">프론트엔드</option>
             <option value="backend">백엔드</option>
             <option value="mobile">모바일</option>
             <option value="ai">인공지능</option>
             <option value="blockchain">블록체인</option>
-          </ag-select>
+          </seo-select>
         </label>
 
         <button type="submit">제출</button>
@@ -324,7 +324,7 @@ export const docs = {
   styling: {
     title: '크기 및 스타일링',
     description: `
-      <code>ag-select</code>의 크기는 다음과 같이 제어할 수 있습니다:
+      <code>seo-select</code>의 크기는 다음과 같이 제어할 수 있습니다:
 
       - <strong>width</strong>: 셀렉트 박스의 너비 지정 (미지정 시 자동 계산)
       - <strong>height</strong>: 셀렉트 박스의 높이 (기본값: 100%)
@@ -335,17 +335,17 @@ export const docs = {
     `,
     code: `
       <!-- 자동 너비 조절 -->
-      <ag-select name="auto-width">
+      <seo-select name="auto-width">
         <option value="short">짧음</option>
         <option value="very-long-option">매우 긴 옵션 텍스트입니다</option>
         <option value="medium">중간 길이</option>
-      </ag-select>
+      </seo-select>
 
       <!-- 고정 너비 -->
-      <ag-select name="fixed-width" width="150px">
+      <seo-select name="fixed-width" width="150px">
         <option value="a">옵션 A</option>
         <option value="b">옵션 B</option>
-      </ag-select>
+      </seo-select>
     `,
     lang: 'html'
   }

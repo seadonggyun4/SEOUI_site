@@ -17,14 +17,14 @@ export default component$(() => {
       import('@/components/seo-toggle'),
       import('@/components/seo-radio')
     ]).then(([checkboxMod, toggleMod, radioMod]) => {
-      if (!customElements.get('ag-check-box')) {
-        customElements.define('ag-check-box', checkboxMod.CheckBox);
+      if (!customElements.get('seo-check-box')) {
+        customElements.define('seo-check-box', checkboxMod.CheckBox);
       }
-      if (!customElements.get('ag-toggle')) {
-        customElements.define('ag-toggle', toggleMod.AgToggle);
+      if (!customElements.get('seo-toggle')) {
+        customElements.define('seo-toggle', toggleMod.AgToggle);
       }
-      if (!customElements.get('ag-radio')) {
-        customElements.define('ag-radio', radioMod.AgRadio);
+      if (!customElements.get('seo-radio')) {
+        customElements.define('seo-radio', radioMod.AgRadio);
       }
 
       // 이벤트 처리 예시를 위한 설정
@@ -229,22 +229,22 @@ export default component$(() => {
       <DocSection {...docs.checkboxBasic}>
         <div class="demo-item">
           <h4>기본 체크박스</h4>
-          <div dangerouslySetInnerHTML={`<ag-check-box></ag-check-box>`} />
+          <div dangerouslySetInnerHTML={`<seo-check-box></seo-check-box>`} />
         </div>
 
         <div class="demo-item">
           <h4>미리 선택된 상태</h4>
-          <div dangerouslySetInnerHTML={`<ag-check-box checked></ag-check-box>`} />
+          <div dangerouslySetInnerHTML={`<seo-check-box checked></seo-check-box>`} />
         </div>
 
         <div class="demo-item">
           <h4>라벨이 있는 체크박스</h4>
-          <div dangerouslySetInnerHTML={`<ag-check-box label="이용약관에 동의합니다"></ag-check-box>`} />
+          <div dangerouslySetInnerHTML={`<seo-check-box label="이용약관에 동의합니다"></seo-check-box>`} />
         </div>
 
         <div class="demo-item">
           <h4>비활성화된 체크박스</h4>
-          <div dangerouslySetInnerHTML={`<ag-check-box checked disabled label="수정 불가 항목"></ag-check-box>`} />
+          <div dangerouslySetInnerHTML={`<seo-check-box checked disabled label="수정 불가 항목"></seo-check-box>`} />
         </div>
       </DocSection>
 
@@ -252,7 +252,7 @@ export default component$(() => {
         <div class="demo-grid">
           <div class="demo-item">
             <h4>이벤트 테스트</h4>
-            <div dangerouslySetInnerHTML={`<ag-check-box id="agreement" label="개인정보 처리방침 동의"></ag-check-box>`} />
+            <div dangerouslySetInnerHTML={`<seo-check-box id="agreement" label="개인정보 처리방침 동의"></seo-check-box>`} />
             <button type="button" onClick$={clearEventLogs} class="gradient-btn clear">
               로그 지우기
             </button>
@@ -271,22 +271,22 @@ export default component$(() => {
       <DocSection {...docs.toggleBasic}>
         <div class="demo-item">
           <h4>기본 토글</h4>
-          <div dangerouslySetInnerHTML={`<ag-toggle></ag-toggle>`} />
+          <div dangerouslySetInnerHTML={`<seo-toggle></seo-toggle>`} />
         </div>
 
         <div class="demo-item">
           <h4>활성화된 토글</h4>
-          <div dangerouslySetInnerHTML={`<ag-toggle checked></ag-toggle>`} />
+          <div dangerouslySetInnerHTML={`<seo-toggle checked></seo-toggle>`} />
         </div>
 
         <div class="demo-item">
           <h4>라벨이 있는 토글</h4>
-          <div dangerouslySetInnerHTML={`<ag-toggle label="이메일 알림 수신" checked></ag-toggle>`} />
+          <div dangerouslySetInnerHTML={`<seo-toggle label="이메일 알림 수신" checked></seo-toggle>`} />
         </div>
 
         <div class="demo-item">
           <h4>비활성화된 토글</h4>
-          <div dangerouslySetInnerHTML={`<ag-toggle disabled label="관리자 전용 기능"></ag-toggle>`} />
+          <div dangerouslySetInnerHTML={`<seo-toggle disabled label="관리자 전용 기능"></seo-toggle>`} />
         </div>
       </DocSection>
 
@@ -297,21 +297,21 @@ export default component$(() => {
         }} class="demo-form">
           <div class="form-field">
             <div dangerouslySetInnerHTML={`
-              <ag-toggle
+              <seo-toggle
                 name="terms"
                 label="서비스 이용약관에 동의합니다"
                 required>
-              </ag-toggle>
+              </seo-toggle>
             `} />
           </div>
 
           <div class="form-field">
             <div dangerouslySetInnerHTML={`
-              <ag-toggle
+              <seo-toggle
                 name="privacy"
                 label="개인정보 처리방침에 동의합니다"
                 required>
-              </ag-toggle>
+              </seo-toggle>
             `} />
           </div>
 
@@ -322,7 +322,7 @@ export default component$(() => {
       <DocSection {...docs.radioBasic}>
         <div class="demo-item">
           <h4>결제 방법 선택</h4>
-          <div dangerouslySetInnerHTML={`<ag-radio id="payment-method" name="payment"></ag-radio>`} />
+          <div dangerouslySetInnerHTML={`<seo-radio id="payment-method" name="payment"></seo-radio>`} />
           <p class="demo-note">
             💳 JavaScript를 통해 options 배열을 설정해야 합니다
           </p>
@@ -333,7 +333,7 @@ export default component$(() => {
         <div class="demo-grid">
           <div class="demo-item">
             <h4>구독 플랜 선택</h4>
-            <div dangerouslySetInnerHTML={`<ag-radio id="subscription-plan" name="plan"></ag-radio>`} />
+            <div dangerouslySetInnerHTML={`<seo-radio id="subscription-plan" name="plan"></seo-radio>`} />
           </div>
 
           <div class="demo-item">
@@ -349,7 +349,7 @@ export default component$(() => {
       <DocSection {...docs.radioDisabled}>
         <div class="demo-item">
           <h4>비활성화된 라디오 그룹</h4>
-          <div dangerouslySetInnerHTML={`<ag-radio id="region-selector" name="region" disabled></ag-radio>`} />
+          <div dangerouslySetInnerHTML={`<seo-radio id="region-selector" name="region" disabled></seo-radio>`} />
           <p class="demo-note">
             🚫 전체 라디오 그룹이 비활성화되어 선택할 수 없습니다
           </p>
@@ -365,18 +365,18 @@ export default component$(() => {
         >
           <fieldset>
             <legend>알림 설정</legend>
-            <div dangerouslySetInnerHTML={`<ag-check-box name="email_notifications" label="이메일 알림" checked></ag-check-box>`} />
-            <div dangerouslySetInnerHTML={`<ag-toggle name="push_notifications" label="푸시 알림"></ag-toggle>`} />
+            <div dangerouslySetInnerHTML={`<seo-check-box name="email_notifications" label="이메일 알림" checked></seo-check-box>`} />
+            <div dangerouslySetInnerHTML={`<seo-toggle name="push_notifications" label="푸시 알림"></seo-toggle>`} />
           </fieldset>
 
           <fieldset>
             <legend>테마 선택</legend>
-            <div dangerouslySetInnerHTML={`<ag-radio id="theme-selector" name="theme"></ag-radio>`} />
+            <div dangerouslySetInnerHTML={`<seo-radio id="theme-selector" name="theme"></seo-radio>`} />
           </fieldset>
 
           <fieldset>
             <legend>언어 설정</legend>
-            <div dangerouslySetInnerHTML={`<ag-radio id="language-selector" name="language"></ag-radio>`} />
+            <div dangerouslySetInnerHTML={`<seo-radio id="language-selector" name="language"></seo-radio>`} />
           </fieldset>
 
           <button type="submit" class="gradient-btn submit">설정 저장</button>
@@ -397,11 +397,11 @@ export default component$(() => {
         >
           <div class="form-field">
             <div dangerouslySetInnerHTML={`
-              <ag-check-box
+              <seo-check-box
                 name="agree_terms"
                 label="이용약관 동의 (필수)"
                 required>
-              </ag-check-box>
+              </seo-check-box>
             `} />
             <p class="demo-note">
               ⚠️ required 속성이 있지만 실제로는 검증되지 않습니다
@@ -410,11 +410,11 @@ export default component$(() => {
 
           <div class="form-field">
             <div dangerouslySetInnerHTML={`
-              <ag-toggle
+              <seo-toggle
                 name="agree_privacy"
                 label="개인정보 처리방침 동의 (필수)"
                 required>
-              </ag-toggle>
+              </seo-toggle>
             `} />
             <p class="demo-note">
               ✅ required 검증이 정상 작동합니다
@@ -422,7 +422,7 @@ export default component$(() => {
           </div>
 
           <div class="form-field">
-            <div dangerouslySetInnerHTML={`<ag-radio id="age-group" name="age_group"></ag-radio>`} />
+            <div dangerouslySetInnerHTML={`<seo-radio id="age-group" name="age_group"></seo-radio>`} />
             <p class="demo-note">
               🔧 필수 검증을 수동으로 구현해야 합니다
             </p>
@@ -438,17 +438,17 @@ export default component$(() => {
         <div class="demo-grid">
           <div class="demo-item">
             <h4>동적 체크박스</h4>
-            <div dangerouslySetInnerHTML={`<ag-check-box id="dynamic-checkbox" label="동적 체크박스"></ag-check-box>`} />
+            <div dangerouslySetInnerHTML={`<seo-check-box id="dynamic-checkbox" label="동적 체크박스"></seo-check-box>`} />
           </div>
 
           <div class="demo-item">
             <h4>동적 토글</h4>
-            <div dangerouslySetInnerHTML={`<ag-toggle id="dynamic-toggle" label="동적 토글"></ag-toggle>`} />
+            <div dangerouslySetInnerHTML={`<seo-toggle id="dynamic-toggle" label="동적 토글"></seo-toggle>`} />
           </div>
 
           <div class="demo-item">
             <h4>동적 라디오</h4>
-            <div dangerouslySetInnerHTML={`<ag-radio id="dynamic-radio" name="dynamic"></ag-radio>`} />
+            <div dangerouslySetInnerHTML={`<seo-radio id="dynamic-radio" name="dynamic"></seo-radio>`} />
           </div>
 
           <div class="button-group">

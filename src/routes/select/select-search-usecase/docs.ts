@@ -2,27 +2,27 @@ export const docs = {
   basic: {
     title: '검색 셀렉트박스 기본 사용법',
     description: `
-      <code>ag-select-search</code>는 초성 검색 기능을 포함한 고급 셀렉트 박스입니다.
+      <code>seo-select-search</code>는 초성 검색 기능을 포함한 고급 셀렉트 박스입니다.
 
-      - 기본 <code>ag-select</code>의 모든 기능을 포함하며, 추가로 실시간 검색 기능을 제공합니다
+      - 기본 <code>seo-select</code>의 모든 기능을 포함하며, 추가로 실시간 검색 기능을 제공합니다
       - 검색창은 드롭다운 상단에 고정되어 있으며, 옵션 목록 위에 표시됩니다
       - 한글 초성 검색을 지원하여 <code>ㄱ</code>, <code>ㄴ</code> 등의 자음으로도 검색할 수 있습니다
       - <strong>getChosungAll</strong> 유틸 함수를 내부적으로 사용하여 정확한 초성 매칭을 수행합니다
-      - 옵션 정의 방식은 <code>ag-select</code>와 동일하게 slot 또는 <strong>optionItems</strong> 배열을 사용합니다
+      - 옵션 정의 방식은 <code>seo-select</code>와 동일하게 slot 또는 <strong>optionItems</strong> 배열을 사용합니다
     `,
     code: `
       <!-- slot 방식으로 옵션 정의 -->
-      <ag-select-search name="brand" width="250px">
+      <seo-select-search name="brand" width="250px">
         <option value="kia">기아자동차</option>
         <option value="hyundai" selected>현대자동차</option>
         <option value="bmw">BMW</option>
         <option value="benz">Mercedes-Benz</option>
         <option value="audi">Audi</option>
         <option value="volkswagen">Volkswagen</option>
-      </ag-select-search>
+      </seo-select-search>
 
       <!-- 배열 방식으로 옵션 정의 -->
-      <ag-select-search id="dynamic-search" name="city" width="250px"></ag-select-search>
+      <seo-select-search id="dynamic-search" name="city" width="250px"></seo-select-search>
 
       <script>
         const searchSelect = document.getElementById('dynamic-search');
@@ -42,7 +42,7 @@ export const docs = {
   search: {
     title: '초성 검색 기능',
     description: `
-      <code>ag-select-search</code>의 핵심 기능인 초성 검색은 한글 텍스트의 효율적인 필터링을 제공합니다.
+      <code>seo-select-search</code>의 핵심 기능인 초성 검색은 한글 텍스트의 효율적인 필터링을 제공합니다.
 
       - **완전 매칭**: <code>"서울"</code> 입력 시 "서울특별시" 검색됨
       - **부분 매칭**: <code>"특별"</code> 입력 시 "서울**특별**시" 검색됨
@@ -52,7 +52,7 @@ export const docs = {
       - 검색 중에도 키보드 네비게이션이 정상 작동하며, 필터된 결과 내에서 이동할 수 있습니다
     `,
     code: `
-      <ag-select-search name="search-demo" width="300px">
+      <seo-select-search name="search-demo" width="300px">
         <option value="seoul">서울특별시</option>
         <option value="busan">부산광역시</option>
         <option value="daegu">대구광역시</option>
@@ -63,7 +63,7 @@ export const docs = {
         <option value="sejong">세종특별자치시</option>
         <option value="gyeonggi">경기도</option>
         <option value="gangwon">강원특별자치도</option>
-      </ag-select-search>
+      </seo-select-search>
 
       <!-- 드롭다운을 열고 다음과 같이 검색해보세요:
            - "서울" → 서울특별시 매칭
@@ -77,7 +77,7 @@ export const docs = {
   loading: {
     title: '로딩 상태 및 비동기 처리',
     description: `
-      <code>ag-select-search</code>는 부모 클래스와 동일한 로딩 처리 메커니즘을 가집니다.
+      <code>seo-select-search</code>는 부모 클래스와 동일한 로딩 처리 메커니즘을 가집니다.
 
       - 옵션이 없는 상태에서 드롭다운을 열면 자동으로 로딩 스피너가 표시됩니다
       - 로딩 중에는 검색창 아래에 애니메이션 도트와 "옵션 로딩 중..." 메시지가 표시됩니다
@@ -87,9 +87,9 @@ export const docs = {
     `,
     code: `
       <!-- 빈 상태에서 시작하여 로딩 데모 -->
-      <ag-select-search id="loading-demo" name="async-data" width="300px">
+      <seo-select-search id="loading-demo" name="async-data" width="300px">
         <!-- 처음엔 비어있어서 드롭다운 열면 로딩 표시됨 -->
-      </ag-select-search>
+      </seo-select-search>
 
       <button onclick="loadData()">데이터 로딩 시작</button>
 
@@ -114,7 +114,7 @@ export const docs = {
   virtual: {
     title: '가상 스크롤링과 대용량 검색',
     description: `
-      <code>ag-select-search</code>는 수천 개의 옵션에서도 실시간 검색이 가능합니다.
+      <code>seo-select-search</code>는 수천 개의 옵션에서도 실시간 검색이 가능합니다.
 
       - <strong>InteractiveVirtualSelect</strong>를 확장하여 검색 기능과 가상 스크롤을 통합했습니다
       - 검색어 입력 시 전체 데이터셋에서 필터링 후 가상 스크롤에 적용됩니다
@@ -123,7 +123,7 @@ export const docs = {
       - 메모리 효율성과 검색 속도를 모두 보장하는 최적화된 구조입니다
     `,
     code: `
-      <ag-select-search id="large-search" name="large-dataset" width="350px"></ag-select-search>
+      <seo-select-search id="large-search" name="large-dataset" width="350px"></seo-select-search>
 
       <script>
         const largeSelect = document.getElementById('large-search');
@@ -158,7 +158,7 @@ export const docs = {
       - 대용량 옵션에서 특정 항목들을 빠르게 찾아 선택할 때 매우 효율적입니다
     `,
     code: `
-      <ag-select-search multiple name="skills" width="400px">
+      <seo-select-search multiple name="skills" width="400px">
         <option value="javascript">JavaScript</option>
         <option value="typescript">TypeScript</option>
         <option value="react">React</option>
@@ -175,10 +175,10 @@ export const docs = {
         <option value="rust">Rust</option>
         <option value="kotlin">Kotlin</option>
         <option value="swift">Swift</option>
-      </ag-select-search>
+      </seo-select-search>
 
       <script>
-        const multiSearchSelect = document.querySelector('ag-select-search[multiple]');
+        const multiSearchSelect = document.querySelector('seo-select-search[multiple]');
 
         // 이벤트 리스너로 선택/해제 추적
         multiSearchSelect.addEventListener('onSelect', (e) => {
@@ -199,7 +199,7 @@ export const docs = {
   events: {
     title: '검색 관련 이벤트 처리',
     description: `
-      <code>ag-select-search</code>는 기본 셀렉트 이벤트 외에 검색 관련 동작도 추적할 수 있습니다.
+      <code>seo-select-search</code>는 기본 셀렉트 이벤트 외에 검색 관련 동작도 추적할 수 있습니다.
 
       - **onSelect**: 검색 후 옵션 선택 시 발생 (검색어와 함께 선택된 값 확인 가능)
       - **onDeselect**: 다중 선택에서 태그 제거 시 발생 (검색 상태 유지됨)
@@ -209,13 +209,13 @@ export const docs = {
       - 드롭다운 닫기 시 검색어가 자동으로 초기화됩니다
     `,
     code: `
-      <ag-select-search id="event-demo" name="demo" width="250px">
+      <seo-select-search id="event-demo" name="demo" width="250px">
         <option value="option1">첫 번째 옵션</option>
         <option value="option2">두 번째 옵션</option>
         <option value="option3">세 번째 옵션</option>
         <option value="option4">네 번째 옵션</option>
         <option value="option5">다섯 번째 옵션</option>
-      </ag-select-search>
+      </seo-select-search>
 
       <div id="event-log" style="margin-top: 10px; padding: 10px; background: #f5f5f5; max-height: 100px; overflow-y: auto;"></div>
 
@@ -250,7 +250,7 @@ export const docs = {
   form: {
     title: '폼 연동과 검증',
     description: `
-      <code>ag-select-search</code>도 완전한 폼 호환성을 제공합니다.
+      <code>seo-select-search</code>도 완전한 폼 호환성을 제공합니다.
 
       - <strong>formAssociated = true</strong>로 설정되어 표준 HTML 폼과 연동됩니다
       - 검색 기능은 UI 편의성일 뿐, 폼 전송 시에는 선택된 값만 전송됩니다
@@ -262,7 +262,7 @@ export const docs = {
       <form id="search-form">
         <label>
           거주 지역 (필수):
-          <ag-select-search name="region" required width="200px">
+          <seo-select-search name="region" required width="200px">
             <option value="">선택해주세요</option>
             <option value="seoul">서울특별시</option>
             <option value="busan">부산광역시</option>
@@ -271,12 +271,12 @@ export const docs = {
             <option value="gwangju">광주광역시</option>
             <option value="daejeon">대전광역시</option>
             <option value="ulsan">울산광역시</option>
-          </ag-select-search>
+          </seo-select-search>
         </label>
 
         <label>
           관심 분야 (다중 선택):
-          <ag-select-search name="interests" multiple width="300px">
+          <seo-select-search name="interests" multiple width="300px">
             <option value="frontend">프론트엔드 개발</option>
             <option value="backend">백엔드 개발</option>
             <option value="mobile">모바일 앱 개발</option>
@@ -285,7 +285,7 @@ export const docs = {
             <option value="devops">데브옵스/인프라</option>
             <option value="design">UI/UX 디자인</option>
             <option value="data">데이터 분석</option>
-          </ag-select-search>
+          </seo-select-search>
         </label>
 
         <button type="submit">제출</button>

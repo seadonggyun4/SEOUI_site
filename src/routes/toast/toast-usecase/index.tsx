@@ -14,8 +14,8 @@ interface AgToastElement extends HTMLElement {
 export default component$(() => {
   useVisibleTask$(() => {
     import('@/components/seo-toast').then((mod) => {
-      if (!customElements.get('ag-toast')) {
-        customElements.define('ag-toast', mod.AgToast);
+      if (!customElements.get('seo-toast')) {
+        customElements.define('seo-toast', mod.AgToast);
       }
 
       // 기본 토스트 설정
@@ -52,7 +52,7 @@ export default component$(() => {
       // 고급 사용법 - 동적 토스트 매니저 (데모용)
       const advancedContainer = document.getElementById('advanced-container');
       if (advancedContainer) {
-        const dynamicToast = document.createElement('ag-toast');
+        const dynamicToast = document.createElement('seo-toast');
         dynamicToast.id = 'dynamic-toast';
         advancedContainer.appendChild(dynamicToast);
       }
@@ -204,7 +204,7 @@ export default component$(() => {
                 경고 메시지
               </button>
             </div>
-            <div dangerouslySetInnerHTML={`<ag-toast id="basic-toast"></ag-toast>`} />
+            <div dangerouslySetInnerHTML={`<seo-toast id="basic-toast"></seo-toast>`} />
             <p class="demo-note">
               💬 각 버튼을 클릭하여 다양한 타입의 토스트를 확인해보세요
             </p>
@@ -228,7 +228,7 @@ export default component$(() => {
               매우 짧음 (1초)
             </button>
           </div>
-          <div dangerouslySetInnerHTML={`<ag-toast id="timing-toast"></ag-toast>`} />
+          <div dangerouslySetInnerHTML={`<seo-toast id="timing-toast"></seo-toast>`} />
           <p class="demo-note">
             ⏱️ 각기 다른 표시 시간으로 토스트가 나타납니다
           </p>
@@ -248,7 +248,7 @@ export default component$(() => {
               다른 메시지, 같은 타입
             </button>
           </div>
-          <div dangerouslySetInnerHTML={`<ag-toast id="duplicate-toast"></ag-toast>`} />
+          <div dangerouslySetInnerHTML={`<seo-toast id="duplicate-toast"></seo-toast>`} />
           <p class="demo-note">
             🔄 "같은 메시지 반복" 버튼을 여러 번 눌러 중복 처리를 확인해보세요
           </p>
@@ -270,7 +270,7 @@ export default component$(() => {
                 로그 지우기
               </button>
             </div>
-            <div dangerouslySetInnerHTML={`<ag-toast id="event-toast"></ag-toast>`} />
+            <div dangerouslySetInnerHTML={`<seo-toast id="event-toast"></seo-toast>`} />
           </div>
 
           <div class="demo-item">
@@ -361,7 +361,7 @@ export default component$(() => {
             #styled-toast .toast--info .toast__icon-wrapper { color: #3b82f6; }
           `} />
 
-          <div dangerouslySetInnerHTML={`<ag-toast id="styled-toast"></ag-toast>`} />
+          <div dangerouslySetInnerHTML={`<seo-toast id="styled-toast"></seo-toast>`} />
           <p class="demo-note">
             🎨 글래스모피즘과 그라데이션이 적용된 커스텀 스타일 토스트입니다
           </p>

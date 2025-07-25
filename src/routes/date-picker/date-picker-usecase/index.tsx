@@ -32,7 +32,7 @@ const openDatePicker = _openDatePicker as (params: {
 
 export default component$(() => {
   useVisibleTask$(() => {
-    const datepicker = document.getElementById('ag-datepicker-main') as DatepickerElement | null;
+    const datepicker = document.getElementById('seo-datepicker-main') as DatepickerElement | null;
     if (!datepicker) return;
 
     const today = new Date().toISOString().split('T')[0];

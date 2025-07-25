@@ -2,7 +2,7 @@ export const docs = {
   basic: {
     title: '기본 날짜/시간 선택기 사용법',
     description: `
-      <code>ag-datepicker</code>는 커스텀 캘린더 모달을 제공하는 날짜/시간 선택 컴포넌트입니다.
+      <code>seo-datepicker</code>는 커스텀 캘린더 모달을 제공하는 날짜/시간 선택 컴포넌트입니다.
 
       - <strong>hidden</strong> 속성으로 모달 표시/숨김을 제어합니다 (기본값: true)
       - <code>open(rect, triggerEl, timeShow)</code>로 모달을 열고, <code>close()</code>로 닫습니다
@@ -12,7 +12,7 @@ export const docs = {
     `,
     code: `
       <input id="basic-input" type="datetime-local" placeholder="날짜/시간 선택" />
-      <ag-datepicker id="datepicker-basic" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-basic" hidden></seo-datepicker>
 
       <script>
         const input = document.getElementById('basic-input');
@@ -47,7 +47,7 @@ export const docs = {
     `,
     code: `
       <input id="date-only-input" type="date" placeholder="날짜만 선택" />
-      <ag-datepicker id="datepicker-date-only" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-date-only" hidden></seo-datepicker>
 
       <script>
         const input = document.getElementById('date-only-input');
@@ -80,7 +80,7 @@ export const docs = {
     code: `
       <!-- 오늘부터 30일 후까지만 선택 가능 -->
       <input id="constrained-input" type="datetime-local" />
-      <ag-datepicker id="datepicker-constrained" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-constrained" hidden></seo-datepicker>
 
       <script>
         const input = document.getElementById('constrained-input');
@@ -124,7 +124,7 @@ export const docs = {
       <input id="start-date" type="date" placeholder="시작일" />
       ~
       <input id="end-date" type="date" placeholder="종료일" />
-      <ag-datepicker id="datepicker-criteria" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-criteria" hidden></seo-datepicker>
 
       <script>
         const startInput = document.getElementById('start-date');
@@ -165,7 +165,7 @@ export const docs = {
   keyboard: {
     title: '키보드 인터랙션',
     description: `
-      <code>ag-datepicker</code>는 포괄적인 키보드 네비게이션을 지원합니다.
+      <code>seo-datepicker</code>는 포괄적인 키보드 네비게이션을 지원합니다.
 
       - <strong>Enter</strong>: 유효한 날짜/시간이 입력된 경우 선택 완료 및 모달 닫기
       - <strong>Escape</strong>: 모달 닫기 (변경사항 취소)
@@ -175,7 +175,7 @@ export const docs = {
     `,
     code: `
       <input id="keyboard-input" type="datetime-local" />
-      <ag-datepicker id="datepicker-keyboard" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-keyboard" hidden></seo-datepicker>
 
       <script>
         const input = document.getElementById('keyboard-input');
@@ -211,7 +211,7 @@ export const docs = {
     `,
     code: `
       <input id="validation-input" type="datetime-local" />
-      <ag-datepicker id="datepicker-validation" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-validation" hidden></seo-datepicker>
 
       <script>
         const input = document.getElementById('validation-input');
@@ -256,7 +256,7 @@ export const docs = {
     `,
     code: `
       <input id="formatting-input" type="datetime-local" />
-      <ag-datepicker id="datepicker-formatting" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-formatting" hidden></seo-datepicker>
 
       <script>
         const input = document.getElementById('formatting-input');
@@ -294,7 +294,7 @@ export const docs = {
     `,
     code: `
       <input id="calendar-input" type="date" />
-      <ag-datepicker id="datepicker-calendar" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-calendar" hidden></seo-datepicker>
 
       <script>
         const input = document.getElementById('calendar-input');
@@ -334,7 +334,7 @@ export const docs = {
     `,
     code: `
       <input id="time-input" type="datetime-local" />
-      <ag-datepicker id="datepicker-time" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-time" hidden></seo-datepicker>
 
       <script>
         const input = document.getElementById('time-input');
@@ -378,7 +378,7 @@ export const docs = {
         <input id="modal-3" type="date" style="margin: 100px 20px;" />
       </div>
 
-      <ag-datepicker id="datepicker-modal" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-modal" hidden></seo-datepicker>
 
       <script>
         const datepicker = document.getElementById('datepicker-modal');
@@ -446,7 +446,7 @@ export const docs = {
         <button type="reset">초기화</button>
       </form>
 
-      <ag-datepicker id="datepicker-form" hidden></ag-datepicker>
+      <seo-datepicker id="datepicker-form" hidden></seo-datepicker>
 
       <script>
         const form = document.getElementById('datetime-form');

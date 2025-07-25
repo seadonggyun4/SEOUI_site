@@ -14,8 +14,8 @@ interface CustomSelectElement extends HTMLElement {
 export default component$(() => {
   useVisibleTask$(() => {
     import('@/components/seo-select').then((mod) => {
-      if (!customElements.get('ag-select')) {
-        customElements.define('ag-select', mod.AgSelect);
+      if (!customElements.get('seo-select')) {
+        customElements.define('seo-select', mod.AgSelect);
       }
 
       // 대용량 데이터 셀렉트 설정
@@ -111,12 +111,12 @@ export default component$(() => {
           <h4>Slot 방식 (권장)</h4>
           <div
             dangerouslySetInnerHTML={`
-              <ag-select name="brand-slot" width="200px">
+              <seo-select name="brand-slot" width="200px">
                 <option value="kia">기아자동차</option>
                 <option value="hyundai" selected>현대자동차</option>
                 <option value="bmw">BMW</option>
                 <option value="benz">Mercedes-Benz</option>
-              </ag-select>
+              </seo-select>
             `}
           />
         </div>
@@ -124,7 +124,7 @@ export default component$(() => {
         <div class="demo-item">
           <h4>배열 방식 (Fallback)</h4>
           <div
-            dangerouslySetInnerHTML={`<ag-select id="array-demo" name="brand-array" width="200px"></ag-select>`}
+            dangerouslySetInnerHTML={`<seo-select id="array-demo" name="brand-array" width="200px"></seo-select>`}
           />
         </div>
       </DocSection>
@@ -133,7 +133,7 @@ export default component$(() => {
         <div class="demo-item">
           <h4>지속적 로딩 상태 (빈 셀렉트)</h4>
           <div
-            dangerouslySetInnerHTML={`<ag-select id="loading-demo" name="loading-auto" width="250px"></ag-select>`}
+            dangerouslySetInnerHTML={`<seo-select id="loading-demo" name="loading-auto" width="250px"></seo-select>`}
           />
           <p class="demo-note">
             💫 옵션이 계속 비어있어서 드롭다운을 열 때마다 로딩 상태가 표시됩니다
@@ -145,7 +145,7 @@ export default component$(() => {
         <div class="demo-item">
           <h4>10,000개 옵션 - 가상 스크롤링</h4>
           <div
-            dangerouslySetInnerHTML={`<ag-select id="large-dataset" name="large-data" width="300px"></ag-select>`}
+            dangerouslySetInnerHTML={`<seo-select id="large-dataset" name="large-data" width="300px"></seo-select>`}
           />
           <p class="demo-note">
             ⚡ 대용량 데이터도 성능 저하 없이 즉시 렌더링됩니다
@@ -158,7 +158,7 @@ export default component$(() => {
           <h4>키보드 네비게이션 테스트</h4>
           <div
             dangerouslySetInnerHTML={`
-              <ag-select name="navigation-test" width="250px">
+              <seo-select name="navigation-test" width="250px">
                 <option value="option1">옵션 1</option>
                 <option value="option2">옵션 2</option>
                 <option value="option3">옵션 3</option>
@@ -169,7 +169,7 @@ export default component$(() => {
                 <option value="option8">옵션 8</option>
                 <option value="option9">옵션 9</option>
                 <option value="option10">옵션 10</option>
-              </ag-select>
+              </seo-select>
             `}
           />
           <p class="demo-note">
@@ -184,11 +184,11 @@ export default component$(() => {
             <h4>이벤트 발생 테스트</h4>
             <div
               dangerouslySetInnerHTML={`
-                <ag-select id="event-demo" name="event-test" width="200px">
+                <seo-select id="event-demo" name="event-test" width="200px">
                   <option value="a">옵션 A</option>
                   <option value="b">옵션 B</option>
                   <option value="c">옵션 C</option>
-                </ag-select>
+                </seo-select>
               `}
             />
             <button type="button" onClick$={clearEventLog} class="gradient-btn clear">
@@ -211,7 +211,7 @@ export default component$(() => {
           <h4>다중 선택 모드</h4>
           <div
             dangerouslySetInnerHTML={`
-              <ag-select id="multi-demo" multiple name="skills" width="400px">
+              <seo-select id="multi-demo" multiple name="skills" width="400px">
                 <option value="js">JavaScript</option>
                 <option value="ts">TypeScript</option>
                 <option value="react">React</option>
@@ -222,7 +222,7 @@ export default component$(() => {
                 <option value="python">Python</option>
                 <option value="java">Java</option>
                 <option value="go">Go</option>
-              </ag-select>
+              </seo-select>
             `}
           />
           <p class="demo-note">
@@ -236,11 +236,11 @@ export default component$(() => {
           <h4>리셋 버튼 활성화 (기본)</h4>
           <div
             dangerouslySetInnerHTML={`
-              <ag-select name="with-reset" width="200px">
+              <seo-select name="with-reset" width="200px">
                 <option value="default">기본값</option>
                 <option value="option1">옵션 1</option>
                 <option value="option2" selected>옵션 2</option>
-              </ag-select>
+              </seo-select>
             `}
           />
           <p class="demo-note">
@@ -252,11 +252,11 @@ export default component$(() => {
           <h4>리셋 버튼 비활성화</h4>
           <div
             dangerouslySetInnerHTML={`
-              <ag-select id="no-reset" name="no-reset" width="200px">
+              <seo-select id="no-reset" name="no-reset" width="200px">
                 <option value="default">기본값</option>
                 <option value="option1">옵션 1</option>
                 <option value="option2" selected>옵션 2</option>
-              </ag-select>
+              </seo-select>
             `}
           />
           <p class="demo-note">
@@ -276,12 +276,12 @@ export default component$(() => {
               선호 언어 (필수):
               <div
                 dangerouslySetInnerHTML={`
-                  <ag-select name="language" required width="200px">
+                  <seo-select name="language" required width="200px">
                     <option value="">선택해주세요</option>
                     <option value="ko">한국어</option>
                     <option value="en">English</option>
                     <option value="ja">日本語</option>
-                  </ag-select>
+                  </seo-select>
                 `}
               />
             </label>
@@ -292,13 +292,13 @@ export default component$(() => {
               관심 기술 (다중 선택):
               <div
                 dangerouslySetInnerHTML={`
-                  <ag-select name="interests" multiple width="300px">
+                  <seo-select name="interests" multiple width="300px">
                     <option value="frontend">프론트엔드</option>
                     <option value="backend">백엔드</option>
                     <option value="mobile">모바일</option>
                     <option value="ai">인공지능</option>
                     <option value="blockchain">블록체인</option>
-                  </ag-select>
+                  </seo-select>
                 `}
               />
             </label>
@@ -319,11 +319,11 @@ export default component$(() => {
             <h4>자동 너비 조절</h4>
             <div
               dangerouslySetInnerHTML={`
-                <ag-select name="auto-width">
+                <seo-select name="auto-width">
                   <option value="short">짧음</option>
                   <option value="very-long-option">매우 긴 옵션 텍스트입니다</option>
                   <option value="medium">중간 길이</option>
-                </ag-select>
+                </seo-select>
               `}
             />
             <p class="demo-note">
@@ -335,10 +335,10 @@ export default component$(() => {
             <h4>고정 너비</h4>
             <div
               dangerouslySetInnerHTML={`
-                <ag-select name="fixed-width" width="150px">
+                <seo-select name="fixed-width" width="150px">
                   <option value="a">옵션 A</option>
                   <option value="b">옵션 B</option>
-                </ag-select>
+                </seo-select>
               `}
             />
             <p class="demo-note">

@@ -2,7 +2,7 @@ export const docs = {
   basic: {
     title: '기본 토스트 사용법',
     description: `
-      <code>ag-toast</code>는 사용자에게 알림 메시지를 표시하는 컴포넌트입니다.
+      <code>seo-toast</code>는 사용자에게 알림 메시지를 표시하는 컴포넌트입니다.
 
       <strong>showToast(message, type, options)</strong> 메서드를 통해 알림을 표시할 수 있으며,
       4가지 타입의 알림을 지원합니다:
@@ -16,7 +16,7 @@ export const docs = {
     `,
     code: `
       <!-- HTML에 토스트 컴포넌트 배치 -->
-      <ag-toast id="main-toast"></ag-toast>
+      <seo-toast id="main-toast"></seo-toast>
 
       <script>
         const toast = document.getElementById('main-toast');
@@ -49,7 +49,7 @@ export const docs = {
       짧은 시간(1초 미만)으로 설정하면 사용자가 메시지를 읽기 어려울 수 있으므로 주의가 필요합니다.
     `,
     code: `
-      <ag-toast id="timing-toast"></ag-toast>
+      <seo-toast id="timing-toast"></seo-toast>
 
       <script>
         const toast = document.getElementById('timing-toast');
@@ -82,7 +82,7 @@ export const docs = {
   duplicate: {
     title: '중복 메시지 처리',
     description: `
-      <code>ag-toast</code>는 중복 메시지 발생을 효과적으로 처리합니다:
+      <code>seo-toast</code>는 중복 메시지 발생을 효과적으로 처리합니다:
 
       - 동일한 <strong>타입 + 메시지</strong> 조합이 표시 시간 내에 다시 호출되면 새로운 토스트를 생성하지 않습니다
       - 대신 기존 토스트의 <strong>발생 횟수</strong>만 증가시키고 표시 시간을 연장합니다
@@ -92,7 +92,7 @@ export const docs = {
       이 기능으로 동일한 알림이 여러 번 발생해도 화면이 토스트로 가득 차는 것을 방지할 수 있습니다.
     `,
     code: `
-      <ag-toast id="duplicate-toast"></ag-toast>
+      <seo-toast id="duplicate-toast"></seo-toast>
 
       <script>
         const toast = document.getElementById('duplicate-toast');
@@ -134,7 +134,7 @@ export const docs = {
       상위 요소에서도 캐치할 수 있으며, Shadow DOM 경계를 넘어 전파됩니다.
     `,
     code: `
-      <ag-toast id="event-toast"></ag-toast>
+      <seo-toast id="event-toast"></seo-toast>
 
       <script>
         const toast = document.getElementById('event-toast');
@@ -176,7 +176,7 @@ export const docs = {
   positioning: {
     title: '토스트 배치 및 스타일링',
     description: `
-      <code>ag-toast</code>는 <strong>Light DOM</strong>을 사용하여 스타일링이 용이합니다:
+      <code>seo-toast</code>는 <strong>Light DOM</strong>을 사용하여 스타일링이 용이합니다:
 
       - 토스트 컨테이너(<code>.toast-container</code>)에 CSS를 적용하여 위치 조정 가능
       - 개별 토스트(<code>.toast</code>)의 외관을 자유롭게 커스터마이징 가능
@@ -189,7 +189,7 @@ export const docs = {
     code: `
       <style>
         /* 토스트 컨테이너를 화면 우상단에 고정 */
-        ag-toast .toast-container {
+        seo-toast .toast-container {
           position: fixed;
           top: 20px;
           right: 20px;
@@ -198,7 +198,7 @@ export const docs = {
         }
 
         /* 개별 토스트 스타일 커스터마이징 */
-        ag-toast .toast {
+        seo-toast .toast {
           margin-bottom: 12px;
           padding: 16px;
           border-radius: 8px;
@@ -211,30 +211,30 @@ export const docs = {
         }
 
         /* 타입별 색상 */
-        ag-toast .toast--success { border-left-color: #10b981; }
-        ag-toast .toast--error { border-left-color: #ef4444; }
-        ag-toast .toast--warning { border-left-color: #f59e0b; }
-        ag-toast .toast--info { border-left-color: #3b82f6; }
+        seo-toast .toast--success { border-left-color: #10b981; }
+        seo-toast .toast--error { border-left-color: #ef4444; }
+        seo-toast .toast--warning { border-left-color: #f59e0b; }
+        seo-toast .toast--info { border-left-color: #3b82f6; }
 
         /* 애니메이션 */
-        ag-toast .toast--enter {
+        seo-toast .toast--enter {
           transform: translateX(100%);
           opacity: 0;
         }
 
-        ag-toast .toast {
+        seo-toast .toast {
           transition: all 0.3s ease;
           transform: translateX(0);
           opacity: 1;
         }
 
-        ag-toast .toast--exit {
+        seo-toast .toast--exit {
           transform: translateX(100%);
           opacity: 0;
         }
       </style>
 
-      <ag-toast id="styled-toast"></ag-toast>
+      <seo-toast id="styled-toast"></seo-toast>
 
       <script>
         const toast = document.getElementById('styled-toast');
@@ -247,7 +247,7 @@ export const docs = {
   advanced: {
     title: '고급 사용법 및 최적화',
     description: `
-      <code>ag-toast</code>의 고급 기능과 성능 최적화 방법:
+      <code>seo-toast</code>의 고급 기능과 성능 최적화 방법:
 
       **메모리 관리**:
       - 내부적으로 <strong>5초마다</strong> 만료된 메시지 캐시를 정리합니다
@@ -267,7 +267,7 @@ export const docs = {
           private toastElement: HTMLElement;
 
           private constructor() {
-            this.toastElement = document.createElement('ag-toast');
+            this.toastElement = document.createElement('seo-toast');
             this.toastElement.id = 'global-toast';
             document.body.appendChild(this.toastElement);
           }
@@ -313,8 +313,8 @@ export const docs = {
         }
 
         // 여러 용도별 토스트 컨테이너 분리
-        const systemToast = document.createElement('ag-toast');
-        const userToast = document.createElement('ag-toast');
+        const systemToast = document.createElement('seo-toast');
+        const userToast = document.createElement('seo-toast');
 
         systemToast.className = 'system-toast';
         userToast.className = 'user-toast';

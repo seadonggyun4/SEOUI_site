@@ -79,14 +79,14 @@ export class AgSelect extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.initializeOptionsFromPropsOrSlot();
-    window.addEventListener('ag-select-open', this.onOtherSelectOpened);
+    window.addEventListener('seo-select-open', this.onOtherSelectOpened);
     window.addEventListener('click', this.handleOutsideClick, true);
     this.addEventListener('keydown', this._handleKeydownBound);
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
-    window.removeEventListener('ag-select-open', this.onOtherSelectOpened);
+    window.removeEventListener('seo-select-open', this.onOtherSelectOpened);
     window.removeEventListener('click', this.handleOutsideClick);
     this.removeEventListener('keydown', this._handleKeydownBound);
     this._virtual?.destroy();
@@ -155,7 +155,7 @@ export class AgSelect extends LitElement {
     const showNoData = this.multiple && !this._isLoading && !hasOptions;
 
     return html`
-      <div class="ag-select-listbox ag-select-scroll ${this.open ? '' : 'hidden'}" role="listbox">
+      <div class="seo-select-listbox seo-select-scroll ${this.open ? '' : 'hidden'}" role="listbox">
         ${this._isLoading
           ? this.renderLoadingSpinner()
           : showNoData
@@ -178,7 +178,7 @@ export class AgSelect extends LitElement {
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
-      <div class="ag-select multi-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
+      <div class="seo-select multi-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <div class="selected-container ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           <div class="selected-tags">
             ${this._selectedValues.map(value => {
@@ -225,7 +225,7 @@ export class AgSelect extends LitElement {
                           this._value !== firstOptionValue;
 
     return html`
-      <div class="ag-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
+      <div class="seo-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <button type="button" class="selected ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           ${this._labelText}
           ${showResetButton
@@ -258,7 +258,7 @@ export class AgSelect extends LitElement {
       // 선택 해제 후 옵션이 있으면 가상 스크롤 재생성
       const optionData = this.getAllOptionData();
       if (optionData.length > 0) {
-        const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+        const scrollEl = this.querySelector('.seo-select-scroll') as HTMLDivElement;
         if (scrollEl) {
           this._virtual = this._createVirtualSelect(optionData, scrollEl);
           requestAnimationFrame(() => {
@@ -292,7 +292,7 @@ export class AgSelect extends LitElement {
         this._virtual = null;
 
         // 리셋 후 모든 옵션이 다시 사용 가능하므로 가상 스크롤 재생성
-        const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+        const scrollEl = this.querySelector('.seo-select-scroll') as HTMLDivElement;
         if (scrollEl) {
           const optionData = this.getAllOptionData();
           this._virtual = this._createVirtualSelect(optionData, scrollEl);
@@ -394,7 +394,7 @@ export class AgSelect extends LitElement {
   }
 
   private openDropdown(): void {
-    window.dispatchEvent(new CustomEvent('ag-select-open', { detail: this }));
+    window.dispatchEvent(new CustomEvent('seo-select-open', { detail: this }));
     this.open = true;
     this.requestUpdate(); // open 상태 변경을 위한 리렌더링
 
@@ -424,7 +424,7 @@ export class AgSelect extends LitElement {
 
   // 가상 스크롤 초기화
   protected initializeVirtualSelect(): void {
-    const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+    const scrollEl = this.querySelector('.seo-select-scroll') as HTMLDivElement;
     const optionData = this.getAllOptionData();
 
     // 다중선택에서 모든 항목이 선택된 경우 가상 스크롤 생성하지 않음
@@ -470,7 +470,7 @@ export class AgSelect extends LitElement {
       this._virtual?.destroy();
       this._virtual = null;
 
-      const scrollEl = this.querySelector('.ag-select-scroll') as HTMLDivElement;
+      const scrollEl = this.querySelector('.seo-select-scroll') as HTMLDivElement;
       if (scrollEl) {
         const optionData = this.getAllOptionData();
         if (optionData.length > 0) {
@@ -519,7 +519,7 @@ export class AgSelect extends LitElement {
 
   private handleOutsideClick = async (e: MouseEvent) => {
     const target = e.target as Node;
-    const box = this.querySelector('.ag-select') as HTMLDivElement;
+    const box = this.querySelector('.seo-select') as HTMLDivElement;
     if (box?.contains(target)) return;
     if (!this.contains(target)) await this.closeDropdown();
   };
@@ -641,6 +641,6 @@ export class AgSelect extends LitElement {
   }
 }
 
-if (!customElements.get('ag-select')) {
-  customElements.define('ag-select', AgSelect);
+if (!customElements.get('seo-select')) {
+  customElements.define('seo-select', AgSelect);
 }

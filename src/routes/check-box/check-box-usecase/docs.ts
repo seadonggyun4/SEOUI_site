@@ -2,7 +2,7 @@ export const docs = {
   checkboxBasic: {
     title: '체크박스 기본 사용법',
     description: `
-      <code>ag-check-box</code>는 단일 선택 체크박스 컴포넌트입니다.
+      <code>seo-check-box</code>는 단일 선택 체크박스 컴포넌트입니다.
 
       **기본 동작**:
       - <strong>checked</strong> 속성으로 초기 선택 상태를 설정합니다
@@ -12,16 +12,16 @@ export const docs = {
     `,
     code: `
       <!-- 기본 체크박스 -->
-      <ag-check-box></ag-check-box>
+      <seo-check-box></seo-check-box>
 
       <!-- 미리 선택된 상태 -->
-      <ag-check-box checked></ag-check-box>
+      <seo-check-box checked></seo-check-box>
 
       <!-- 라벨이 있는 체크박스 -->
-      <ag-check-box label="이용약관에 동의합니다"></ag-check-box>
+      <seo-check-box label="이용약관에 동의합니다"></seo-check-box>
 
       <!-- 비활성화된 체크박스 -->
-      <ag-check-box checked disabled label="수정 불가 항목"></ag-check-box>
+      <seo-check-box checked disabled label="수정 불가 항목"></seo-check-box>
     `,
     lang: 'html'
   },
@@ -37,7 +37,7 @@ export const docs = {
       - 프로그래매틱하게 <code>checked</code> 속성을 변경해도 이벤트는 발생하지 않습니다
     `,
     code: `
-      <ag-check-box id="agreement" label="개인정보 처리방침 동의"></ag-check-box>
+      <seo-check-box id="agreement" label="개인정보 처리방침 동의"></seo-check-box>
 
       <script>
         const checkbox = document.getElementById('agreement');
@@ -63,7 +63,7 @@ export const docs = {
   toggleBasic: {
     title: '토글 기본 사용법',
     description: `
-      <code>ag-toggle</code>는 스위치 형태의 boolean 입력 컴포넌트입니다.
+      <code>seo-toggle</code>는 스위치 형태의 boolean 입력 컴포넌트입니다.
 
       **체크박스와의 차이점**:
       - 시각적으로 스위치 형태로 표시됩니다
@@ -74,16 +74,16 @@ export const docs = {
     `,
     code: `
       <!-- 기본 토글 -->
-      <ag-toggle></ag-toggle>
+      <seo-toggle></seo-toggle>
 
       <!-- 활성화된 토글 -->
-      <ag-toggle checked></ag-toggle>
+      <seo-toggle checked></seo-toggle>
 
       <!-- 라벨이 있는 토글 -->
-      <ag-toggle label="이메일 알림 수신" checked></ag-toggle>
+      <seo-toggle label="이메일 알림 수신" checked></seo-toggle>
 
       <!-- 비활성화된 토글 -->
-      <ag-toggle disabled label="관리자 전용 기능"></ag-toggle>
+      <seo-toggle disabled label="관리자 전용 기능"></seo-toggle>
     `,
     lang: 'html'
   },
@@ -100,17 +100,17 @@ export const docs = {
     `,
     code: `
       <form>
-        <ag-toggle
+        <seo-toggle
           name="terms"
           label="서비스 이용약관에 동의합니다"
           required>
-        </ag-toggle>
+        </seo-toggle>
 
-        <ag-toggle
+        <seo-toggle
           name="privacy"
           label="개인정보 처리방침에 동의합니다"
           required>
-        </ag-toggle>
+        </seo-toggle>
 
         <button type="submit">가입하기</button>
       </form>
@@ -131,7 +131,7 @@ export const docs = {
   radioBasic: {
     title: '라디오 기본 사용법',
     description: `
-      <code>ag-radio</code>는 여러 선택지 중 하나만 선택할 수 있는 라디오 그룹 컴포넌트입니다.
+      <code>seo-radio</code>는 여러 선택지 중 하나만 선택할 수 있는 라디오 그룹 컴포넌트입니다.
 
       **설정 방법**:
       - <strong>options</strong> 속성에 <code>{ label, value }</code> 형태의 배열을 전달
@@ -143,7 +143,7 @@ export const docs = {
       - 빈 options 배열일 때의 렌더링 동작이 명확하지 않습니다
     `,
     code: `
-      <ag-radio id="payment-method" name="payment"></ag-radio>
+      <seo-radio id="payment-method" name="payment"></seo-radio>
 
       <script>
         const radio = document.getElementById('payment-method');
@@ -174,7 +174,7 @@ export const docs = {
       - <code>disabled</code> 상태에서는 이벤트가 발생하지 않습니다
     `,
     code: `
-      <ag-radio id="subscription-plan" name="plan"></ag-radio>
+      <seo-radio id="subscription-plan" name="plan"></seo-radio>
 
       <script>
         const planRadio = document.getElementById('subscription-plan');
@@ -213,7 +213,7 @@ export const docs = {
       **제약사항**: 개별 옵션을 선택적으로 비활성화하는 기능은 없습니다
     `,
     code: `
-      <ag-radio id="region-selector" name="region" disabled></ag-radio>
+      <seo-radio id="region-selector" name="region" disabled></seo-radio>
 
       <script>
         const regionRadio = document.getElementById('region-selector');
@@ -248,18 +248,18 @@ export const docs = {
       <form id="user-preferences">
         <fieldset>
           <legend>알림 설정</legend>
-          <ag-check-box name="email_notifications" label="이메일 알림" checked></ag-check-box>
-          <ag-toggle name="push_notifications" label="푸시 알림"></ag-toggle>
+          <seo-check-box name="email_notifications" label="이메일 알림" checked></seo-check-box>
+          <seo-toggle name="push_notifications" label="푸시 알림"></seo-toggle>
         </fieldset>
 
         <fieldset>
           <legend>테마 선택</legend>
-          <ag-radio id="theme-selector" name="theme"></ag-radio>
+          <seo-radio id="theme-selector" name="theme"></seo-radio>
         </fieldset>
 
         <fieldset>
           <legend>언어 설정</legend>
-          <ag-radio id="language-selector" name="language"></ag-radio>
+          <seo-radio id="language-selector" name="language"></seo-radio>
         </fieldset>
 
         <button type="submit">설정 저장</button>
@@ -327,21 +327,21 @@ export const docs = {
     code: `
       <form id="validation-form">
         <!-- 체크박스 - required 속성이 있지만 실제로는 검증되지 않음 -->
-        <ag-check-box
+        <seo-check-box
           name="agree_terms"
           label="이용약관 동의 (필수)"
           required>
-        </ag-check-box>
+        </seo-check-box>
 
         <!-- 토글 - required 검증 작동 -->
-        <ag-toggle
+        <seo-toggle
           name="agree_privacy"
           label="개인정보 처리방침 동의 (필수)"
           required>
-        </ag-toggle>
+        </seo-toggle>
 
         <!-- 라디오 - required 검증 기능 없음 -->
-        <ag-radio id="age-group" name="age_group"></ag-radio>
+        <seo-radio id="age-group" name="age_group"></seo-radio>
 
         <button type="submit">가입하기</button>
       </form>
@@ -394,9 +394,9 @@ export const docs = {
         <button id="reset-all">모두 리셋</button>
       </div>
 
-      <ag-check-box id="dynamic-checkbox" label="동적 체크박스"></ag-check-box>
-      <ag-toggle id="dynamic-toggle" label="동적 토글"></ag-toggle>
-      <ag-radio id="dynamic-radio" name="dynamic"></ag-radio>
+      <seo-check-box id="dynamic-checkbox" label="동적 체크박스"></seo-check-box>
+      <seo-toggle id="dynamic-toggle" label="동적 토글"></seo-toggle>
+      <seo-radio id="dynamic-radio" name="dynamic"></seo-radio>
 
       <script>
         const checkbox = document.getElementById('dynamic-checkbox');

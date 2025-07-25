@@ -28,7 +28,7 @@ export class AgTable extends LitElement {
     this.appendChild($wrap);
 
     this.$scroll = $wrap;
-    this.classList.add('ag-grid-table');
+    this.classList.add('seo-grid-table');
   }
 
   private initReferences() {
@@ -46,4 +46,4 @@ export class AgTable extends LitElement {
   }
 }
 
-customElements.define('ag-grid-table', AgTable);
+customElements.define('seo-grid-table', AgTable);

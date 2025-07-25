@@ -15,8 +15,8 @@ interface CustomSelectSearchElement extends HTMLElement {
 export default component$(() => {
   useVisibleTask$(() => {
     import('@/components/seo-select-search').then((mod) => {
-      if (!customElements.get('ag-select-search')) {
-        customElements.define('ag-select-search', mod.AgSelectSearch);
+      if (!customElements.get('seo-select-search')) {
+        customElements.define('seo-select-search', mod.AgSelectSearch);
       }
 
       // 대용량 검색 데모 설정
@@ -151,14 +151,14 @@ export default component$(() => {
             <h4>Slot 방식 검색 셀렉트</h4>
             <div
               dangerouslySetInnerHTML={`
-                <ag-select-search name="brand-search" width="250px">
+                <seo-select-search name="brand-search" width="250px">
                   <option value="kia">기아자동차</option>
                   <option value="hyundai" selected>현대자동차</option>
                   <option value="bmw">BMW</option>
                   <option value="benz">Mercedes-Benz</option>
                   <option value="audi">Audi</option>
                   <option value="volkswagen">Volkswagen</option>
-                </ag-select-search>
+                </seo-select-search>
               `}
             />
             <p class="demo-note">
@@ -169,7 +169,7 @@ export default component$(() => {
           <div class="demo-item">
             <h4>배열 방식 검색 셀렉트</h4>
             <div
-              dangerouslySetInnerHTML={`<ag-select-search id="dynamic-search" name="city-search" width="250px"></ag-select-search>`}
+              dangerouslySetInnerHTML={`<seo-select-search id="dynamic-search" name="city-search" width="250px"></seo-select-search>`}
             />
             <p class="demo-note">
               🏙️ "서울", "ㅅㅇ", "광역", "ㄱㅇ" 등으로 지역을 검색해보세요
@@ -183,7 +183,7 @@ export default component$(() => {
           <h4>초성 검색 기능 테스트</h4>
           <div
             dangerouslySetInnerHTML={`
-              <ag-select-search name="search-demo" width="300px">
+              <seo-select-search name="search-demo" width="300px">
                 <option value="seoul">서울특별시</option>
                 <option value="busan">부산광역시</option>
                 <option value="daegu">대구광역시</option>
@@ -194,7 +194,7 @@ export default component$(() => {
                 <option value="sejong">세종특별자치시</option>
                 <option value="gyeonggi">경기도</option>
                 <option value="gangwon">강원특별자치도</option>
-              </ag-select-search>
+              </seo-select-search>
             `}
           />
           <div class="demo-note">
@@ -211,7 +211,7 @@ export default component$(() => {
         <div class="demo-item">
           <h4>지속적 로딩 상태</h4>
           <div
-            dangerouslySetInnerHTML={`<ag-select-search id="loading-search-demo" name="loading-search" width="300px"></ag-select-search>`}
+            dangerouslySetInnerHTML={`<seo-select-search id="loading-search-demo" name="loading-search" width="300px"></seo-select-search>`}
           />
           <p class="demo-note">
             💫 옵션이 비어있어서 드롭다운을 열 때마다 로딩 상태가 표시됩니다
@@ -223,7 +223,7 @@ export default component$(() => {
         <div class="demo-item">
           <h4>10,000개 옵션 - 실시간 검색</h4>
           <div
-            dangerouslySetInnerHTML={`<ag-select-search id="large-search" name="large-search-data" width="350px"></ag-select-search>`}
+            dangerouslySetInnerHTML={`<seo-select-search id="large-search" name="large-search-data" width="350px"></seo-select-search>`}
           />
           <div class="demo-note">
             <strong>검색 예시:</strong><br/>
@@ -241,7 +241,7 @@ export default component$(() => {
             <h4>다중 선택과 검색 조합</h4>
             <div
               dangerouslySetInnerHTML={`
-                <ag-select-search id="multi-search-demo" multiple name="skills-search" width="400px">
+                <seo-select-search id="multi-search-demo" multiple name="skills-search" width="400px">
                   <option value="javascript">JavaScript</option>
                   <option value="typescript">TypeScript</option>
                   <option value="react">React</option>
@@ -258,7 +258,7 @@ export default component$(() => {
                   <option value="rust">Rust</option>
                   <option value="kotlin">Kotlin</option>
                   <option value="swift">Swift</option>
-                </ag-select-search>
+                </seo-select-search>
               `}
             />
             <button type="button" onClick$={() => clearEventLog('multi-event-log')} class="gradient-btn clear">
@@ -285,13 +285,13 @@ export default component$(() => {
             <h4>검색 이벤트 테스트</h4>
             <div
               dangerouslySetInnerHTML={`
-                <ag-select-search id="event-search-demo" name="event-search" width="250px">
+                <seo-select-search id="event-search-demo" name="event-search" width="250px">
                   <option value="option1">첫 번째 옵션</option>
                   <option value="option2">두 번째 옵션</option>
                   <option value="option3">세 번째 옵션</option>
                   <option value="option4">네 번째 옵션</option>
                   <option value="option5">다섯 번째 옵션</option>
-                </ag-select-search>
+                </seo-select-search>
               `}
             />
             <button type="button" onClick$={() => clearEventLog('search-event-log')} class="gradient-btn clear">
@@ -323,7 +323,7 @@ export default component$(() => {
               거주 지역 (필수):
               <div
                 dangerouslySetInnerHTML={`
-                  <ag-select-search name="region" required width="200px">
+                  <seo-select-search name="region" required width="200px">
                     <option value="">선택해주세요</option>
                     <option value="seoul">서울특별시</option>
                     <option value="busan">부산광역시</option>
@@ -332,7 +332,7 @@ export default component$(() => {
                     <option value="gwangju">광주광역시</option>
                     <option value="daejeon">대전광역시</option>
                     <option value="ulsan">울산광역시</option>
-                  </ag-select-search>
+                  </seo-select-search>
                 `}
               />
             </label>
@@ -343,7 +343,7 @@ export default component$(() => {
               관심 분야 (다중 선택):
               <div
                 dangerouslySetInnerHTML={`
-                  <ag-select-search name="interests" multiple width="300px">
+                  <seo-select-search name="interests" multiple width="300px">
                     <option value="frontend">프론트엔드 개발</option>
                     <option value="backend">백엔드 개발</option>
                     <option value="mobile">모바일 앱 개발</option>
@@ -352,7 +352,7 @@ export default component$(() => {
                     <option value="devops">데브옵스/인프라</option>
                     <option value="design">UI/UX 디자인</option>
                     <option value="data">데이터 분석</option>
-                  </ag-select-search>
+                  </seo-select-search>
                 `}
               />
             </label>

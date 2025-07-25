@@ -165,7 +165,7 @@ const dummyTextData = Array.from({ length: 5000 }).map((_, i) => {
 
 export default component$(() => {
   useVisibleTask$(async () => {
-    await customElements.whenDefined('ag-grid-table');
+    await customElements.whenDefined('seo-grid-table');
 
     requestAnimationFrame(() => {
       const demoTable = document.querySelector('#demo-table') as HTMLTableElement;
@@ -216,7 +216,7 @@ export default component$(() => {
   return (
     <>
       <DocSection {...docs.virtualTable}>
-        <ag-grid-table>
+        <seo-grid-table>
           <table id="demo-table">
             <colgroup>
               <col style="width: 6rem;" />
@@ -286,11 +286,11 @@ export default component$(() => {
             </thead>
             <tbody></tbody>
           </table>
-        </ag-grid-table>
+        </seo-grid-table>
       </DocSection>
 
       <DocSection {...docs.cellSelection}>
-        <ag-grid-table>
+        <seo-grid-table>
           <table id="gtable">
             <colgroup>
               <col width="5%"/>
@@ -318,7 +318,7 @@ export default component$(() => {
 
             <tbody></tbody>
           </table>
-        </ag-grid-table>
+        </seo-grid-table>
       </DocSection>
 
       <DocSection {...docs.fillHandler}>
