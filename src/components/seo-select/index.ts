@@ -27,6 +27,7 @@ export class AgSelect extends LitElement {
       _selectedValues: { type: Array, state: true },
       _isLoading: { type: Boolean, state: true },
       theme: { type: String },
+      dark: { type: Boolean }, // 다크 모드 prop 추가
     };
   }
 
@@ -39,6 +40,7 @@ export class AgSelect extends LitElement {
   declare showReset: boolean;
   declare multiple: boolean;
   declare theme: SelectTheme;
+  declare dark: boolean; // 다크 모드 속성 추가
 
   declare open: boolean;
   declare _labelText: string;
@@ -74,6 +76,7 @@ export class AgSelect extends LitElement {
     this._selectedValues = [];
     this._isLoading = false;
     this.theme = 'float'; // 기본값은 float
+    this.dark = false; // 기본값은 light 모드
     this._handleKeydownBound = (e) => this._virtual?.handleKeydown(e);
     this.tabIndex = 0;
     this._pendingActiveIndex = null;
@@ -174,7 +177,9 @@ export class AgSelect extends LitElement {
   }
 
   protected getThemeClass(): string {
-    return `theme-${this.theme}`;
+    const themeClass = `theme-${this.theme}`;
+    const darkClass = this.dark ? 'dark' : '';
+    return `${themeClass} ${darkClass}`.trim();
   }
 
   render() {

@@ -22,18 +22,21 @@ export class AgSelectSearch extends AgSelect {
       _searchText: { type: String },
       _noMatchVisible: { type: Boolean },
       theme: { type: String }, // 부모 클래스에서 상속되지만 명시적으로 선언
+      dark: { type: Boolean }, // 다크 모드 prop 추가
     };
   }
 
   declare _searchText: string;
   declare _noMatchVisible: boolean;
   declare theme: SelectTheme;
+  declare dark: boolean; // 다크 모드 속성 추가
 
   constructor() {
     super();
     this._searchText = '';
     this._noMatchVisible = false;
     this.theme = 'float'; // 기본값은 float
+    this.dark = false; // 기본값은 light 모드
   }
 
   updated(changed: Map<string, unknown>): void {
@@ -80,9 +83,11 @@ export class AgSelectSearch extends AgSelect {
     `;
   }
 
-  // 부모 클래스의 getThemeClass 메서드를 상속받아 사용
+  // 부모 클래스의 getThemeClass 메서드를 오버라이드하여 다크 모드 지원
   protected override getThemeClass(): string {
-    return `theme-${this.theme}`;
+    const themeClass = `theme-${this.theme}`;
+    const darkClass = this.dark ? 'dark' : '';
+    return `${themeClass} ${darkClass}`.trim();
   }
 
   render() {

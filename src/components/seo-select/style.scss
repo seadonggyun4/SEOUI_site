@@ -397,6 +397,186 @@ seo-select-search {
     transition: select.$arrow-transition;
     margin-top: select.$arrow-margin-top;
   }
+
+  // ============================================
+  // 다크 모드 스타일
+  // ============================================
+  &.dark {
+    // 기본 selected 스타일 (단일 선택)
+    .selected {
+      background: select.$dark-select-bg;
+      border-color: select.$dark-border-color;
+      color: select.$dark-text-color;
+
+      &:hover {
+        border-color: select.$dark-border-hover-color;
+      }
+    }
+
+    // 멀티 선택 컨테이너
+    &.multi-select .selected-container {
+      background: select.$dark-select-bg;
+      border-color: select.$dark-border-color;
+
+      &:hover {
+        border-color: select.$dark-border-hover-color;
+      }
+
+      .selected-tags {
+        .tag {
+          background: select.$dark-tag-bg;
+          color: select.$dark-tag-text-color;
+          border-color: select.$dark-tag-border-color;
+
+          .tag-remove {
+            color: select.$dark-text-secondary-color;
+
+            &:hover {
+              background: select.$dark-tag-remove-hover-bg;
+              color: white;
+            }
+          }
+        }
+
+        .placeholder {
+          color: select.$dark-placeholder-color;
+        }
+      }
+    }
+
+    // open 상태일 때 테두리 색상
+    &.open {
+      .selected {
+        border-color: select.$dark-border-focus-color;
+      }
+
+      &.multi-select .selected-container {
+        border-color: select.$dark-border-focus-color;
+      }
+    }
+
+    // 드롭다운 리스트박스
+    .seo-select-listbox {
+      background-color: select.$dark-dropdown-bg;
+      border-color: select.$dark-border-color;
+
+      // 검색 입력
+      .select-search-input {
+        background-color: select.$dark-search-input-bg;
+
+        input {
+          background: select.$dark-search-input-bg;
+          border-color: select.$dark-border-color;
+          color: select.$dark-text-color;
+
+          &::placeholder {
+            color: select.$dark-placeholder-color;
+          }
+
+          &:not(:disabled):focus,
+          &:not(:read-only):focus {
+            border-color: select.$dark-border-focus-color;
+            box-shadow: select.$dark-search-input-focus-shadow;
+          }
+        }
+
+        .search-icon {
+          color: select.$dark-text-secondary-color;
+        }
+      }
+
+      // 로딩 컨테이너
+      .loading-container {
+        background: select.$dark-dropdown-bg;
+
+        .loading-text {
+          color: select.$dark-text-secondary-color;
+        }
+      }
+
+      // 데이터 없음 컨테이너
+      .no-data-container {
+        background: select.$dark-dropdown-bg;
+
+        .no-data-text {
+          color: select.$dark-text-secondary-color;
+        }
+      }
+    }
+
+    // 스크롤 영역
+    .seo-select-scroll {
+      background-color: select.$dark-dropdown-bg;
+
+      .option-wrapper {
+        .option {
+          color: select.$dark-text-color;
+
+          // 멀티셀렉트에서 선택된 항목
+          &.selected {
+            background-color: select.$dark-option-selected-bg;
+            color: white;
+          }
+
+          &.focused {
+            background-color: select.$dark-option-hover-bg;
+          }
+
+          &.active {
+            background-color: select.$dark-option-selected-bg;
+            color: white;
+          }
+
+          &.disabled {
+            color: select.$dark-option-disabled-color;
+          }
+
+          &:hover:not(.disabled) {
+            background-color: select.$dark-option-hover-bg;
+          }
+        }
+      }
+    }
+
+    // 리셋 버튼
+    .reset-button {
+      color: select.$dark-reset-button-color;
+      border-right-color: select.$dark-border-color;
+
+      &:hover {
+        color: select.$dark-reset-button-hover-color;
+      }
+    }
+
+    // 멀티 리셋 버튼
+    .multi-reset-button {
+      background: select.$dark-multi-reset-button-bg;
+
+      &:hover {
+        background: select.$dark-tag-remove-hover-bg;
+      }
+    }
+
+    // 화살표
+    .arrow {
+      color: select.$dark-text-secondary-color;
+    }
+
+    // Float 테마 다크 모드 그림자
+    &.theme-float {
+      .selected {
+        box-shadow: select.$dark-float-box-shadow;
+      }
+
+      &.multi-select .selected-container {
+        box-shadow: select.$dark-float-box-shadow;
+      }
+
+      .seo-select-listbox {
+        box-shadow: select.$dark-dropdown-box-shadow;
+      }
+    }
+  }
 }
 
 // 로딩 애니메이션 키프레임

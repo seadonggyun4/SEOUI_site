@@ -88,6 +88,85 @@ export const docs = {
     lang: 'html'
   },
 
+  darkmode: {
+    title: '다크 모드 지원',
+    description: `
+      <code>seo-select</code>와 <code>seo-select-search</code>는 <strong>dark</strong> 속성으로
+      다크 모드를 지원합니다.
+
+      <strong>다크 모드 특징</strong>:
+      - 어두운 배경색과 밝은 텍스트 색상으로 변경
+      - 모든 UI 요소(드롭다운, 태그, 버튼, 검색창)가 다크 테마로 적용
+      - 호버 및 포커스 상태도 다크 모드에 맞게 조정
+      - Float 테마에서는 다크 모드 전용 그림자 효과 적용
+      - 기본값은 <code>false</code> (라이트 모드)
+
+      <strong>다크 모드 색상 시스템</strong>:
+      - 배경: 진한 회색 계열 (#2d3748, #1a202c)
+      - 텍스트: 밝은 회색 (#e2e8f0, #a0aec0)
+      - 테두리: 중간 회색 (#4a5568)
+      - 액센트: 파란색 계열 (#63b3ed, #2b6cb0)
+      - 에러: 빨간색 (#e53e3e)
+
+      **참고**: 다크 모드는 시스템 테마와 독립적으로 동작하며,
+      JavaScript로 동적으로 변경할 수 있습니다.
+    `,
+    code: `
+      <!-- 라이트 모드 (기본값) -->
+      <seo-select name="light-mode" theme="float" width="200px">
+        <option value="option1">라이트 모드 옵션 1</option>
+        <option value="option2">라이트 모드 옵션 2</option>
+        <option value="option3">라이트 모드 옵션 3</option>
+      </seo-select>
+
+      <!-- 다크 모드 -->
+      <seo-select name="dark-mode" theme="float" dark width="200px">
+        <option value="option1">다크 모드 옵션 1</option>
+        <option value="option2">다크 모드 옵션 2</option>
+        <option value="option3">다크 모드 옵션 3</option>
+      </seo-select>
+
+      <!-- 다중 선택 다크 모드 -->
+      <seo-select multiple name="dark-multi" theme="float" dark width="300px">
+        <option value="js">JavaScript</option>
+        <option value="ts">TypeScript</option>
+        <option value="react">React</option>
+        <option value="vue">Vue.js</option>
+        <option value="node">Node.js</option>
+      </seo-select>
+
+      <!-- 검색 기능이 있는 다크 모드 -->
+      <seo-select-search name="dark-search" theme="float" dark width="250px">
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+        <option value="cherry">Cherry</option>
+        <option value="date">Date</option>
+        <option value="elderberry">Elderberry</option>
+      </seo-select-search>
+
+      <script>
+        // JavaScript로 다크 모드 동적 변경
+        const lightSelect = document.querySelector('[name="light-mode"]');
+        const darkSelect = document.querySelector('[name="dark-mode"]');
+
+        // 다크 모드 토글 예시
+        function toggleDarkMode() {
+          lightSelect.dark = !lightSelect.dark;
+          console.log('다크 모드:', lightSelect.dark ? '활성화' : '비활성화');
+        }
+
+        // 초기 선택값 설정
+        document.querySelector('[name="dark-multi"]').selectedValues = ['js', 'react'];
+
+        // 5초 후 라이트 모드 셀렉트를 다크 모드로 변경
+        setTimeout(() => {
+          toggleDarkMode();
+        }, 5000);
+      </script>
+    `,
+    lang: 'html'
+  },
+
   loading: {
     title: '로딩 상태 및 비동기 처리',
     description: `
@@ -398,5 +477,5 @@ export const docs = {
       </seo-select>
     `,
     lang: 'html'
-  }
+  },
 };

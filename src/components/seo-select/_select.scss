@@ -98,3 +98,44 @@ $arrow-right: 0.8rem !default;
 $arrow-font-size: 0.9rem !default;
 $arrow-margin-top: -0.1rem !default;
 $arrow-transition: transform 0.2s ease !default;
+
+// ============================================
+// 다크 모드 전용 변수들
+// ============================================
+
+// 다크 모드 배경색
+$dark-select-bg: #2d3748 !default;
+$dark-dropdown-bg: #1a202c !default;
+$dark-tag-bg: #4a5568 !default;
+$dark-search-input-bg: #2d3748 !default;
+
+// 다크 모드 테두리 색상
+$dark-border-color: #4a5568 !default;
+$dark-border-hover-color: #63b3ed !default;
+$dark-border-focus-color: #63b3ed !default;
+
+// 다크 모드 텍스트 색상
+$dark-text-color: #e2e8f0 !default;
+$dark-text-secondary-color: #a0aec0 !default;
+$dark-placeholder-color: #718096 !default;
+
+// 다크 모드 옵션 색상
+$dark-option-hover-bg: #4a5568 !default;
+$dark-option-selected-bg: #2b6cb0 !default;
+$dark-option-focused-bg: #2d3748 !default;
+$dark-option-disabled-color: #718096 !default;
+
+// 다크 모드 태그 색상
+$dark-tag-text-color: #e2e8f0 !default;
+$dark-tag-border-color: #63b3ed !default;
+$dark-tag-remove-hover-bg: #e53e3e !default;
+
+// 다크 모드 버튼 색상
+$dark-reset-button-color: #a0aec0 !default;
+$dark-reset-button-hover-color: #e53e3e !default;
+$dark-multi-reset-button-bg: #4a5568 !default;
+
+// 다크 모드 그림자
+$dark-float-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !default;
+$dark-dropdown-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4) !default;
+$dark-search-input-focus-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 0 1px #63b3ed !default;
