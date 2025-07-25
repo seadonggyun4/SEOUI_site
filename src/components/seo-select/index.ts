@@ -7,6 +7,8 @@ interface VirtualSelectOption {
   label: string;
 }
 
+type SelectTheme = 'basic' | 'float';
+
 export class AgSelect extends LitElement {
   static formAssociated = true;
 
@@ -24,6 +26,7 @@ export class AgSelect extends LitElement {
       multiple: { type: Boolean },
       _selectedValues: { type: Array, state: true },
       _isLoading: { type: Boolean, state: true },
+      theme: { type: String },
     };
   }
 
@@ -35,6 +38,7 @@ export class AgSelect extends LitElement {
   declare optionItems: VirtualSelectOption[];
   declare showReset: boolean;
   declare multiple: boolean;
+  declare theme: SelectTheme;
 
   declare open: boolean;
   declare _labelText: string;
@@ -68,6 +72,7 @@ export class AgSelect extends LitElement {
     this.multiple = false;
     this._selectedValues = [];
     this._isLoading = false;
+    this.theme = 'float'; // 기본값은 float
     this._handleKeydownBound = (e) => this._virtual?.handleKeydown(e);
     this.tabIndex = 0;
   }
@@ -166,6 +171,10 @@ export class AgSelect extends LitElement {
     `;
   }
 
+  protected getThemeClass(): string {
+    return `theme-${this.theme}`;
+  }
+
   render() {
     if (this.multiple) {
       return this.renderMultiSelect();
@@ -178,7 +187,7 @@ export class AgSelect extends LitElement {
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
-      <div class="seo-select multi-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
+      <div class="seo-select multi-select ${this.getThemeClass()} ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <div class="selected-container ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           <div class="selected-tags">
             ${this._selectedValues.map(value => {
@@ -225,7 +234,7 @@ export class AgSelect extends LitElement {
                           this._value !== firstOptionValue;
 
     return html`
-      <div class="seo-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
+      <div class="seo-select ${this.getThemeClass()} ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <button type="button" class="selected ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           ${this._labelText}
           ${showResetButton

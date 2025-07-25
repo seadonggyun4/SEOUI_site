@@ -8,6 +8,16 @@ $select-border-width: 1px !default;
 $select-transition-duration: 0.3s !default;
 $select-transition-easing: ease !default;
 
+// 테마별 스타일 - Basic Theme
+$select-basic-border-radius: 0 !default;
+$select-basic-box-shadow: none !default;
+$select-basic-margin-bottom: 0 !default;
+
+// 테마별 스타일 - Float Theme
+$select-float-border-radius: 5px !default;
+$select-float-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !default;
+$select-float-margin-bottom: 0 !default;
+
 // 멀티 셀렉트 관련
 $select-multi-padding-right: 3rem !default;
 $select-tags-gap: 0.25rem !default;
@@ -30,6 +40,17 @@ $tag-remove-transition: all 0.2s ease !default;
 $dropdown-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1) !default;
 $dropdown-border-width: 1px !default;
 $dropdown-z-index: 1000 !default;
+
+// 드롭다운 테마별 스타일
+$dropdown-basic-border-radius: 0 !default;
+$dropdown-float-border-radius: 5px !default;
+$dropdown-float-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !default;
+$dropdown-float-top: 130% !default;
+
+// Float 테마 애니메이션
+$dropdown-float-animation-duration: 0.2s !default;
+$dropdown-float-animation-easing: ease-out !default;
+$dropdown-float-slide-distance: -20px !default;
 
 // 검색 입력 관련
 $search-input-padding: 0.3rem !default;

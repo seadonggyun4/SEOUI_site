@@ -11,6 +11,15 @@ seo-select-search {
 .seo-select {
   position: relative;
 
+  // 테마별 기본 스타일
+  &.theme-basic {
+    margin-bottom: select.$select-basic-margin-bottom;
+  }
+
+  &.theme-float {
+    margin-bottom: select.$select-float-margin-bottom;
+  }
+
   .selected {
     position: relative;
     padding: select.$select-padding;
@@ -30,6 +39,55 @@ seo-select-search {
 
     &:hover {
       border-color: colors.$primary-color;
+    }
+  }
+
+  // Basic Theme 스타일
+  &.theme-basic {
+    .selected {
+      border-radius: select.$select-basic-border-radius;
+      box-shadow: select.$select-basic-box-shadow;
+    }
+
+    &.multi-select .selected-container {
+      border-radius: select.$select-basic-border-radius;
+      box-shadow: select.$select-basic-box-shadow;
+    }
+
+    .seo-select-listbox {
+      border-radius: select.$dropdown-basic-border-radius;
+      box-shadow: select.$dropdown-box-shadow;
+    }
+  }
+
+  // Float Theme 스타일
+  &.theme-float {
+    .selected {
+      border-radius: select.$select-float-border-radius;
+      box-shadow: select.$select-float-box-shadow;
+    }
+
+    &.multi-select .selected-container {
+      border-radius: select.$select-float-border-radius;
+      box-shadow: select.$select-float-box-shadow;
+    }
+
+    .seo-select-listbox {
+      border-radius: select.$dropdown-float-border-radius;
+      box-shadow: select.$dropdown-float-box-shadow;
+      top: select.$dropdown-float-top;
+
+      &:not(.hidden) {
+        animation: float-dropdown-slide-in select.$dropdown-float-animation-duration select.$dropdown-float-animation-easing forwards;
+      }
+
+      .select-search-input {
+        border-radius: select.$select-float-border-radius select.$select-float-border-radius 0 0;
+
+        input {
+          border-radius: select.$select-float-border-radius;
+        }
+      }
     }
   }
 
@@ -120,7 +178,6 @@ seo-select-search {
     top: 100%;
     left: 0;
     width: 100%;
-    box-shadow: select.$dropdown-box-shadow;
     border: select.$dropdown-border-width solid colors.$border-color;
     background-color: #fff;
     z-index: select.$dropdown-z-index;
@@ -136,6 +193,17 @@ seo-select-search {
 
       input {
         text-indent: select.$search-input-text-indent;
+        width: 100%;
+        border: 1px solid colors.pick(gray, 5);
+        padding: 0.5rem;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &:not(:disabled):focus,
+        &:not(:read-only):focus {
+          border-color: colors.$primary-color;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 0 1px colors.pick(indigo, 5);
+        }
       }
 
       .search-icon {
@@ -339,6 +407,18 @@ seo-select-search {
   }
   40% {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Float 테마 드롭다운 슬라이드 인 애니메이션
+@keyframes float-dropdown-slide-in {
+  0% {
+    transform: translateY(select.$dropdown-float-slide-distance);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
     opacity: 1;
   }
 }

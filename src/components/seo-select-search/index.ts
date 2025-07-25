@@ -13,7 +13,7 @@ interface VirtualSelectOption {
   label: string;
 }
 
-// No need for global interface extension
+type SelectTheme = 'basic' | 'float';
 
 export class AgSelectSearch extends AgSelect {
   static get properties() {
@@ -21,16 +21,19 @@ export class AgSelectSearch extends AgSelect {
       ...super.properties,
       _searchText: { type: String },
       _noMatchVisible: { type: Boolean },
+      theme: { type: String }, // 부모 클래스에서 상속되지만 명시적으로 선언
     };
   }
 
   declare _searchText: string;
   declare _noMatchVisible: boolean;
+  declare theme: SelectTheme;
 
   constructor() {
     super();
     this._searchText = '';
     this._noMatchVisible = false;
+    this.theme = 'float'; // 기본값은 float
   }
 
   updated(changed: Map<string, unknown>): void {
@@ -77,6 +80,11 @@ export class AgSelectSearch extends AgSelect {
     `;
   }
 
+  // 부모 클래스의 getThemeClass 메서드를 상속받아 사용
+  protected override getThemeClass(): string {
+    return `theme-${this.theme}`;
+  }
+
   render() {
     if (this.multiple) {
       return this.renderMultiSelectSearch();
@@ -89,7 +97,7 @@ export class AgSelectSearch extends AgSelect {
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
-      <div class="seo-select multi-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
+      <div class="seo-select multi-select ${this.getThemeClass()} ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <div class="selected-container ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           <div class="selected-tags">
             ${this._selectedValues.map(value => {
@@ -136,7 +144,7 @@ export class AgSelectSearch extends AgSelect {
                           this._value !== firstOptionValue;
 
     return html`
-      <div class="seo-select ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
+      <div class="seo-select ${this.getThemeClass()} ${this.open ? 'open' : ''}" style="width: ${this.width}; height: ${this.height};">
         <button type="button" class="selected ${showResetButton ? 'with-reset' : ''}" @click=${this.toggleDropdown}>
           ${this._labelText}
           ${showResetButton
