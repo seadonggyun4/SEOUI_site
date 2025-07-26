@@ -49,7 +49,7 @@ export const DocSection = component$<DocSectionProps>(
     open = true,
     onClick$,
     waitForComponents = [],
-    componentTimeout = 10000
+    componentTimeout = 1000
   }) => {
     const sectionOpen = useSignal(open);
     const isVisible = useSignal(false);
@@ -124,6 +124,17 @@ export const DocSection = component$<DocSectionProps>(
       cleanup(() => controller.abort());
 
       try {
+        // 1초 로딩 지연 추가
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(resolve, 1000);
+          cleanup(() => clearTimeout(timeout));
+          
+          controller.signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Operation aborted', 'AbortError'));
+          });
+        });
+
         if (controller.signal.aborted) {
           throw new DOMException('Operation aborted', 'AbortError');
         }
@@ -150,6 +161,17 @@ export const DocSection = component$<DocSectionProps>(
       cleanup(() => controller.abort());
 
       try {
+        // 1.2초 로딩 지연 추가 (description보다 약간 더 길게)
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(resolve, 1200);
+          cleanup(() => clearTimeout(timeout));
+          
+          controller.signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Operation aborted', 'AbortError'));
+          });
+        });
+
         if (controller.signal.aborted) {
           throw new DOMException('Operation aborted', 'AbortError');
         }
@@ -180,8 +202,9 @@ export const DocSection = component$<DocSectionProps>(
 
       if (!shouldLoad.value || !sectionOpen.value) return false;
 
-      // 대기할 컴포넌트가 없으면 즉시 로딩 완료
+      // 대기할 컴포넌트가 없으면 기본 1초 로딩 시간 적용
       if (waitForComponents.length === 0) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         return true;
       }
 
@@ -189,6 +212,17 @@ export const DocSection = component$<DocSectionProps>(
       cleanup(() => controller.abort());
 
       try {
+        // 컴포넌트 로딩 시작 전 1초 지연
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(resolve, 1000);
+          cleanup(() => clearTimeout(timeout));
+          
+          controller.signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Operation aborted', 'AbortError'));
+          });
+        });
+
         // 각 컴포넌트가 정의될 때까지 대기
         const componentPromises = waitForComponents.map(async (componentName) => {
           // 이미 정의된 컴포넌트는 즉시 해결
