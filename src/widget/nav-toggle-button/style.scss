@@ -1,19 +1,21 @@
+@use './style-color' as nav-colors;
+
 .nav-toggle-btn {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  background-color: #000;
-  color: white;
+  background-color: nav-colors.$toggle-bg;
+  color: nav-colors.$toggle-color;
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px nav-colors.$toggle-shadow;
   z-index: 100000;
   border: none;
   cursor: pointer;
   transition: .3s ease-in-out;
 
-  &:hover{
+  &:hover {
     opacity: 0.7;
   }
 }

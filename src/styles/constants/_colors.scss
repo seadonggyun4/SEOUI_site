@@ -75,3 +75,57 @@ $nav-bg: #21252b;
 $summary-bg:#f1f2f3;
 $badge-bg:#008ff519;
 $badge-color: $primary-color;
+
+/**
+  Document Module color (demo-grid, demo-item, gradient buttons, event-log, demo-form)
+*/
+// Demo 기본 색상
+$demo-heading-color: #374151;
+$demo-note-color: #6b7280;
+$demo-comparison-title-color: #6b7280;
+
+// 그라데이션 버튼 색상
+$gradient-btn-default-start: #667eea;
+$gradient-btn-default-end: #764ba2;
+$gradient-btn-default-shadow: rgba(102, 126, 234, 0.2);
+$gradient-btn-default-hover-start: #5a6fd8;
+$gradient-btn-default-hover-end: #6a4190;
+$gradient-btn-default-hover-shadow: rgba(102, 126, 234, 0.3);
+
+$gradient-btn-clear-start: #f093fb;
+$gradient-btn-clear-end: #f5576c;
+$gradient-btn-clear-shadow: rgba(240, 147, 251, 0.2);
+$gradient-btn-clear-hover-start: #e680f0;
+$gradient-btn-clear-hover-end: #e8495a;
+$gradient-btn-clear-hover-shadow: rgba(240, 147, 251, 0.3);
+
+$gradient-btn-submit-start: #4facfe;
+$gradient-btn-submit-end: #00f2fe;
+$gradient-btn-submit-shadow: rgba(79, 172, 254, 0.2);
+$gradient-btn-submit-hover-start: #3d93e5;
+$gradient-btn-submit-hover-end: #00d9e5;
+$gradient-btn-submit-hover-shadow: rgba(79, 172, 254, 0.3);
+
+// 이벤트 로그 색상
+$event-log-bg: #1f2937;
+$event-log-text: #f9fafb;
+$event-log-border: #374151;
+$event-log-divider: rgba(55, 65, 81, 0.5);
+$event-log-reset-text: #fbbf24;
+$event-log-deselect-text: #f87171;
+$event-log-scrollbar-track: #374151;
+$event-log-scrollbar-thumb: #6b7280;
+$event-log-scrollbar-thumb-hover: #9ca3af;
+
+// 데모 폼 색상
+$demo-form-bg-start: #f8fafc;
+$demo-form-bg-end: #f1f5f9;
+$demo-form-border: #e2e8f0;
+$demo-form-shadow: rgba(0, 0, 0, 0.05);
+$demo-form-label-color: #374151;
+$demo-form-output-bg: #1f2937;
+$demo-form-output-text: #f9fafb;
+$demo-form-output-border: #374151;
+$demo-form-output-scrollbar-track: #374151;
+$demo-form-output-scrollbar-thumb: #6b7280;
+$demo-form-output-scrollbar-thumb-hover: #9ca3af;

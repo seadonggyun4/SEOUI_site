@@ -1,5 +1,6 @@
 @use '@/styles/constants/colors' as colors;
 @use '@/styles/constants/breakpoint' as breakpoint;
+@use './style-color' as doc-colors;
 
 .docs {
   border: 1px solid colors.$border-color;
@@ -18,30 +19,21 @@
     font-weight: 500;
     transition: background-color 0.2s ease;
 
-    .streaming-indicator {
-      .fas {
-        color: #007bff;
-        animation: pulse 2s infinite;
-      }
-    }
-
-    // 새로 추가된 컴포넌트 인디케이터 스타일
     .component-indicator {
       margin-left: 0.5rem;
 
       .fas {
-        color: #28a745;
+        color: doc-colors.$component-success;
         animation: component-pulse 1.5s infinite;
       }
 
       &:hover {
         .fas {
-          color: #20c997;
+          color: doc-colors.$component-success-hover;
         }
       }
     }
 
-    // 햄버거 토글 아이콘 스타일
     .toggle-indicator {
       margin-left: 0.5rem;
       display: flex;
@@ -148,7 +140,7 @@
     .skeleton-lang-tag,
     .skeleton-copy-btn,
     .skeleton-component {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background: linear-gradient(90deg, doc-colors.$skeleton-light 25%, doc-colors.$skeleton-mid 50%, doc-colors.$skeleton-light 75%);
       background-size: 200% 100%;
       animation: skeleton-loading 1.5s infinite;
       border-radius: 4px;
@@ -178,11 +170,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
+        background: doc-colors.$skeleton-bg;
+        border: 1px solid doc-colors.$skeleton-border;
 
         .fas {
-          color: #6c757d;
+          color: doc-colors.$skeleton-text;
         }
       }
 
@@ -194,20 +186,20 @@
         justify-content: center;
         gap: 6px;
         padding: 12px 16px;
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
+        background: doc-colors.$skeleton-bg;
+        border: 1px solid doc-colors.$skeleton-border;
         border-radius: 6px;
         min-width: 120px;
         position: relative;
 
         .fas {
-          color: #28a745;
+          color: doc-colors.$component-success;
           font-size: 16px;
         }
 
         .component-name {
           font-size: 12px;
-          color: #6c757d;
+          color: doc-colors.$skeleton-text;
           font-weight: 500;
           text-align: center;
           max-width: 100px;
@@ -225,7 +217,7 @@
           background: linear-gradient(
             90deg,
             transparent 0%,
-            rgba(40, 167, 69, 0.1) 50%,
+            doc-colors.$component-loading-bg 50%,
             transparent 100%
           );
           animation: component-loading-sweep 2s infinite;
@@ -235,7 +227,7 @@
     }
 
     .loading-text {
-      color: #6c757d;
+      color: doc-colors.$skeleton-text;
       font-size: 14px;
       font-style: italic;
       display: flex;
@@ -243,7 +235,7 @@
       gap: 8px;
 
       .fas {
-        color: #28a745;
+        color: doc-colors.$component-success;
         animation: spin 1s linear infinite;
       }
     }
@@ -261,11 +253,11 @@
         align-items: center;
         gap: 4px;
         padding: 4px 8px;
-        background: #f8f9fa;
+        background: doc-colors.$skeleton-bg;
         border-radius: 4px;
 
         .fas {
-          color: #6c757d;
+          color: doc-colors.$skeleton-text;
         }
       }
 
@@ -297,12 +289,12 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #6c757d;
+      color: doc-colors.$skeleton-text;
       font-size: 14px;
       font-style: italic;
 
       .fas {
-        color: #007bff;
+        color: doc-colors.$code-primary;
       }
     }
   }
@@ -317,16 +309,16 @@
   .code-error,
   .components-error {
     padding: 2rem;
-    background: #f1eeee;
-    color: #721c24;
+    background: doc-colors.$error-bg-light;
+    color: doc-colors.$error-text;
     border-radius: 6px;
-    border-left: 5px solid #721c24;
+    border-left: 5px solid doc-colors.$error-border;
     display: flex;
     align-items: flex-start;
     gap: 1rem;
 
     .error-icon {
-      color: #dc3545;
+      color: doc-colors.$error-icon;
       font-size: 18px;
       margin-top: 2px;
       flex-shrink: 0;
@@ -364,7 +356,7 @@
       align-items: center;
       gap: 4px;
       padding: 6px 12px;
-      background: #dc3545;
+      background: doc-colors.$error-btn;
       color: white;
       border: none;
       border-radius: 4px;
@@ -378,27 +370,27 @@
       }
 
       &:hover {
-        background: #c82333;
+        background: doc-colors.$error-btn-hover;
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
       }
     }
 
     .raw-code-button {
-      background: #6c757d;
+      background: doc-colors.$btn-raw-code;
 
       &:hover {
-        background: #5a6268;
+        background: doc-colors.$btn-raw-code-hover;
         box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
       }
     }
 
     .skip-button {
-      background: #ffc107;
-      color: #212529;
+      background: doc-colors.$btn-skip;
+      color: doc-colors.$btn-skip-text;
 
       &:hover {
-        background: #e0a800;
+        background: doc-colors.$btn-skip-hover;
         box-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
       }
     }
@@ -406,19 +398,19 @@
 
   // 컴포넌트 에러만의 특별한 스타일
   .components-error {
-    background: #fff3cd;
-    color: #856404;
-    border-color: #ffeaa7;
+    background: doc-colors.$warning-bg;
+    color: doc-colors.$warning-text;
+    border-color: doc-colors.$warning-border;
 
     .error-icon {
-      color: #f39c12;
+      color: doc-colors.$warning-icon;
     }
 
     .retry-button {
-      background: #f39c12;
+      background: doc-colors.$warning-btn;
 
       &:hover {
-        background: #e67e22;
+        background: doc-colors.$warning-btn-hover;
         box-shadow: 0 2px 4px rgba(243, 156, 18, 0.3);
       }
     }
@@ -430,14 +422,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    background: #2e3440;
+    background: doc-colors.$code-header-bg;
     border-radius: 6px 6px 0 0;
 
     .language-tag {
       display: flex;
       align-items: center;
       gap: 4px;
-      color: #88c0d0;
+      color: doc-colors.$code-lang-text;
       font-size: 12px;
       font-weight: 600;
 
@@ -450,8 +442,8 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      background: #4c566a;
-      color: #d8dee9;
+      background: doc-colors.$code-copy-bg;
+      color: doc-colors.$code-copy-text;
       border: none;
       padding: 4px 8px;
       border-radius: 4px;
@@ -460,7 +452,7 @@
       transition: all 0.2s ease;
 
       &:hover {
-        background: #5e81ac;
+        background: doc-colors.$code-copy-hover;
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(94, 129, 172, 0.3);
       }
@@ -473,10 +465,10 @@
 
   // 원본 코드 표시용
   .raw-code {
-    background: #f8f9fa;
+    background: doc-colors.$raw-code-bg;
     padding: 1rem;
     border-radius: 6px;
-    border: 1px solid #e9ecef;
+    border: 1px solid doc-colors.$raw-code-border;
     font-family: 'Courier New', monospace;
     line-height: 1.5;
     white-space: pre-wrap;
@@ -489,16 +481,16 @@
     }
 
     &::-webkit-scrollbar-track {
-      background: #f1f1f1;
+      background: doc-colors.$raw-scrollbar-track;
       border-radius: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
+      background: doc-colors.$raw-scrollbar-thumb;
       border-radius: 4px;
 
       &:hover {
-        background: #a8a8a8;
+        background: doc-colors.$raw-scrollbar-thumb-hover;
       }
     }
   }

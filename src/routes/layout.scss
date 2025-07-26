@@ -1,5 +1,6 @@
-#main{
-  min-height: 100vh;
-  background-color: #f8f8f8;
-}
+@use './style-color' as layout-colors;
 
+#main {
+  min-height: 100vh;
+  background-color: layout-colors.$main-bg;
+}

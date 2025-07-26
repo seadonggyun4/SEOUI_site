@@ -1,0 +1,52 @@
+// DocSection 컴포넌트 전용 색상 변수들
+// 스켈레톤 로더 관련
+$skeleton-light: #f0f0f0;
+$skeleton-mid: #e0e0e0;
+$skeleton-bg: #f8f9fa;
+$skeleton-border: #e9ecef;
+$skeleton-text: #6c757d;
+
+// 컴포넌트 관련
+$component-success: #28a745;
+$component-success-hover: #20c997;
+$component-loading-bg: rgba(40, 167, 69, 0.1);
+
+// 에러 상태 관련
+$error-bg-light: #f1eeee;
+$error-text: #721c24;
+$error-border: #721c24;
+$error-icon: #dc3545;
+$error-btn: #dc3545;
+$error-btn-hover: #c82333;
+
+// 컴포넌트 에러 (경고) 관련
+$warning-bg: #fff3cd;
+$warning-text: #856404;
+$warning-border: #ffeaa7;
+$warning-icon: #f39c12;
+$warning-btn: #f39c12;
+$warning-btn-hover: #e67e22;
+
+// 버튼 관련
+$btn-raw-code: #6c757d;
+$btn-raw-code-hover: #5a6268;
+$btn-skip: #ffc107;
+$btn-skip-text: #212529;
+$btn-skip-hover: #e0a800;
+
+// 코드 헤더 관련
+$code-header-bg: #2e3440;
+$code-lang-text: #88c0d0;
+$code-copy-bg: #4c566a;
+$code-copy-text: #d8dee9;
+$code-copy-hover: #5e81ac;
+
+// 원본 코드 관련
+$raw-code-bg: #f8f9fa;
+$raw-code-border: #e9ecef;
+$raw-scrollbar-track: #f1f1f1;
+$raw-scrollbar-thumb: #c1c1c1;
+$raw-scrollbar-thumb-hover: #a8a8a8;
+
+// 코드 관련
+$code-primary: #007bff;
