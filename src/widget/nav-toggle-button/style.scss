@@ -1,5 +1,6 @@
 @use './style-color' as nav-colors;
 
+// 네비게이션 토글 버튼
 .nav-toggle-btn {
   position: fixed;
   bottom: 1rem;
@@ -17,5 +18,12 @@
 
   &:hover {
     opacity: 0.7;
+  }
+
+  // 다크모드 지원
+  :global(body.dark) & {
+    background-color: nav-colors.$toggle-bg-dark;
+    color: nav-colors.$toggle-color-dark;
+    box-shadow: 0 2px 8px nav-colors.$toggle-shadow-dark;
   }
 }

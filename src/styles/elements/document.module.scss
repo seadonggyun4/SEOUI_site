@@ -8,6 +8,16 @@
   align-items: start;
 }
 
+@use '@/styles/constants/breakpoint' as breakpoint;
+@use '@/styles/constants/colors' as colors;
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
 .demo-item {
   h4 {
     margin-bottom: 1rem;
@@ -27,176 +37,17 @@
       margin-right: 0.3rem;
     }
   }
-}
 
-// 그라데이션 버튼 스타일링
-.gradient-btn {
-  position: relative;
-  padding: 0.5rem 0.8rem;
-  margin-top: 1rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: white;
-  background: linear-gradient(135deg, colors.$gradient-btn-default-start 0%, colors.$gradient-btn-default-end 100%);
-  box-shadow: 0 2px 4px colors.$gradient-btn-default-shadow;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px colors.$gradient-btn-default-hover-shadow;
-    background: linear-gradient(135deg, colors.$gradient-btn-default-hover-start 0%, colors.$gradient-btn-default-hover-end 100%);
-  }
-
-  &.clear {
-    background: linear-gradient(135deg, colors.$gradient-btn-clear-start 0%, colors.$gradient-btn-clear-end 100%);
-    box-shadow: 0 2px 4px colors.$gradient-btn-clear-shadow;
-
-    &:hover {
-      background: linear-gradient(135deg, colors.$gradient-btn-clear-hover-start 0%, colors.$gradient-btn-clear-hover-end 100%);
-      box-shadow: 0 4px 8px colors.$gradient-btn-clear-hover-shadow;
-    }
-  }
-
-  &.submit {
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, colors.$gradient-btn-submit-start 0%, colors.$gradient-btn-submit-end 100%);
-    box-shadow: 0 2px 4px colors.$gradient-btn-submit-shadow;
-
-    &:hover {
-      background: linear-gradient(135deg, colors.$gradient-btn-submit-hover-start 0%, colors.$gradient-btn-submit-hover-end 100%);
-      box-shadow: 0 4px 8px colors.$gradient-btn-submit-hover-shadow;
-    }
-  }
-
-  .icon {
-    margin-right: 0.5rem;
-  }
-}
-
-// 이벤트 로그 스타일링
-.event-log {
-  height: 20rem;
-  overflow-y: auto;
-  border-radius: 5px;
-  background: colors.$event-log-bg;
-  color: colors.$event-log-text;
-  padding: 1rem;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-  font-size: 1rem;
-  line-height: 1.4;
-  border: 1px solid colors.$event-log-border;
-
-  div {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid colors.$event-log-divider;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &.reset {
-      color: colors.$event-log-reset-text;
-      font-weight: 500;
-    }
-
-    &.deselect {
-      color: colors.$event-log-deselect-text;
-      font-style: italic;
-    }
-  }
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: colors.$event-log-scrollbar-track;
-    border-radius: 3px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: colors.$event-log-scrollbar-thumb;
-    border-radius: 3px;
-
-    &:hover {
-      background: colors.$event-log-scrollbar-thumb-hover;
-    }
-  }
-}
-
-// 폼 스타일링
-.demo-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, colors.$demo-form-bg-start 0%, colors.$demo-form-bg-end 100%);
-  border: 1px solid colors.$demo-form-border;
-  box-shadow: 0 4px 6px colors.$demo-form-shadow;
-
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    label {
-      font-weight: 500;
-      color: colors.$demo-form-label-color;
-      font-size: 1rem;
-    }
-  }
-
-  .form-output-container {
-    margin-top: 1rem;
-
+  // 다크모드 지원
+  :global(body.dark) & {
     h4 {
-      margin: 0 0 0.75rem 0;
-      font-size: 1rem;
-      color: colors.$demo-form-label-color;
-      font-weight: 600;
+      color: colors.$demo-heading-color-dark;
     }
 
-    .form-output {
-      border-radius: 5px;
-      background: colors.$demo-form-output-bg;
-      color: colors.$demo-form-output-text;
-      padding: 1rem;
-      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-      font-size: 1rem;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      min-height: 10rem;
-      border: 1px solid colors.$demo-form-output-border;
-      max-height: 20rem;
-      overflow-y: auto;
-
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: colors.$demo-form-output-scrollbar-track;
-        border-radius: 3px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: colors.$demo-form-output-scrollbar-thumb;
-        border-radius: 3px;
-
-        &:hover {
-          background: colors.$demo-form-output-scrollbar-thumb-hover;
-        }
-      }
+    .demo-note {
+      color: colors.$demo-note-color-dark;
     }
   }
-}
-
-.flex-group{
-  display: flex;
-  gap: 1rem;
 }
 
 .comparison-item {
@@ -209,6 +60,13 @@
     font-size: 0.875rem;
     font-weight: 500;
     color: colors.$demo-comparison-title-color;
+  }
+
+  // 다크모드 지원
+  :global(body.dark) & {
+    h5 {
+      color: colors.$demo-comparison-title-color-dark;
+    }
   }
 }
 

@@ -143,6 +143,18 @@ $form-border-light: #e2e8f0;
 // 공통 메인 배경
 $main-bg-light: #f8f8f8;
 
+// 다크모드 지원 색상
+$main-bg-dark: #121212;
+
+// 다크모드 텍스트 색상
+$font-color-dark: #e0e0e0;
+$font-secondary-color-dark: #b0b0b0;
+
+// 다크모드 UI 색상
+$border-color-dark: #333333;
+$summary-bg-dark: #1e1e1e;
+$badge-bg-dark: rgba(59, 130, 246, 0.2);
+
 /**
   Document Module color (demo-grid, demo-item, gradient buttons, event-log, demo-form)
 */
@@ -150,6 +162,11 @@ $main-bg-light: #f8f8f8;
 $demo-heading-color: $heading-text-gray;
 $demo-note-color: $note-text-gray;
 $demo-comparison-title-color: $note-text-gray;
+
+// 다크모드 Demo 색상
+$demo-heading-color-dark: #e0e0e0;
+$demo-note-color-dark: #b0b0b0;
+$demo-comparison-title-color-dark: #b0b0b0;
 
 // 그라데이션 버튼 색상
 $gradient-btn-default-start: #667eea;
@@ -195,4 +212,4 @@ $demo-form-output-text: $code-text-light;
 $demo-form-output-border: $code-border-gray;
 $demo-form-output-scrollbar-track: $scrollbar-track-gray;
 $demo-form-output-scrollbar-thumb: $scrollbar-thumb-gray;
-$demo-form-output-scrollbar-thumb-hover: $scrollbar-thumb-gray-hover; 
+$demo-form-output-scrollbar-thumb-hover: $scrollbar-thumb-gray-hover;

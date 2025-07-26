@@ -6,6 +6,13 @@ $skeleton-bg: #f8f9fa;
 $skeleton-border: #e9ecef;
 $skeleton-text: #6c757d;
 
+// 다크모드 스켈레톤 로더
+$skeleton-light-dark: #2a2a2a;
+$skeleton-mid-dark: #3a3a3a;
+$skeleton-bg-dark: #1e1e1e;
+$skeleton-border-dark: #333333;
+$skeleton-text-dark: #b0b0b0;
+
 // 컴포넌트 관련
 $component-success: #28a745;
 $component-success-hover: #20c997;
@@ -19,6 +26,11 @@ $error-icon: #dc3545;
 $error-btn: #dc3545;
 $error-btn-hover: #c82333;
 
+// 다크모드 에러 상태
+$error-bg-light-dark: #2d1b1e;
+$error-text-dark: #ff6b7a;
+$error-border-dark: #ff6b7a;
+
 // 컴포넌트 에러 (경고) 관련
 $warning-bg: #fff3cd;
 $warning-text: #856404;
@@ -27,12 +39,22 @@ $warning-icon: #f39c12;
 $warning-btn: #f39c12;
 $warning-btn-hover: #e67e22;
 
+// 다크모드 경고 상태
+$warning-bg-dark: #2d2516;
+$warning-text-dark: #ffc107;
+$warning-border-dark: #ffc107;
+
 // 버튼 관련
 $btn-raw-code: #6c757d;
 $btn-raw-code-hover: #5a6268;
 $btn-skip: #ffc107;
 $btn-skip-text: #212529;
 $btn-skip-hover: #e0a800;
+
+// 다크모드 버튼
+$btn-raw-code-dark: #9ca3af;
+$btn-raw-code-hover-dark: #d1d5db;
+$btn-skip-text-dark: #1f2937;
 
 // 코드 헤더 관련
 $code-header-bg: #2e3440;
@@ -47,6 +69,13 @@ $raw-code-border: #e9ecef;
 $raw-scrollbar-track: #f1f1f1;
 $raw-scrollbar-thumb: #c1c1c1;
 $raw-scrollbar-thumb-hover: #a8a8a8;
+
+// 다크모드 원본 코드
+$raw-code-bg-dark: #1e1e1e;
+$raw-code-border-dark: #333333;
+$raw-scrollbar-track-dark: #2a2a2a;
+$raw-scrollbar-thumb-dark: #4a4a4a;
+$raw-scrollbar-thumb-hover-dark: #5a5a5a;
 
 // 코드 관련
 $code-primary: #007bff;

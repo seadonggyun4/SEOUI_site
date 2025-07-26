@@ -1,5 +1,6 @@
 @use '@/styles/constants/colors' as colors;
 @use '@/styles/constants/breakpoint' as breakpoint;
+@use './style-color' as nav-colors;
 
 .mobile-nav {
   position: fixed;
