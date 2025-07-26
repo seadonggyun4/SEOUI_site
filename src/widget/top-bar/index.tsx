@@ -7,7 +7,7 @@ import './style.scss';
 export const TopBar = component$(() => {
   const loc = useLocation();
   const context = useLanguage();
-  
+   
   // useComputed$를 사용하여 반응형 계산 보장
   const currentLanguage = useComputed$(() => {
     return context.languages.find(
@@ -15,12 +15,21 @@ export const TopBar = component$(() => {
     ) || context.languages[0];
   });
 
-  // 현재 URL의 첫 번째 세그먼트 추출
-  const getCurrentFirstSegment = () => {
-    const pathname = loc.url.pathname;
+  // 안전한 URL 접근을 위한 computed
+  const currentPathname = useComputed$(() => {
+    // SSR에서 안전하게 처리
+    if (!loc || !loc.url) return '';
+    return loc.url.pathname || '';
+  });
+
+  // 현재 URL의 첫 번째 세그먼트 추출 (안전한 버전)
+  const getCurrentFirstSegment = useComputed$(() => {
+    const pathname = currentPathname.value;
+    if (!pathname) return '';
+    
     const segments = pathname.split('/').filter(segment => segment !== '');
     return segments[0] || '';
-  };
+  });
 
   // TopBarMenu 링크의 첫 번째 세그먼트 추출
   const getLinkFirstSegment = (link: string) => {
@@ -28,11 +37,11 @@ export const TopBar = component$(() => {
     return segments[0] || '';
   };
 
-  // active 상태 확인 함수
+  // active 상태 확인 함수 (안전한 버전)
   const isActive = (menuLink: string) => {
-    const currentFirstSegment = getCurrentFirstSegment();
+    const currentFirstSegment = getCurrentFirstSegment.value;
     const linkFirstSegment = getLinkFirstSegment(menuLink);
-        
+         
     return currentFirstSegment === linkFirstSegment && currentFirstSegment !== '';
   };
 

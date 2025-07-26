@@ -11,7 +11,6 @@ export default component$(() => {
     import('@/components/seo-select');
     import('@/components/seo-select-search');
 
-
     const $loader = document.querySelector('.document-loder') as HTMLElement;
     if (!$loader) return;
 
@@ -19,7 +18,12 @@ export default component$(() => {
 
     const shouldHandleNavigation = (anchor: HTMLAnchorElement | null) => {
       if (!anchor || !anchor.href || anchor.target === '_blank') return false;
-      const isInternal = anchor.origin === location.url.origin;
+      
+      // 안전한 origin 검사
+      const currentOrigin = location.url?.origin;
+      if (!currentOrigin) return false;
+      
+      const isInternal = anchor.origin === currentOrigin;
       return isInternal && !anchor.hasAttribute('data-instant');
     };
 

@@ -14,8 +14,11 @@ export const MobileNavigation = component$(() => {
   const nav = useNavigation();
   const loc = useLocation();
   
+  // 안전한 pathname 접근
+  const currentPathname = loc.url?.pathname || '';
+  
   // 현재 경로의 첫 번째 세그먼트 추출
-  const pathSegments = loc.url.pathname.split('/').filter(Boolean);
+  const pathSegments = currentPathname.split('/').filter(Boolean);
   const firstSegment = pathSegments[0];
   
   // 첫 번째 세그먼트에 따라 적절한 메뉴 선택
@@ -82,7 +85,7 @@ export const MobileNavigation = component$(() => {
                   <li key={item.href} class="mobile-nav-item">
                     <Link
                       href={item.href}
-                      class={`mobile-nav-link ${loc.url.pathname === item.href ? 'active' : ''}`}
+                      class={`mobile-nav-link ${currentPathname === item.href ? 'active' : ''}`}
                       onClick$={closeNav} // 링크 클릭 시 자동 닫기
                     >
                       <span class="mobile-nav-item-label">{item.label}</span>
