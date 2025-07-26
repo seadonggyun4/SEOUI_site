@@ -1,13 +1,122 @@
-import formatter from './formatter'
+import formatter from './formatter';
 
-/**
- * GridDataTable
- */
+interface GridColumn {
+  key: string;
+  type?: string;
+  class?: string[];
+  html?: (td: HTMLTableCellElement, rowIdx: number, colIdx: number, col: GridColumn, rowData: any) => HTMLElement | null;
+  [key: string]: any;
+}
+interface GridDataTableOptions {
+  rowHeight?: number;
+  overscan?: number;
+  cancelStatus?: string | boolean;
+  activeId?: string | number | null;
+  onDelete?: ((data: any[]) => void) | null;
+}
+
+interface CellPosition {
+  row: number;
+  col: number;
+}
+
+interface CellRange {
+  start: CellPosition;
+  end: CellPosition;
+}
+
+interface FillRange {
+  rows: { start: number; end: number };
+  cols: { start: number; end: number };
+}
+
+interface CopyData {
+  body: string[][];
+  html: string[][];
+}
+
+interface TableData {
+  header: string[];
+  body: string[][];
+  columns: GridColumn[];
+}
+
 export class GridDataTable {
-  constructor(table, data, columns, options = {}) {
+  // DOM 요소들
+  private table: HTMLTableElement;
+  private container: HTMLElement;
+  private gridDataTable: HTMLElement;
+  private tbody: HTMLTableSectionElement;
+  private topPH!: HTMLTableRowElement;
+  private botPH!: HTMLTableRowElement;
+
+  // 기본 설정
+  private columns: GridColumn[];
+  private rowHeight: number;
+  private overscan: number;
+  private cancelStatus: string | boolean;
+  private activeId: string | number | null;
+  private onDelete: ((data: any[]) => void) | null;
+
+  // 가상 스크롤 관련
+  private _data: any[];
+  private trPool: HTMLTableRowElement[] = [];
+  private viewportH!: number;
+  private visibleCount!: number;
+  private poolSize!: number;
+  private prevStart: number | null = null;
+  private prevEnd: number | null = null;
+  private _ticking: boolean = false;
+  private _lastScrollTop: number = 0;
+
+  // 선택 관련
+  private selectedRow: number | null = null;
+  private selectedColumns: Map<number, boolean> = new Map();
+  private selectedCells: Set<string> = new Set();
+  private selectedRange: CellRange | null = null;
+
+  // 드래그 관련
+  private _isDragging: boolean = false;
+  private _dragStart: CellPosition | null = null;
+  private _dragEnd: CellPosition | null = null;
+  private _hoveredRowIndex: number | null = null;
+  private _shiftStartCell: CellPosition | null = null;
+
+  // 컨텍스트 메뉴
+  private _contextMenu: HTMLElement | null = null;
+  private $contextMenu!: HTMLElement;
+
+  // 복사/붙여넣기
+  private _copyCells: CopyData | null = null;
+
+  // Fill Handler
+  private $fillHandle!: HTMLElement;
+  private _isFillDragging: boolean = false;
+  private _fillStartRange: CellRange | null = null;
+  private _fillCurrent: CellPosition | null = null;
+  private _fillTarget: FillRange | null = null;
+
+  // 포매터들
+  private _numFmt: (value: number) => string;
+  private _dateFmt: (value: Date) => string;
+  private _datetimeFmt: (value: Date) => string;
+
+  // 이벤트 핸들러들 (바인딩용)
+  private _onClickBound!: (evt: MouseEvent) => void;
+  private _onClickOutsideBound!: (e: MouseEvent) => void;
+  private _onScrollBound!: () => void;
+  private _onMouseDownBound!: (evt: MouseEvent) => void;
+  private _onMouseMoveBound!: (evt: MouseEvent) => void;
+  private _onMouseupBound!: (evt: MouseEvent) => void;
+  private _onKeydownBound!: (evt: KeyboardEvent) => void;
+  private _onFillMouseDownBound!: (e: MouseEvent) => void;
+  private _onFillMouseMoveBound!: (e: MouseEvent) => void;
+  private _onFillMouseUpBound!: () => void;
+
+  constructor(table: HTMLTableElement, data: any[], columns: GridColumn[], options: GridDataTableOptions = {}) {
     this.table = table;
-    this.container = table.parentElement;
-    this.gridDataTable = this.container.parentElement;
+    this.container = table.parentElement!;
+    this.gridDataTable = this.container.parentElement!;
     this.tbody = table.tBodies[0];
     this.columns = columns;
     this.rowHeight = options.rowHeight || 35;
@@ -15,27 +124,12 @@ export class GridDataTable {
     this.cancelStatus = options.cancelStatus || false;
     this.activeId = options.activeId || null;
     this.onDelete = options.onDelete || null;
-    this._ticking = false;
-    this.selectedRow = null;
-    this.selectedColumns = new Map();
-    this.selectedCells = new Set();
-    this._isDragging = false;
-    this._dragStart = null;
-    this._dragEnd = null;
-    this._hoveredRowIndex = null;
-    this._shiftStartCell = null;
-    this._contextMenu = null;
-    this._copyCells = null;
-    this.$fillHandle = null;
-    this._isFillDragging = false;
-    this._fillStartRange = null;
-    this._fillCurrent = null;
-    this._fillTarget = null;
+    this._data = data;
+
+    // 포매터 초기화
     this._numFmt = formatter.number.format;
     this._dateFmt = formatter.date.format;
     this._datetimeFmt = formatter.datetime.format;
-    this._lastScrollTop = 0;
-    this._data = data;
 
     this._initPlaceholder();
     this._initFillHandler();
@@ -45,7 +139,7 @@ export class GridDataTable {
     this.render();
   }
 
-  _bindEvents() {
+  private _bindEvents(): void {
     this._bindScrollEvent();
     this._bindClickEvents();
     this._bindKeyboardEvents();
@@ -55,14 +149,14 @@ export class GridDataTable {
   /**
    * 데이터 교체(필터 후 등) 시 호출
    */
-  setData(newData, shouldRender = true) {
+  setData(newData: any[], shouldRender: boolean = true): void {
     this.selectedRow = null;
     this._data = newData;
     this.table.style.height = `${this._data.length * this.rowHeight}px`;
     if (shouldRender) this.render();
   }
 
-  rowDelete() {
+  rowDelete(): void {
     if (!this.selectedRange) return;
     const { start, end } = this.selectedRange;
     const minRow = Math.min(start.row, end.row);
@@ -79,7 +173,7 @@ export class GridDataTable {
     this.selectedCells.clear();
     this.selectedRange = null;
     this._shiftStartCell = null;
-    this.table.style.height = `${this.total * this.rowHeight}px`;
+    this.table.style.height = `${this._data.length * this.rowHeight}px`;
     this.render();
     this.hideContextMenu?.();
     this._clearCellSelection();
@@ -88,85 +182,84 @@ export class GridDataTable {
   /**
    * 풀 크기 조정 (리사이즈 등) & 메인 렌더 함수 & 행/셀 클릭 처리 (이벤트 위임) & 스크롤링 이벤트
    */
-  _initPlaceholder (){
-    this.table.style.height = `${this._data.length * this.rowHeight}px`
-    this.prevStart = null
-    this.prevEnd = null
+  private _initPlaceholder(): void {
+    this.table.style.height = `${this._data.length * this.rowHeight}px`;
+    this.prevStart = null;
+    this.prevEnd = null;
 
     // thead 용 colspan 계산
-    const colspan = this.table.tHead.rows[0]?.cells.length || this.columns.length
+    const colspan = this.table.tHead?.rows[0]?.cells.length || this.columns.length;
 
     // CSS 변수
-    this.container.style.setProperty('--row-height', `${this.rowHeight}px`)
+    this.container.style.setProperty('--row-height', `${this.rowHeight}px`);
 
     // placeholder + pool 초기화
-    this.tbody.innerHTML = ''
+    this.tbody.innerHTML = '';
 
     // 상단 placeholder
-    this.topPH = document.createElement('tr')
-    this.topPH.className = 'virtual-placeholder top'
-    this.topPH.innerHTML = `<td colspan="${colspan}" style="padding:0; border:0;"></td>`
-    this.tbody.appendChild(this.topPH)
+    this.topPH = document.createElement('tr');
+    this.topPH.className = 'virtual-placeholder top';
+    this.topPH.innerHTML = `<td colspan="${colspan}" style="padding:0; border:0;"></td>`;
+    this.tbody.appendChild(this.topPH);
 
     // 풀 크기
-    this.viewportH = this.container.clientHeight
-    this.visibleCount = Math.ceil(this.viewportH / this.rowHeight)
-    this.poolSize = this.visibleCount + this.overscan * 2
-    this.trPool = []
+    this.viewportH = this.container.clientHeight;
+    this.visibleCount = Math.ceil(this.viewportH / this.rowHeight);
+    this.poolSize = this.visibleCount + this.overscan * 2;
+    this.trPool = [];
 
     for (let i = 0; i < this.poolSize; i++) {
-      const tr = document.createElement('tr')
+      const tr = document.createElement('tr');
 
       for (let c = 0; c < this.columns.length; c++) {
-        tr.appendChild(document.createElement('td'))
+        tr.appendChild(document.createElement('td'));
       }
 
       tr.addEventListener('mouseenter', () => {
-        const rowIdx = parseInt(tr.dataset.rowIndex, 10);
+        const rowIdx = parseInt(tr.dataset.rowIndex || '-1', 10);
         if (!isNaN(rowIdx)) this._hoveredRowIndex = rowIdx;
       });
 
-      this.tbody.appendChild(tr)
-      this.trPool.push(tr)
+      this.tbody.appendChild(tr);
+      this.trPool.push(tr);
     }
 
     // 하단 placeholder
-    this.botPH = document.createElement('tr')
-    this.botPH.className = 'virtual-placeholder bottom'
-    this.botPH.innerHTML = `<td colspan="${colspan}" style="padding:0; border:0;"></td>`
-    this.tbody.appendChild(this.botPH)
+    this.botPH = document.createElement('tr');
+    this.botPH.className = 'virtual-placeholder bottom';
+    this.botPH.innerHTML = `<td colspan="${colspan}" style="padding:0; border:0;"></td>`;
+    this.tbody.appendChild(this.botPH);
   }
 
-  render () {
-    const scrollTop = this.container.scrollTop
-    const newStart = Math.max(0, Math.floor(scrollTop / this.rowHeight) - this.overscan)
-    const newEnd   = Math.min(this._data.length, newStart + this.trPool.length)
+  render(): void {
+    const scrollTop = this.container.scrollTop;
+    const newStart = Math.max(0, Math.floor(scrollTop / this.rowHeight) - this.overscan);
+    const newEnd = Math.min(this._data.length, newStart + this.trPool.length);
 
-    const poolLength = this.trPool.length
+    const poolLength = this.trPool.length;
 
     for (let i = 0; i < poolLength; i++) {
-      this._updateRow(i, newStart + i)
+      this._updateRow(i, newStart + i);
     }
 
-    this.prevStart = newStart
-    this.prevEnd = newEnd
+    this.prevStart = newStart;
+    this.prevEnd = newEnd;
 
     // placeholder
-    const topPad = newStart * this.rowHeight
-    const botPad = (this._data.length - newEnd) * this.rowHeight
+    const topPad = newStart * this.rowHeight;
+    const botPad = (this._data.length - newEnd) * this.rowHeight;
 
-    this.container.style.setProperty('--top-placeholder', `${topPad}px`)
-    this.container.style.setProperty('--bottom-placeholder', `${botPad}px`)
+    this.container.style.setProperty('--top-placeholder', `${topPad}px`);
+    this.container.style.setProperty('--bottom-placeholder', `${botPad}px`);
 
-    this.topPH.firstElementChild .style.height = `${topPad}px`
-    this.botPH.firstElementChild .style.height = `${botPad}px`
+    (this.topPH.firstElementChild as HTMLElement).style.height = `${topPad}px`;
+    (this.botPH.firstElementChild as HTMLElement).style.height = `${botPad}px`;
 
-
-    this.topPH.style.display = topPad ? '' : 'none'
-    this.botPH.style.display = botPad ? '' : 'none'
+    this.topPH.style.display = topPad ? '' : 'none';
+    this.botPH.style.display = botPad ? '' : 'none';
   }
 
-  _updateRow(poolIndex, rowIdx) {
+  private _updateRow(poolIndex: number, rowIdx: number): void {
     const tr = this.trPool[poolIndex];
 
     if (rowIdx < 0 || rowIdx >= this._data.length) {
@@ -177,7 +270,7 @@ export class GridDataTable {
 
     // 렌더링 수행
     tr.style.display = '';
-    tr.dataset.rowIndex = rowIdx;
+    tr.dataset.rowIndex = String(rowIdx);
     tr.className = '';
 
     const isActive = this.selectedRow === rowIdx || (this.activeId && rowData?.id == this.activeId);
@@ -189,7 +282,7 @@ export class GridDataTable {
 
     const colLength = this.columns.length;
     for (let c = 0; c < colLength; c++) {
-      const td = tr.children[c];
+      const td = tr.children[c] as HTMLTableCellElement;
 
       // 여기선 무조건 갱신 (column에 대한 캐싱까지 하려면 별도 구조 필요)
       td.className = '';
@@ -198,12 +291,12 @@ export class GridDataTable {
     }
   }
 
-  _cellRenderer(td, rowIdx, colIdx, col, rowData) {
+  private _cellRenderer(td: HTMLTableCellElement, rowIdx: number, colIdx: number, col: GridColumn, rowData: any): void {
     td.dataset.cellKey = `${rowIdx}-${colIdx}`;
 
     const colKey = col.key;
     const colType = col.type ?? 'string';
-    const colClass = typeof col === 'string' ? [] : (col.class ?? []);
+    const colClass = col.class ?? [];
     const raw = rowData?.[colKey];
     const value = raw ?? '';
 
@@ -214,14 +307,14 @@ export class GridDataTable {
       td.classList.add('text-right');
     }
 
-    const renderHtmlStringSafely = (htmlStr) => {
+    const renderHtmlStringSafely = (htmlStr: string): void => {
       td.innerHTML = '';
       const range = document.createRange();
       const fragment = range.createContextualFragment(htmlStr);
       td.appendChild(fragment);
     };
 
-    const typeHandlers = {
+    const typeHandlers: Record<string, () => void> = {
       number: () => {
         const numeric = typeof value === 'string' ? Number(value.replace(/,/g, '')) : value;
         if (numeric === 0) td.classList.add('empty');
@@ -242,7 +335,7 @@ export class GridDataTable {
         td.textContent = isNaN(date.getTime()) ? 'Invalid Date' : this._dateFmt(date);
       },
       datetime: () => {
-        const date = new Date(value)
+        const date = new Date(value);
         td.textContent = isNaN(date.getTime()) ? 'Invalid Date' : this._datetimeFmt(date);
       },
       string: () => {
@@ -254,19 +347,19 @@ export class GridDataTable {
     renderFn();
   }
 
-  _onClick(evt) {
+  private _onClick(evt: MouseEvent): void {
     evt.preventDefault();
     if (evt.shiftKey || this._isDragging || this._isFillDragging) return; // ← 드래그 중엔 무시
 
-    const td = evt.target.closest('td');
-    const tr = evt.target.closest('tr');
+    const td = (evt.target as Element).closest('td');
+    const tr = (evt.target as Element).closest('tr');
     if (!tr || tr.classList.contains('virtual-placeholder')) return;
     if (!td || td.classList.contains('no-selecte')) return;
 
-    const rowIdx = parseInt(tr.dataset.rowIndex, 10);
+    const rowIdx = parseInt(tr.dataset.rowIndex || '-1', 10);
     if (isNaN(rowIdx)) return;
 
-    const colIdx = td.cellIndex;
+    const colIdx = (td as HTMLTableCellElement).cellIndex;
     const rowData = this._data[rowIdx];
     const isSame = this.selectedRow === rowIdx;
 
@@ -295,28 +388,28 @@ export class GridDataTable {
         colIndex: colIdx,
         colKey,
         rowData,
-        cellText: td.textContent.trim(),
+        cellText: td.textContent?.trim() || '',
       },
       bubbles: true,
       composed: true,
     }));
   }
 
-  _onClickOutside (e) {
-    const path = e.composedPath ? e.composedPath() : e.path || []
+  private _onClickOutside(e: MouseEvent): void {
+    const path = (e as any).composedPath ? (e as any).composedPath() : (e as any).path || [];
     const isInside =
       path.includes(this.container) || // 스크롤 container
       path.includes(this.tbody) || // table 자체
-      path.includes(this.$contextMenu) // 메뉴 클릭은 예외
+      path.includes(this.$contextMenu); // 메뉴 클릭은 예외
 
     if (!isInside) {
       this._clearCellSelection();
       this.hideContextMenu();
-      this.$fillHandle.remove()
+      this.$fillHandle.remove();
     }
   }
 
-  _onScroll(){
+  private _onScroll(): void {
     this._ticking = true;
 
     requestAnimationFrame(() => {
@@ -326,41 +419,41 @@ export class GridDataTable {
     });
   }
 
-  _bindClickEvents() {
-    this._onClick = this._onClick.bind(this);
-    this._onClickOutside = this._onClickOutside.bind(this);
+  private _bindClickEvents(): void {
+    this._onClickBound = this._onClick.bind(this);
+    this._onClickOutsideBound = this._onClickOutside.bind(this);
 
-    this.table.addEventListener('click', this._onClick);
-    window.addEventListener('click', this._onClickOutside, true);
-    this._onMouseDown = this._onMouseDown.bind(this);
-    this.table.addEventListener('mousedown', this._onMouseDown);
+    this.table.addEventListener('click', this._onClickBound);
+    window.addEventListener('click', this._onClickOutsideBound, true);
+    this._onMouseDownBound = this._onMouseDown.bind(this);
+    this.table.addEventListener('mousedown', this._onMouseDownBound);
   }
 
-  _bindScrollEvent() {
-    this._onScroll = this._onScroll.bind(this);
-    this.container.addEventListener('scroll', this._onScroll, { passive: true });
+  private _bindScrollEvent(): void {
+    this._onScrollBound = this._onScroll.bind(this);
+    this.container.addEventListener('scroll', this._onScrollBound, { passive: true });
   }
 
-  _unbindScrollEvents() {
-    this.container.removeEventListener('scroll', this._onScroll);
+  private _unbindScrollEvents(): void {
+    this.container.removeEventListener('scroll', this._onScrollBound);
   }
 
-  _unbindClickEvents() {
-    this.table.removeEventListener('click', this._onClick);
-    this.table.removeEventListener('mousedown', this._onMouseDown);
-    window.removeEventListener('click', this._onClickOutside, true);
+  private _unbindClickEvents(): void {
+    this.table.removeEventListener('click', this._onClickBound);
+    this.table.removeEventListener('mousedown', this._onMouseDownBound);
+    window.removeEventListener('click', this._onClickOutsideBound, true);
   }
 
   /**
    * 다중 셀 선택 & 키보드 이벤트
    */
-  _onMouseDown(evt) {
+  private _onMouseDown(evt: MouseEvent): void {
     if (this._isFillDragging) return;
-    const th = evt.target.closest('th');
-    const td = evt.target.closest('td');
-    const tr = evt.target.closest('tr');
+    const th = (evt.target as Element).closest('th') as HTMLTableHeaderCellElement;
+    const td = (evt.target as Element).closest('td') as HTMLTableCellElement;
+    const tr = (evt.target as Element).closest('tr') as HTMLTableRowElement;
 
-    const rowIdx = tr ? parseInt(tr.dataset.rowIndex, 10) : NaN;
+    const rowIdx = tr ? parseInt(tr.dataset.rowIndex || '-1', 10) : NaN;
     const colIdx = td?.cellIndex ?? -1;
 
     const state = {
@@ -378,7 +471,12 @@ export class GridDataTable {
       hasSelection: this.selectedCells.size > 0
     };
 
-    const handlers = [
+    interface Handler {
+      match: () => boolean;
+      action: () => void;
+    }
+
+    const handlers: Handler[] = [
       // 1. 선택 불가능한 셀 (td 없음 or no-selecte)
       {
         match: () => !state.isTd || !state.tr || !state.isSelectable,
@@ -389,7 +487,7 @@ export class GridDataTable {
       {
         match: () => state.isShift && state.hasShiftStart,
         action: () => {
-          const { row: r1, col: c1 } = this._shiftStartCell;
+          const { row: r1, col: c1 } = this._shiftStartCell!;
           const r2 = rowIdx;
           const c2 = colIdx;
           this._isDragging = true;
@@ -433,26 +531,26 @@ export class GridDataTable {
     }
   }
 
-  _onMouseMove(evt) {
+  private _onMouseMove(evt: MouseEvent): void {
     if (!this._isDragging || this._isFillDragging) return;
 
-    const td = evt.target.closest('td');
-    const tr = evt.target.closest('tr');
+    const td = (evt.target as Element).closest('td') as HTMLTableCellElement;
+    const tr = (evt.target as Element).closest('tr') as HTMLTableRowElement;
     if (!td || !tr) return;
 
-    const endRow = parseInt(tr.dataset.rowIndex, 10);
+    const endRow = parseInt(tr.dataset.rowIndex || '-1', 10);
     const endCol = td.cellIndex;
     if (isNaN(endRow) || isNaN(endCol)) return;
 
     this._dragEnd = { row: endRow, col: endCol };
 
-    const { row: r1, col: c1 } = this._dragStart;
+    const { row: r1, col: c1 } = this._dragStart!;
     const { row: r2, col: c2 } = this._dragEnd;
 
     this._highlightDragCells(r1, c1, r2, c2);
   }
 
-  _onMouseup(evt) {
+  private _onMouseup(): void {
     if (!this._isDragging) return;
 
     this._isDragging = false;
@@ -475,7 +573,7 @@ export class GridDataTable {
     this.showContextMenu();
   }
 
-  _highlightDragCells(r1, c1, r2, c2) {
+  private _highlightDragCells(r1: number, c1: number, r2: number, c2: number): void {
     this.selectedCells.clear();
 
     const minRow = Math.min(r1, r2);
@@ -497,24 +595,24 @@ export class GridDataTable {
 
     // 모든 td에 대해 _highlightDragCellsSingle 적용
     for (const tr of this.trPool) {
-      const rowIdx = parseInt(tr.dataset.rowIndex, 10);
+      const rowIdx = parseInt(tr.dataset.rowIndex || '-1', 10);
       if (isNaN(rowIdx)) continue;
 
       const tds = tr.children;
       for (let colIdx = 0; colIdx < tds.length; colIdx++) {
-        const td = tds[colIdx];
+        const td = tds[colIdx] as HTMLTableCellElement;
         this._highlightDragCellsSingle(rowIdx, colIdx, td);
       }
     }
   }
 
-  _highlightDragCellsSingle(rowIdx, colIdx, td) {
+  private _highlightDragCellsSingle(rowIdx: number, colIdx: number, td: HTMLTableCellElement): void {
     const key = `${rowIdx}-${colIdx}`;
     const isSelected = this.selectedCells.has(key);
     const isStart = this.selectedRange &&
       key === `${this.selectedRange.start.row}-${this.selectedRange.start.col}`;
 
-    const targetClasses = new Set();
+    const targetClasses = new Set<string>();
     if (isSelected) {
       if (isStart) targetClasses.add('start-cell');
       else targetClasses.add('active');
@@ -551,26 +649,27 @@ export class GridDataTable {
       else if (!shouldHave && has) currentClasses.remove(cls);
     }
 
-    this._updateFillHandlerPosition()
+    this._updateFillHandlerPosition();
   }
 
-  _clearCellSelection () {
+  private _clearCellSelection(): void {
     this.selectedCells.clear();
-    this.selectedRange = null
+    this.selectedRange = null;
 
     for (const tr of this.trPool) {
       const tds = tr.children;
-      for (let td of tds) {
-        td.classList.remove('active');
-        td.classList.remove('active-bottom');
-        td.classList.remove('active-top');
-        td.classList.remove('active-left');
-        td.classList.remove('active-right');
+      for (const td of tds) {
+        const cellElement = td as HTMLTableCellElement;
+        cellElement.classList.remove('active');
+        cellElement.classList.remove('active-bottom');
+        cellElement.classList.remove('active-top');
+        cellElement.classList.remove('active-left');
+        cellElement.classList.remove('active-right');
       }
     }
   }
 
-  _onKeydown(evt) {
+  private _onKeydown(evt: KeyboardEvent): void {
     const ARROW_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
     const isMac = navigator.platform.toUpperCase().includes('MAC');
 
@@ -588,7 +687,7 @@ export class GridDataTable {
     }
 
     if (isPasteKey) {
-      this._handlePaste(evt);
+      this._handlePaste();
       evt.preventDefault();
       return;
     }
@@ -604,12 +703,12 @@ export class GridDataTable {
     this._handleArrowKey(evt);
   }
 
-  _handleArrowKey(evt){
-    const { row, col } = this.selectedRange.end || this.selectedRange.start;
+  private _handleArrowKey(evt: KeyboardEvent): void {
+    const { row, col } = this.selectedRange!.end || this.selectedRange!.start;
     let nextRow = row;
     let nextCol = col;
 
-    const lookupMap = {
+    const lookupMap: Record<string, () => void> = {
       ArrowUp: () => nextRow--,
       ArrowDown: () => nextRow++,
       ArrowLeft: () => nextCol--,
@@ -643,7 +742,7 @@ export class GridDataTable {
     const viewportWidth = this.container.clientWidth;
 
     const cellSelector = `td[data-cell-key="${nextRow}-${nextCol}"]`;
-    const $nextCell = this.container.querySelector(cellSelector);
+    const $nextCell = this.container.querySelector(cellSelector) as HTMLTableCellElement;
     if ($nextCell) {
       const cellRect = $nextCell.getBoundingClientRect();
       const containerRect = this.container.getBoundingClientRect();
@@ -661,7 +760,7 @@ export class GridDataTable {
     if (evt.shiftKey && this.selectedCells.size > 0) {
       // 시작점이 없다면 현재 selectedRange.start 사용
       if (!this._shiftStartCell) {
-        this._shiftStartCell = { ...this.selectedRange.start };
+        this._shiftStartCell = { ...this.selectedRange!.start };
       }
 
       // 새로 이동한 셀을 포함한 범위 선택
@@ -689,12 +788,12 @@ export class GridDataTable {
 
     // 렌더링된 셀에 스타일 반영
     for (const tr of this.trPool) {
-      const rowIdx = parseInt(tr.dataset.rowIndex, 10);
+      const rowIdx = parseInt(tr.dataset.rowIndex || '-1', 10);
       if (isNaN(rowIdx)) continue;
 
       const tds = tr.children;
       for (let colIdx = 0; colIdx < tds.length; colIdx++) {
-        const td = tds[colIdx];
+        const td = tds[colIdx] as HTMLTableCellElement;
         this._highlightDragCellsSingle(rowIdx, colIdx, td);
       }
     }
@@ -702,7 +801,7 @@ export class GridDataTable {
     evt.preventDefault();
   }
 
-  _handlePaste(evt) {
+  private _handlePaste(): void {
     const pasteData = this._copyCells;
     if (!pasteData || !pasteData.html?.length) return;
 
@@ -713,26 +812,31 @@ export class GridDataTable {
     this._flashSelectedCells();
   }
 
-  _bindKeyboardEvents() {
-    this._onMouseMove = this._onMouseMove.bind(this);
-    this._onMouseup = this._onMouseup.bind(this);
-    this._onKeydown = this._onKeydown.bind(this);
-
-    window.addEventListener('mousemove', this._onMouseMove);
-    window.addEventListener('mouseup', this._onMouseup);
-    window.addEventListener('keydown', this._onKeydown);
+  private _handleEscape(): void {
+    this._clearCellSelection();
+    this.hideContextMenu();
   }
 
-  _unbindKeyboardEvents() {
-    window.removeEventListener('keydown', this._onKeydown);
-    window.removeEventListener('mousemove', this._onMouseMove);
-    window.removeEventListener('mouseup', this._onMouseup);
+  private _bindKeyboardEvents(): void {
+    this._onMouseMoveBound = this._onMouseMove.bind(this);
+    this._onMouseupBound = this._onMouseup.bind(this);
+    this._onKeydownBound = this._onKeydown.bind(this);
+
+    window.addEventListener('mousemove', this._onMouseMoveBound);
+    window.addEventListener('mouseup', this._onMouseupBound);
+    window.addEventListener('keydown', this._onKeydownBound);
+  }
+
+  private _unbindKeyboardEvents(): void {
+    window.removeEventListener('keydown', this._onKeydownBound);
+    window.removeEventListener('mousemove', this._onMouseMoveBound);
+    window.removeEventListener('mouseup', this._onMouseupBound);
   }
 
   /**
    * ContextMenu
-  */
-  setupContextMenu() {
+   */
+  setupContextMenu(): void {
     // 기존 메뉴 제거
     if (this.$contextMenu && this.$contextMenu.parentElement) this.$contextMenu.remove();
 
@@ -793,7 +897,7 @@ export class GridDataTable {
     this.gridDataTable.appendChild($menu);
     this.$contextMenu = $menu;
 
-    const actionMap = {
+    const actionMap: Record<string, () => void> = {
       delete: () => this.rowDelete?.(),
       copy: () => this.cellCopy?.(),
       copyTh: () => this.cellCopyWithTh?.(),
@@ -802,7 +906,7 @@ export class GridDataTable {
     };
 
     $menu.addEventListener('click', (e) => {
-      const $btn = e.target.closest('button');
+      const $btn = (e.target as Element).closest('button') as HTMLButtonElement;
       if (!$btn) return;
 
       const type = Array.from($btn.classList).find(cls => actionMap[cls]);
@@ -810,7 +914,7 @@ export class GridDataTable {
     });
   }
 
-  showContextMenu() {
+  showContextMenu(): void {
     if (!this.$contextMenu) return;
     if (!this.selectedCells || this.selectedCells.size === 0) {
       this.hideContextMenu();
@@ -820,13 +924,13 @@ export class GridDataTable {
     this.$contextMenu.classList.add('show');
   }
 
-  hideContextMenu() {
+  hideContextMenu(): void {
     if (this.$contextMenu) {
       this.$contextMenu.classList.remove('show');
     }
   }
 
-  _exportExcel() {
+  private _exportExcel(): void {
     if (!this.selectedCells || this.selectedCells.size === 0) return;
 
     const { header, body, columns } = this._getSelectedTableData({ full: false });
@@ -842,7 +946,7 @@ export class GridDataTable {
     }));
   }
 
-  _exportAllExcel() {
+  private _exportAllExcel(): void {
     const { header, body, columns } = this._getSelectedTableData({ full: true });
 
     this.table.dispatchEvent(new CustomEvent('exportAll', {
@@ -854,8 +958,8 @@ export class GridDataTable {
 
   /**
    * cell Selector
-  */
-  cellCopy() {
+   */
+  cellCopy(): void {
     if (!this.selectedCells || this.selectedCells.size === 0) return;
 
     const { body } = this._getSelectedTableData(); // 텍스트 데이터
@@ -874,7 +978,7 @@ export class GridDataTable {
     this._flashSelectedCells();
   }
 
-  _pasteIntoCell(rowStart, colStart, copyData) {
+  private _pasteIntoCell(rowStart: number, colStart: number, copyData: CopyData): void {
     const fillHTML = copyData.html;
     const fillText = copyData.body;
 
@@ -920,7 +1024,7 @@ export class GridDataTable {
     this.render();
   }
 
-  cellCopyWithTh() {
+  cellCopyWithTh(): void {
     if (!this.selectedCells || this.selectedCells.size === 0) return;
 
     const { header, body } = this._getSelectedTableData();
@@ -929,9 +1033,10 @@ export class GridDataTable {
     navigator.clipboard.writeText(text);
     this._flashSelectedCells();
   }
+
   // 테이블 데이터 추출
-  _getSelectedTableData({ full = false } = {}) {
-    const formatterMap = {
+  private _getSelectedTableData({ full = false }: { full?: boolean } = {}): TableData {
+    const formatterMap: Record<string, (val: any) => string> = {
       number: (val) => {
         const num = Number(val);
         return isNaN(num) ? '' : new Intl.NumberFormat('en-US').format(Math.round(num));
@@ -951,7 +1056,7 @@ export class GridDataTable {
         if (typeof val !== 'string') return '';
         const template = document.createElement('template');
         template.innerHTML = val;
-        const img = template.content.querySelector('img');
+        const img = template.content.querySelector('img') as HTMLImageElement;
         return img?.src || '';
       },
     };
@@ -963,7 +1068,7 @@ export class GridDataTable {
     });
 
     const isSelecting = !full && this.selectedRange && this.selectedCells.size > 0;
-    const rowsToInclude = isSelecting
+    const rowsToInclude = isSelecting && this.selectedRange
       ? {
           rowStart: Math.min(this.selectedRange.start.row, this.selectedRange.end.row),
           rowEnd: Math.max(this.selectedRange.start.row, this.selectedRange.end.row),
@@ -977,7 +1082,7 @@ export class GridDataTable {
           colEnd: columns.length - 1,
         };
 
-    const selectableCols = [];
+    const selectableCols: number[] = [];
     for (let c = rowsToInclude.colStart; c <= rowsToInclude.colEnd; c++) {
       const col = columns[c];
       if (col && !col.class?.includes('no-selecte')) {
@@ -985,12 +1090,12 @@ export class GridDataTable {
       }
     }
 
-    const body = [];
+    const body: string[][] = [];
     for (let r = rowsToInclude.rowStart; r <= rowsToInclude.rowEnd; r++) {
       const rowData = this._data[r];
       if (!rowData) continue;
 
-      const row = [];
+      const row: string[] = [];
       for (const c of selectableCols) {
         const col = columns[c];
         if (!col) continue;
@@ -1006,8 +1111,9 @@ export class GridDataTable {
 
     return { header: selectableCols.map(i => header[i]), body, columns };
   }
+
   // 테이블 Dom 추출
-  _getSelectedCellHTML() {
+  private _getSelectedCellHTML(): string[][] {
     const { start, end } = this.selectedRange ?? {};
     if (!start || !end) return [];
 
@@ -1016,17 +1122,17 @@ export class GridDataTable {
     const minCol = Math.min(start.col, end.col);
     const maxCol = Math.max(start.col, end.col);
 
-    const htmlMatrix = [];
+    const htmlMatrix: string[][] = [];
 
     for (let row = minRow; row <= maxRow; row++) {
-      const htmlRow = [];
+      const htmlRow: string[] = [];
       for (let col = minCol; col <= maxCol; col++) {
         const cellKey = `${row}-${col}`;
-        const $td = this.container.querySelector(`td[data-cell-key="${cellKey}"]`);
+        const $td = this.container.querySelector(`td[data-cell-key="${cellKey}"]`) as HTMLTableCellElement;
 
         if ($td) {
-          const $cloned = $td.cloneNode(true);
-          const $fill = $cloned.querySelector('.fill-handler');
+          const $cloned = $td.cloneNode(true) as HTMLTableCellElement;
+          const $fill = $cloned.querySelector('.fill-handler') as HTMLElement;
           if ($fill) $fill.remove();
 
           htmlRow.push($cloned.innerHTML.trim());
@@ -1042,14 +1148,14 @@ export class GridDataTable {
 
   /**
    * Fill Handler
-  */
-  _initFillHandler(){
+   */
+  private _initFillHandler(): void {
     this.$fillHandle = document.createElement('div');
     this.$fillHandle.className = 'fill-handler';
     this._updateFillHandlerPosition();
   }
 
-  _updateFillHandlerPosition() {
+  private _updateFillHandlerPosition(): void {
     if (!this.selectedRange || !this.$fillHandle) return;
 
     const { start, end } = this.selectedRange;
@@ -1063,7 +1169,7 @@ export class GridDataTable {
     const rowTr = this.trPool.find(tr => Number(tr.dataset.rowIndex) === anchorRow);
     if (!rowTr) return;
 
-    const targetTd = rowTr.children[anchorCol];
+    const targetTd = rowTr.children[anchorCol] as HTMLTableCellElement;
     if (!targetTd) return;
 
     this.$fillHandle.remove();
@@ -1071,7 +1177,7 @@ export class GridDataTable {
     this.$fillHandle.style.display = 'block';
   }
 
-  _calculateFillArea() {
+  private _calculateFillArea(): FillRange | null {
     if (!this._fillStartRange || !this._fillCurrent) return null;
 
     const { start, end } = this._fillStartRange;
@@ -1121,16 +1227,16 @@ export class GridDataTable {
     };
   }
 
-  _previewFillArea(rowRange, colRange) {
+  private _previewFillArea(rowRange: { start: number; end: number }, colRange: { start: number; end: number }): void {
     const { start: rowStart, end: rowEnd } = rowRange;
     const { start: colStart, end: colEnd } = colRange;
 
     for (const tr of this.trPool) {
-      const rowIdx = parseInt(tr.dataset.rowIndex, 10);
+      const rowIdx = parseInt(tr.dataset.rowIndex || '-1', 10);
       if (isNaN(rowIdx) || rowIdx < rowStart || rowIdx > rowEnd) continue;
 
       for (let col = colStart; col <= colEnd; col++) {
-        const td = tr.children[col];
+        const td = tr.children[col] as HTMLTableCellElement;
         if (!td) continue;
 
         const classList = td.classList;
@@ -1143,7 +1249,7 @@ export class GridDataTable {
           right: `${rowIdx}-${col + 1}`,
         };
 
-        const lookupMap = {
+        const lookupMap: Record<string, () => boolean> = {
           top: () => rowIdx === rowStart && !this.selectedCells.has(neighbors.top),
           bottom: () => rowIdx === rowEnd && !this.selectedCells.has(neighbors.bottom),
           left: () => col === colStart && !this.selectedCells.has(neighbors.left),
@@ -1159,7 +1265,7 @@ export class GridDataTable {
     }
   }
 
-  _updateFillPreview() {
+  private _updateFillPreview(): void {
     if (!this._fillStartRange || !this._fillCurrent) return;
 
     const fillArea = this._calculateFillArea(); // 내부에서 this._fillStartRange와 this._fillCurrent 사용
@@ -1170,7 +1276,7 @@ export class GridDataTable {
     this._fillTarget = fillArea;
   }
 
-  _applyFill() {
+  private _applyFill(): void {
     const source = this._fillStartRange;
     const target = this._fillTarget;
     if (!source || !target) return;
@@ -1208,7 +1314,7 @@ export class GridDataTable {
     }
 
     // 선택 영역을 target 범위로 다시 설정
-    const oldRange = this.selectedRange;
+    const oldRange = this.selectedRange!;
     const newRange = {
       start: {
         row: Math.min(oldRange.start.row, rowStart),
@@ -1235,7 +1341,7 @@ export class GridDataTable {
     this._flashSelectedCells();
   }
 
-  _clearFillPreview() {
+  private _clearFillPreview(): void {
     const previewClasses = [
       'fill-preview',
       'fill-preview-top',
@@ -1246,17 +1352,18 @@ export class GridDataTable {
 
     for (const tr of this.trPool) {
       for (const td of tr.children) {
+        const cellElement = td as HTMLTableCellElement;
         for (const cls of previewClasses) {
-          td.classList.remove(cls);
+          cellElement.classList.remove(cls);
         }
       }
     }
-    this.$fillHandle.remove()
+    this.$fillHandle.remove();
   }
 
-  _flashSelectedCells() {
+  private _flashSelectedCells(): void {
     for (const key of this.selectedCells) {
-      const $td = this.container.querySelector(`td[data-cell-key="${key}"]`);
+      const $td = this.container.querySelector(`td[data-cell-key="${key}"]`) as HTMLTableCellElement;
       if (!$td) continue;
 
       $td.classList.remove('copy-flash'); // 재적용 위해 제거 후 강제 리플로우
@@ -1265,7 +1372,7 @@ export class GridDataTable {
     }
   }
 
-  _onMouseDownHandler(e) {
+  private _onFillMouseDown(e: MouseEvent): void {
     e.preventDefault();
     this._isFillDragging = true;
 
@@ -1280,35 +1387,35 @@ export class GridDataTable {
     document.body.style.userSelect = 'none';
   }
 
-  _onMoveHandler(e) {
+  private _onFillMouseMove(e: MouseEvent): void {
     if (!this._isFillDragging) return;
 
-    const target = e.target.closest('td');
+    const target = (e.target as Element).closest('td') as HTMLTableCellElement;
     if (!target) return;
 
-    const tr = target.closest('tr');
+    const tr = target.closest('tr') as HTMLTableRowElement;
     const rowIdx = parseInt(tr?.dataset.rowIndex ?? '-1', 10);
     const colIdx = target.cellIndex;
     if (rowIdx < 0 || colIdx < 0) return;
 
-    const { start, end } = this._fillStartRange;
+    const { start, end } = this._fillStartRange!;
 
     const rowStart = Math.min(start.row, end.row);
-    const rowEnd   = Math.max(start.row, end.row);
+    const rowEnd = Math.max(start.row, end.row);
     const colStart = Math.min(start.col, end.col);
-    const colEnd   = Math.max(start.col, end.col);
+    const colEnd = Math.max(start.col, end.col);
 
     const isRowDrag = colIdx >= colStart && colIdx <= colEnd && rowIdx !== rowEnd;
     const isColDrag = rowIdx >= rowStart && rowIdx <= rowEnd && colIdx !== colEnd;
 
     if (!isRowDrag && !isColDrag) {
       this._fillCurrent = null;
-      this._fillTarget = null
+      this._fillTarget = null;
       this._clearFillPreview();
       return;
     }
 
-    let next = null;
+    let next: CellPosition | null = null;
 
     if (isRowDrag) {
       next = { row: rowIdx, col: colStart }; // Y축 이동 (열은 동일)
@@ -1329,7 +1436,7 @@ export class GridDataTable {
     this._updateFillPreview();
   }
 
-  _onMouseupHandler() {
+  private _onFillMouseUp(): void {
     if (!this._isFillDragging) return;
     this._applyFill();
 
@@ -1338,26 +1445,26 @@ export class GridDataTable {
     document.body.style.userSelect = '';
   }
 
-  _bindFillHandlerEvents() {
-    this._onMouseDownHandler = this._onMouseDownHandler.bind(this);
-    this._onMoveHandler = this._onMoveHandler.bind(this);
-    this._onMouseupHandler = this._onMouseupHandler.bind(this);
+  private _bindFillHandlerEvents(): void {
+    this._onFillMouseDownBound = this._onFillMouseDown.bind(this);
+    this._onFillMouseMoveBound = this._onFillMouseMove.bind(this);
+    this._onFillMouseUpBound = this._onFillMouseUp.bind(this);
 
-    this.$fillHandle.addEventListener('mousedown', this._onMouseDownHandler);
-    this.container.addEventListener('mousemove', this._onMoveHandler);
-    window.addEventListener('mouseup', this._onMouseupHandler);
+    this.$fillHandle.addEventListener('mousedown', this._onFillMouseDownBound);
+    this.container.addEventListener('mousemove', this._onFillMouseMoveBound);
+    window.addEventListener('mouseup', this._onFillMouseUpBound);
   }
 
-  _unbindFillHandlerEvents() {
+  private _unbindFillHandlerEvents(): void {
     if (this.$fillHandle) {
-      this.$fillHandle.removeEventListener('mousedown', this._onMouseDownHandler);
+      this.$fillHandle.removeEventListener('mousedown', this._onFillMouseDownBound);
     }
-    this.container.removeEventListener('mousemove', this._onMoveHandler);
-    window.removeEventListener('mouseup', this._onMouseupHandler);
+    this.container.removeEventListener('mousemove', this._onFillMouseMoveBound);
+    window.removeEventListener('mouseup', this._onFillMouseUpBound);
   }
 
   // ------------------------------------------
-  destroy() {
+  destroy(): void {
     this._unbindScrollEvents();
     this._unbindClickEvents();
     this._unbindKeyboardEvents();
@@ -1365,7 +1472,7 @@ export class GridDataTable {
     this._clearInternalState();
   }
 
-  _clearInternalState() {
+  private _clearInternalState(): void {
     this.trPool = [];
     this.selectedCells.clear();
     this.selectedColumns.clear();
