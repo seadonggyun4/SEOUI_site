@@ -2,11 +2,13 @@ import { component$, useComputed$ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { TopBarMenu } from '@/config/menu';
 import { useLanguage } from '@/context/LanguageContext';
+import { useDarkMode } from '@/context/DarkModeContext';
 import './style.scss';
 
 export const TopBar = component$(() => {
   const loc = useLocation();
   const context = useLanguage();
+  const { isDark, toggleDarkMode } = useDarkMode();
    
   // useComputed$를 사용하여 반응형 계산 보장
   const currentLanguage = useComputed$(() => {
@@ -71,6 +73,31 @@ export const TopBar = component$(() => {
               </li>
             ))}
           </ul>
+
+          {/* Action Buttons */}
+          <div class="topbar-actions">
+            {/* Dark Mode Toggle Button */}
+            <button
+              class="topbar-action-btn"
+              onClick$={toggleDarkMode}
+              aria-label={isDark.value ? '라이트 모드로 전환' : '다크 모드로 전환'}
+              title={isDark.value ? '라이트 모드로 전환' : '다크 모드로 전환'}
+            >
+              <i class={isDark.value ? 'fas fa-sun' : 'fas fa-moon'}></i>
+            </button>
+
+            {/* GitHub Button */}
+            <a
+              href="https://github.com/seadonggyun4"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="topbar-action-btn"
+              aria-label="GitHub 저장소 보기"
+              title="GitHub 저장소 보기"
+            >
+              <i class="fab fa-github"></i>
+            </a>
+          </div>
 
           {/* Language Selector */}
           <div class="topbar-language">

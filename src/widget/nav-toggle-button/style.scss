@@ -19,9 +19,11 @@
   &:hover {
     opacity: 0.7;
   }
+}
 
-  // 다크모드 지원
-  :global(body.dark) & {
+// 다크모드 지원
+body.dark {
+  .nav-toggle-btn {
     background-color: nav-colors.$toggle-bg-dark;
     color: nav-colors.$toggle-color-dark;
     box-shadow: 0 2px 8px nav-colors.$toggle-shadow-dark;

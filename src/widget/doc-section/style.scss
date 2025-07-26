@@ -19,6 +19,12 @@
     font-weight: 500;
     transition: background-color 0.2s ease;
 
+    .indicator-group{
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
     .component-indicator {
       margin-left: 0.5rem;
 
@@ -115,123 +121,6 @@
     }
   }
 
-  // 다크모드 지원
-  :global(body.dark) & {
-    border-color: colors.$border-color-dark;
-
-    summary {
-      border-bottom-color: colors.$border-color-dark;
-      background-color: colors.$summary-bg-dark;
-    }
-
-    .doc-description {
-      color: colors.$font-color-dark;
-
-      code {
-        background-color: colors.$badge-bg-dark;
-        color: colors.$badge-color;
-      }
-    }
-
-    // 스켈레톤 다크모드
-    .description-skeleton,
-    .components-skeleton,
-    .code-skeleton {
-      .skeleton-line,
-      .skeleton-button,
-      .skeleton-code-line,
-      .skeleton-lang-tag,
-      .skeleton-copy-btn,
-      .skeleton-component {
-        background: linear-gradient(90deg, doc-colors.$skeleton-light-dark 25%, doc-colors.$skeleton-mid-dark 50%, doc-colors.$skeleton-light-dark 75%);
-      }
-    }
-
-    .components-skeleton {
-      .skeleton-components {
-        .skeleton-button,
-        .skeleton-component {
-          background: doc-colors.$skeleton-bg-dark;
-          border-color: doc-colors.$skeleton-border-dark;
-
-          .fas {
-            color: doc-colors.$skeleton-text-dark;
-          }
-        }
-
-        .skeleton-component .component-name {
-          color: doc-colors.$skeleton-text-dark;
-        }
-      }
-
-      .loading-text {
-        color: doc-colors.$skeleton-text-dark;
-      }
-    }
-
-    .code-skeleton {
-      .skeleton-code-header {
-        .skeleton-lang-tag,
-        .skeleton-copy-btn {
-          background: doc-colors.$skeleton-bg-dark;
-
-          .fas {
-            color: doc-colors.$skeleton-text-dark;
-          }
-        }
-      }
-
-      .loading-text {
-        color: doc-colors.$skeleton-text-dark;
-      }
-    }
-
-    // 에러 상태 다크모드
-    .description-error,
-    .code-error {
-      background: doc-colors.$error-bg-light-dark;
-      color: doc-colors.$error-text-dark;
-      border-left-color: doc-colors.$error-border-dark;
-    }
-
-    .components-error {
-      background: doc-colors.$warning-bg-dark;
-      color: doc-colors.$warning-text-dark;
-      border-left-color: doc-colors.$warning-border-dark;
-    }
-
-    // 버튼 다크모드
-    .raw-code-button {
-      background: doc-colors.$btn-raw-code-dark;
-
-      &:hover {
-        background: doc-colors.$btn-raw-code-hover-dark;
-      }
-    }
-
-    .skip-button {
-      color: doc-colors.$btn-skip-text-dark;
-    }
-
-    // 원본 코드 다크모드
-    .raw-code {
-      background: doc-colors.$raw-code-bg-dark;
-      border-color: doc-colors.$raw-code-border-dark;
-
-      &::-webkit-scrollbar-track {
-        background: doc-colors.$raw-scrollbar-track-dark;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: doc-colors.$raw-scrollbar-thumb-dark;
-
-        &:hover {
-          background: doc-colors.$raw-scrollbar-thumb-hover-dark;
-        }
-      }
-    }
-  }
-
   .doc-components {
     display: flex;
     flex-wrap: wrap;
@@ -295,7 +184,6 @@
         }
       }
 
-      // 새로 추가된 컴포넌트별 스켈레톤 스타일
       .skeleton-component {
         display: flex;
         flex-direction: column;
@@ -323,7 +211,6 @@
           word-break: break-word;
         }
 
-        // 로딩 애니메이션 효과
         &::after {
           content: '';
           position: absolute;
@@ -637,8 +524,125 @@
       }
     }
   }
+}
 
-  // 섹션이 열린 상태일 때는 일반 햄버거 모양 (기본 CSS가 적용됨)
+// 다크모드 지원
+body.dark {
+  .docs {
+    border-color: colors.$border-color-dark;
+
+    summary {
+      border-bottom-color: colors.$border-color-dark;
+      background-color: colors.$summary-bg-dark;
+    }
+
+    .doc-description {
+      color: colors.$font-color-dark;
+
+      code {
+        background-color: colors.$badge-bg-dark;
+        color: colors.$badge-color;
+      }
+    }
+
+    // 스켈레톤 다크모드
+    .description-skeleton,
+    .components-skeleton,
+    .code-skeleton {
+      .skeleton-line,
+      .skeleton-button,
+      .skeleton-code-line,
+      .skeleton-lang-tag,
+      .skeleton-copy-btn,
+      .skeleton-component {
+        background: linear-gradient(90deg, doc-colors.$skeleton-light-dark 25%, doc-colors.$skeleton-mid-dark 50%, doc-colors.$skeleton-light-dark 75%);
+      }
+    }
+
+    .components-skeleton {
+      .skeleton-components {
+        .skeleton-button,
+        .skeleton-component {
+          background: doc-colors.$skeleton-bg-dark;
+          border-color: doc-colors.$skeleton-border-dark;
+
+          .fas {
+            color: doc-colors.$skeleton-text-dark;
+          }
+        }
+
+        .skeleton-component .component-name {
+          color: doc-colors.$skeleton-text-dark;
+        }
+      }
+
+      .loading-text {
+        color: doc-colors.$skeleton-text-dark;
+      }
+    }
+
+    .code-skeleton {
+      .skeleton-code-header {
+        .skeleton-lang-tag,
+        .skeleton-copy-btn {
+          background: doc-colors.$skeleton-bg-dark;
+
+          .fas {
+            color: doc-colors.$skeleton-text-dark;
+          }
+        }
+      }
+
+      .loading-text {
+        color: doc-colors.$skeleton-text-dark;
+      }
+    }
+
+    // 에러 상태 다크모드
+    .description-error,
+    .code-error {
+      background: doc-colors.$error-bg-light-dark;
+      color: doc-colors.$error-text-dark;
+      border-left-color: doc-colors.$error-border-dark;
+    }
+
+    .components-error {
+      background: doc-colors.$warning-bg-dark;
+      color: doc-colors.$warning-text-dark;
+      border-left-color: doc-colors.$warning-border-dark;
+    }
+
+    // 버튼 다크모드
+    .raw-code-button {
+      background: doc-colors.$btn-raw-code-dark;
+
+      &:hover {
+        background: doc-colors.$btn-raw-code-hover-dark;
+      }
+    }
+
+    .skip-button {
+      color: doc-colors.$btn-skip-text-dark;
+    }
+
+    // 원본 코드 다크모드
+    .raw-code {
+      background: doc-colors.$raw-code-bg-dark;
+      border-color: doc-colors.$raw-code-border-dark;
+
+      &::-webkit-scrollbar-track {
+        background: doc-colors.$raw-scrollbar-track-dark;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: doc-colors.$raw-scrollbar-thumb-dark;
+
+        &:hover {
+          background: doc-colors.$raw-scrollbar-thumb-hover-dark;
+        }
+      }
+    }
+  }
 }
 
 // 애니메이션 정의들

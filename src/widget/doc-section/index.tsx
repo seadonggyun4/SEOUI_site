@@ -346,7 +346,7 @@ export const DocSection = component$<DocSectionProps>(
         <summary onClick$={handleToggle}>
           {title}
 
-          <div class="flex-group">
+          <div class="indicator-group">
             {waitForComponents.length > 0 && (
               <span class="component-indicator" title={`${translations.waitingComponents}: ${waitForComponents.join(', ')}`}>
                 <i class="fas fa-puzzle-piece"></i>

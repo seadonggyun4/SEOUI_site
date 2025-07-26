@@ -1,6 +1,7 @@
 import { component$, isDev } from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
 import { RouterHead } from "@/widget/router-head/router-head";
+import { DarkModeProvider } from "@/context/DarkModeContext";
 import '@/styles/main.scss'
 
 export default component$(() => {
@@ -17,7 +18,9 @@ export default component$(() => {
         <RouterHead />
       </head>
       <body lang="ko">
-        <RouterOutlet />
+        <DarkModeProvider>
+          <RouterOutlet />
+        </DarkModeProvider>
       </body>
     </QwikCityProvider>
   );

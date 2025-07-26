@@ -3,9 +3,10 @@
 #main {
   min-height: 100vh;
   background-color: colors.$main-bg-light;
+}
 
-  // 다크모드 지원
-  :global(body.dark) & {
+body.dark{
+  #main{
     background-color: colors.$main-bg-dark;
   }
 }

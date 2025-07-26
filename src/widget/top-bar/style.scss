@@ -64,6 +64,48 @@
     gap: 2rem;
   }
 
+  &-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    background: transparent;
+    border: 1px solid colors.$dark-panel-border;
+    border-radius: 5px;
+    color: colors.$font-secondary-color;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+
+    &:hover {
+      color: colors.$text-white;
+      background: colors.$hover-bg-light;
+      border-color: colors.$hover-border-light;
+      transform: translateY(-1px);
+
+      i {
+        transform: scale(1.1);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    i {
+      transition: transform 0.2s ease;
+    }
+  }
+
   &-menu {
     display: flex;
     align-items: center;
@@ -293,6 +335,10 @@
       padding: 0 1rem;
     }
 
+    &-nav {
+      gap: 1rem;
+    }
+
     &-menu {
       gap: 0.25rem;
     }
@@ -302,6 +348,16 @@
 
       &-label {
         display: none;
+      }
+    }
+
+    &-actions {
+      gap: 0.5rem;
+
+      .topbar-action-btn {
+        width: 2.25rem;
+        height: 2.25rem;
+        font-size: 1rem;
       }
     }
 
