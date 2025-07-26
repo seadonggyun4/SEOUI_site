@@ -352,6 +352,14 @@ export const DocSection = component$<DocSectionProps>(
                 <i class="fas fa-puzzle-piece"></i>
               </span>
             )}
+            
+            <span class="toggle-indicator">
+              <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </span>
           </div>
         </summary>
 

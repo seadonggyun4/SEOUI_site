@@ -625,6 +625,7 @@ export default component$(() => {
             description={doc.description}
             code={doc.code}
             lang={doc.lang}
+            waitForComponents={['seo-select']}
           >
             {content}
           </DocSection>
