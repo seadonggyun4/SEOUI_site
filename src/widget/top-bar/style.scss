@@ -9,11 +9,11 @@
   right: 0;
   padding: 1rem;
   height: 5rem;
-  background: linear-gradient(145deg, topbar-colors.$bg-start 0%, topbar-colors.$bg-end 100%);
-  border-bottom: 1px solid topbar-colors.$border;
+  background: linear-gradient(145deg, colors.$dark-panel-bg-start 0%, colors.$dark-panel-bg-end 100%);
+  border-bottom: 1px solid colors.$dark-panel-border;
   box-shadow:
-    0 2px 20px topbar-colors.$shadow-main,
-    inset 0 -1px 0 topbar-colors.$shadow-inset;
+    0 2px 20px colors.$dark-panel-shadow,
+    inset 0 -1px 0 colors.$dark-panel-shadow-inset;
   backdrop-filter: blur(10px);
   z-index: 99999;
 
@@ -24,7 +24,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse at center top, topbar-colors.$radial-bg 0%, transparent 70%);
+    background: radial-gradient(ellipse at center top, colors.$header-gradient-blue 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -98,7 +98,7 @@
       left: 0;
       width: 0;
       height: 2px;
-      background: linear-gradient(90deg, colors.$primary-color, topbar-colors.$link-gradient-end);
+      background: linear-gradient(90deg, colors.$primary-color, colors.$gradient-purple-end);
       transition: width 0.3s ease;
     }
 
@@ -121,9 +121,9 @@
     }
 
     &:hover, &.active {
-      color: topbar-colors.$link-white;
-      background: topbar-colors.$link-hover-bg;
-      border-color: topbar-colors.$link-hover-border;
+      color: colors.$text-white;
+      background: colors.$hover-bg-light;
+      border-color: colors.$hover-border-light;
 
       &::before {
         width: 100%;
@@ -136,15 +136,15 @@
 
       .topbar-link-indicator {
         background: colors.$primary-color;
-        box-shadow: 0 0 8px topbar-colors.$indicator-glow;
+        box-shadow: 0 0 8px colors.$indicator-glow-normal;
       }
     }
 
     &.active {
-      color: topbar-colors.$link-white;
-      background: topbar-colors.$active-bg;
-      border-color: topbar-colors.$active-border;
-      box-shadow: 0 0 15px topbar-colors.$active-shadow;
+      color: colors.$text-white;
+      background: colors.$active-bg-blue;
+      border-color: colors.$active-border-blue;
+      box-shadow: 0 0 15px colors.$active-shadow-blue;
 
       &::before {
         width: 100%;
@@ -157,7 +157,7 @@
 
       .topbar-link-indicator {
         background: colors.$primary-color;
-        box-shadow: 0 0 8px topbar-colors.$indicator-active-glow;
+        box-shadow: 0 0 8px colors.$indicator-glow-active;
       }
     }
   }
@@ -170,8 +170,8 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.75rem 1rem;
-      background: topbar-colors.$language-bg;
-      border: 1px solid topbar-colors.$language-border;
+      background: colors.$language-selector-bg;
+      border: 1px solid colors.$dark-panel-border;
       border-radius: 8px;
       color: colors.$font-secondary-color;
       font-weight: 500;
@@ -181,9 +181,9 @@
 
       &:hover,
       &.open {
-        color: topbar-colors.$link-white;
-        background: topbar-colors.$language-hover-bg;
-        border-color: topbar-colors.$language-hover-border;
+        color: colors.$text-white;
+        background: colors.$hover-bg-light;
+        border-color: colors.$hover-border-light;
       }
 
       &.open .topbar-language-arrow {
@@ -210,12 +210,12 @@
       top: calc(100% + 0.5rem);
       right: 0;
       min-width: 140px;
-      background: linear-gradient(145deg, topbar-colors.$dropdown-bg-start 0%, topbar-colors.$dropdown-bg-end 100%);
-      border: 1px solid topbar-colors.$dropdown-border;
+      background: linear-gradient(145deg, colors.$dark-panel-bg-start 0%, colors.$dark-panel-bg-end 100%);
+      border: 1px solid colors.$dark-panel-border;
       border-radius: 8px;
       box-shadow:
-        0 10px 40px topbar-colors.$dropdown-shadow,
-        inset 0 1px 0 topbar-colors.$dropdown-inset;
+        0 10px 40px colors.$dark-panel-shadow,
+        inset 0 1px 0 colors.$dark-panel-shadow-inset;
       backdrop-filter: blur(10px);
       overflow: hidden;
       z-index: 100001;
@@ -242,13 +242,13 @@
         top: 0;
         bottom: 0;
         width: 0;
-        background: linear-gradient(90deg, colors.$primary-color, topbar-colors.$link-gradient-end);
+        background: linear-gradient(90deg, colors.$primary-color, colors.$gradient-purple-end);
         transition: width 0.3s ease;
       }
 
       &:hover {
-        color: topbar-colors.$link-white;
-        background: topbar-colors.$option-hover-bg;
+        color: colors.$text-white;
+        background: colors.$hover-bg-light;
 
         &::before {
           width: 3px;
@@ -256,8 +256,8 @@
       }
 
       &.selected {
-        color: topbar-colors.$link-white;
-        background: topbar-colors.$option-selected-bg;
+        color: colors.$text-white;
+        background: colors.$active-bg-blue;
 
         &::before {
           width: 3px;

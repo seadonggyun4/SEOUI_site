@@ -76,13 +76,80 @@ $summary-bg:#f1f2f3;
 $badge-bg:#008ff519;
 $badge-color: $primary-color;
 
+// 공통 다크 테마 색상
+$dark-panel-bg-start: #1a1a1a;
+$dark-panel-bg-end: #0f0f0f;
+$dark-panel-border: rgba(255, 255, 255, 0.1);
+$dark-panel-shadow: rgba(0, 0, 0, 0.3);
+$dark-panel-shadow-inset: rgba(255, 255, 255, 0.05);
+
+// 공통 헤더 색상
+$header-gradient-blue: rgba(59, 130, 246, 0.1);
+$header-gradient-purple: rgba(147, 51, 234, 0.1);
+$header-radial-effect: rgba(59, 130, 246, 0.2);
+
+// 공통 스크롤바 색상
+$scrollbar-track-dark: rgba(255, 255, 255, 0.05);
+$scrollbar-thumb-dark: rgba(255, 255, 255, 0.2);
+$scrollbar-thumb-dark-hover: rgba(255, 255, 255, 0.3);
+
+// 공통 텍스트 색상
+$text-white: #ffffff;
+$text-shadow-blue: rgba(59, 130, 246, 0.3);
+
+// 공통 인터랙션 색상
+$hover-bg-light: rgba(255, 255, 255, 0.08);
+$hover-border-light: rgba(255, 255, 255, 0.2);
+$active-bg-blue: rgba(59, 130, 246, 0.15);
+$active-border-blue: rgba(59, 130, 246, 0.3);
+$active-shadow-blue: rgba(59, 130, 246, 0.2);
+
+// 공통 그라데이션 끝 색상
+$gradient-purple-end: #8b5cf6;
+
+// 공통 인디케이터 글로우
+$indicator-glow-normal: rgba(59, 130, 246, 0.6);
+$indicator-glow-active: rgba(59, 130, 246, 0.8);
+
+// 공통 아이템 구분선
+$item-divider-light: rgba(255, 255, 255, 0.05);
+
+// 공통 오버레이
+$overlay-dark: rgba(0, 0, 0, 0.6);
+
+// 공통 언어 선택기 색상
+$language-selector-bg: rgba(255, 255, 255, 0.05);
+
+// 공통 코드/로그 색상
+$code-bg-dark: #1f2937;
+$code-text-light: #f9fafb;
+$code-border-gray: #374151;
+$code-divider-gray: rgba(55, 65, 81, 0.5);
+
+// 공통 스크롤바 회색 계열
+$scrollbar-track-gray: #374151;
+$scrollbar-thumb-gray: #6b7280;
+$scrollbar-thumb-gray-hover: #9ca3af;
+
+// 공통 노트/보조 텍스트 색상
+$note-text-gray: #6b7280;
+$heading-text-gray: #374151;
+
+// 공통 폼 배경색
+$form-bg-light-start: #f8fafc;
+$form-bg-light-end: #f1f5f9;
+$form-border-light: #e2e8f0;
+
+// 공통 메인 배경
+$main-bg-light: #f8f8f8;
+
 /**
   Document Module color (demo-grid, demo-item, gradient buttons, event-log, demo-form)
 */
-// Demo 기본 색상
-$demo-heading-color: #374151;
-$demo-note-color: #6b7280;
-$demo-comparison-title-color: #6b7280;
+// Demo 기본 색상 (글로벌 변수 사용)
+$demo-heading-color: $heading-text-gray;
+$demo-note-color: $note-text-gray;
+$demo-comparison-title-color: $note-text-gray;
 
 // 그라데이션 버튼 색상
 $gradient-btn-default-start: #667eea;
@@ -106,26 +173,26 @@ $gradient-btn-submit-hover-start: #3d93e5;
 $gradient-btn-submit-hover-end: #00d9e5;
 $gradient-btn-submit-hover-shadow: rgba(79, 172, 254, 0.3);
 
-// 이벤트 로그 색상
-$event-log-bg: #1f2937;
-$event-log-text: #f9fafb;
-$event-log-border: #374151;
-$event-log-divider: rgba(55, 65, 81, 0.5);
+// 이벤트 로그 색상 (글로벌 변수 사용)
+$event-log-bg: $code-bg-dark;
+$event-log-text: $code-text-light;
+$event-log-border: $code-border-gray;
+$event-log-divider: $code-divider-gray;
 $event-log-reset-text: #fbbf24;
 $event-log-deselect-text: #f87171;
-$event-log-scrollbar-track: #374151;
-$event-log-scrollbar-thumb: #6b7280;
-$event-log-scrollbar-thumb-hover: #9ca3af;
+$event-log-scrollbar-track: $scrollbar-track-gray;
+$event-log-scrollbar-thumb: $scrollbar-thumb-gray;
+$event-log-scrollbar-thumb-hover: $scrollbar-thumb-gray-hover;
 
-// 데모 폼 색상
-$demo-form-bg-start: #f8fafc;
-$demo-form-bg-end: #f1f5f9;
-$demo-form-border: #e2e8f0;
+// 데모 폼 색상 (글로벌 변수 사용)
+$demo-form-bg-start: $form-bg-light-start;
+$demo-form-bg-end: $form-bg-light-end;
+$demo-form-border: $form-border-light;
 $demo-form-shadow: rgba(0, 0, 0, 0.05);
-$demo-form-label-color: #374151;
-$demo-form-output-bg: #1f2937;
-$demo-form-output-text: #f9fafb;
-$demo-form-output-border: #374151;
-$demo-form-output-scrollbar-track: #374151;
-$demo-form-output-scrollbar-thumb: #6b7280;
-$demo-form-output-scrollbar-thumb-hover: #9ca3af;
+$demo-form-label-color: $heading-text-gray;
+$demo-form-output-bg: $code-bg-dark;
+$demo-form-output-text: $code-text-light;
+$demo-form-output-border: $code-border-gray;
+$demo-form-output-scrollbar-track: $scrollbar-track-gray;
+$demo-form-output-scrollbar-thumb: $scrollbar-thumb-gray;
+$demo-form-output-scrollbar-thumb-hover: $scrollbar-thumb-gray-hover; 

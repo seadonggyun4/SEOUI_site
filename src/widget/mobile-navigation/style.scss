@@ -1,6 +1,5 @@
 @use '@/styles/constants/colors' as colors;
 @use '@/styles/constants/breakpoint' as breakpoint;
-@use './style-color' as nav-colors;
 
 .mobile-nav {
   position: fixed;
@@ -34,7 +33,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: nav-colors.$overlay-bg;
+    background: colors.$overlay-dark;
     opacity: 0;
     transition: opacity 0.3s ease;
     backdrop-filter: blur(4px);
@@ -47,9 +46,9 @@
     width: 85%;
     max-width: 35rem;
     height: 100%;
-    background: linear-gradient(145deg, nav-colors.$panel-bg-start 0%, nav-colors.$panel-bg-end 100%);
-    border-left: 1px solid nav-colors.$panel-border;
-    box-shadow: -5px 0 25px nav-colors.$panel-shadow;
+    background: linear-gradient(145deg, colors.$dark-panel-bg-start 0%, colors.$dark-panel-bg-end 100%);
+    border-left: 1px solid colors.$dark-panel-border;
+    box-shadow: -5px 0 25px colors.$dark-panel-shadow;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
@@ -62,8 +61,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 1.5rem 2rem;
-    background: linear-gradient(135deg, nav-colors.$header-bg-blue 0%, nav-colors.$header-bg-purple 100%);
-    border-bottom: 1px solid nav-colors.$panel-border;
+    background: linear-gradient(135deg, colors.$header-gradient-blue 0%, colors.$header-gradient-purple 100%);
+    border-bottom: 1px solid colors.$dark-panel-border;
     position: relative;
 
     &::before {
@@ -73,7 +72,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at 50% 0%, nav-colors.$header-radial 0%, transparent 70%);
+      background: radial-gradient(circle at 50% 0%, colors.$header-radial-effect 0%, transparent 70%);
       pointer-events: none;
     }
   }
@@ -87,7 +86,7 @@
   &-close {
     background: none;
     border: none;
-    color: nav-colors.$close-white;
+    color: colors.$text-white;
     font-size: 1.5rem;
     padding: 0.5rem;
     cursor: pointer;
@@ -100,7 +99,7 @@
     height: 3rem;
 
     &:hover {
-      background: nav-colors.$close-hover;
+      background: colors.$hover-bg-light;
       transform: scale(1.1);
     }
 
@@ -120,15 +119,15 @@
     }
 
     &::-webkit-scrollbar-track {
-      background: nav-colors.$scrollbar-track;
+      background: colors.$scrollbar-track-dark;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: nav-colors.$scrollbar-thumb;
+      background: colors.$scrollbar-thumb-dark;
       border-radius: 2px;
 
       &:hover {
-        background: nav-colors.$scrollbar-thumb-hover;
+        background: colors.$scrollbar-thumb-dark-hover;
       }
     }
   }
@@ -139,9 +138,9 @@
     &-title {
       font-weight: 600;
       font-size: 1.3rem;
-      color: nav-colors.$title-white;
+      color: colors.$text-white;
       padding: 1rem 2rem 0.5rem;
-      text-shadow: 0 0 15px nav-colors.$title-shadow;
+      text-shadow: 0 0 15px colors.$text-shadow-blue;
     }
 
     &-list {
@@ -152,7 +151,7 @@
   }
 
   &-item {
-    border-bottom: 1px solid nav-colors.$item-border;
+    border-bottom: 1px solid colors.$item-divider-light;
 
     &:last-child {
       border-bottom: none;
@@ -177,14 +176,14 @@
       top: 0;
       bottom: 0;
       width: 0;
-      background: linear-gradient(180deg, colors.$primary-color, nav-colors.$link-gradient-end);
+      background: linear-gradient(180deg, colors.$primary-color, colors.$gradient-purple-end);
       transition: width 0.3s ease;
     }
 
     &:hover,
     &:focus {
-      color: nav-colors.$link-white;
-      background: nav-colors.$link-hover-bg;
+      color: colors.$text-white;
+      background: colors.$hover-bg-light;
       transform: translateX(8px);
 
       &::before {
@@ -198,8 +197,8 @@
     }
 
     &.active {
-      color: nav-colors.$link-white;
-      background: nav-colors.$active-bg;
+      color: colors.$text-white;
+      background: colors.$active-bg-blue;
       
       &::before {
         width: 4px;
