@@ -5,7 +5,8 @@ import {
   useSignal,
   Resource,
   useResource$,
-  $
+  $,
+  useVisibleTask$
 } from '@builder.io/qwik';
 import { useLanguage } from '@/context/LanguageContext';
 import { createTranslations } from '@/utils/translate';
@@ -19,11 +20,7 @@ interface DocSectionProps {
   lang?: string;
   open?: boolean;
   onClick$?: PropFunction<() => void>;
-  // 스트리밍 관련 새 옵션들
-  enableStreaming?: boolean;
-  streamDelay?: number;
-  priority?: 'high' | 'medium' | 'low';
-  // 컴포넌트 로딩 관련 새 옵션들
+  // 컴포넌트 로딩 관련 옵션들
   waitForComponents?: string[]; // 대기할 custom element 이름들
   componentTimeout?: number; // 컴포넌트 로딩 타임아웃 (ms)
 }
@@ -51,14 +48,12 @@ export const DocSection = component$<DocSectionProps>(
     lang = 'ts',
     open = true,
     onClick$,
-    enableStreaming = true,
-    streamDelay,
-    priority = 'medium',
     waitForComponents = [],
     componentTimeout = 10000
   }) => {
     const sectionOpen = useSignal(open);
-    const isComponentsLoaded = useSignal(false);
+    const isVisible = useSignal(false);
+    const shouldLoad = useSignal(false);
     const componentLoadingError = useSignal<string | null>(null);
     
     // 언어 컨텍스트 가져오기
@@ -88,33 +83,47 @@ export const DocSection = component$<DocSectionProps>(
       context.selectedLanguage.value
     );
 
-    // Description을 스트리밍으로 로드
+    // Intersection Observer 설정
+    useVisibleTask$(() => {
+      const element = document.querySelector(`[data-section="${title}"]`);
+      if (!element) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              isVisible.value = true;
+              // 섹션이 열려있을 때만 로딩 시작
+              if (sectionOpen.value) {
+                shouldLoad.value = true;
+              }
+            }
+          });
+        },
+        {
+          threshold: 0.1, // 10%가 보이면 트리거
+          rootMargin: '50px' // 50px 먼저 트리거
+        }
+      );
+
+      observer.observe(element);
+
+      return () => {
+        observer.disconnect();
+      };
+    });
+
+    // Description을 observer 기반으로 로드
     const descriptionResource = useResource$<string>(async ({ track, cleanup }) => {
+      track(() => shouldLoad.value);
       track(() => sectionOpen.value);
 
-      if (!description || !sectionOpen.value) return '';
+      if (!description || !shouldLoad.value || !sectionOpen.value) return '';
 
       const controller = new AbortController();
       cleanup(() => controller.abort());
 
       try {
-        if (enableStreaming) {
-          const delay = streamDelay !== undefined ? streamDelay :
-                      priority === 'high' ? 0 :
-                      priority === 'medium' ? 300 :
-                      priority === 'low' ? 800 : 300;
-
-          await new Promise((resolve, reject) => {
-            const timeout = setTimeout(resolve, delay);
-            cleanup(() => clearTimeout(timeout));
-
-            controller.signal.addEventListener('abort', () => {
-              clearTimeout(timeout);
-              reject(new DOMException('Operation aborted', 'AbortError'));
-            });
-          });
-        }
-
         if (controller.signal.aborted) {
           throw new DOMException('Operation aborted', 'AbortError');
         }
@@ -130,33 +139,17 @@ export const DocSection = component$<DocSectionProps>(
       }
     });
 
-    // Code highlighting을 스트리밍으로 로드
+    // Code highlighting을 observer 기반으로 로드
     const codeResource = useResource$<string>(async ({ track, cleanup }) => {
+      track(() => shouldLoad.value);
       track(() => sectionOpen.value);
 
-      if (!code || !sectionOpen.value) return '';
+      if (!code || !shouldLoad.value || !sectionOpen.value) return '';
 
       const controller = new AbortController();
       cleanup(() => controller.abort());
 
       try {
-        if (enableStreaming) {
-          const delay = streamDelay !== undefined ? streamDelay + 200 :
-                      priority === 'high' ? 200 :
-                      priority === 'medium' ? 500 :
-                      priority === 'low' ? 1000 : 500;
-
-          await new Promise((resolve, reject) => {
-            const timeout = setTimeout(resolve, delay);
-            cleanup(() => clearTimeout(timeout));
-
-            controller.signal.addEventListener('abort', () => {
-              clearTimeout(timeout);
-              reject(new DOMException('Operation aborted', 'AbortError'));
-            });
-          });
-        }
-
         if (controller.signal.aborted) {
           throw new DOMException('Operation aborted', 'AbortError');
         }
@@ -181,22 +174,14 @@ export const DocSection = component$<DocSectionProps>(
 
     // 컴포넌트 로딩 상태를 실제로 추적하는 Resource
     const componentResource = useResource$<boolean>(async ({ track, cleanup }) => {
+      track(() => shouldLoad.value);
       track(() => sectionOpen.value);
       track(() => waitForComponents.length);
 
-      if (!sectionOpen.value) return false;
+      if (!shouldLoad.value || !sectionOpen.value) return false;
 
       // 대기할 컴포넌트가 없으면 즉시 로딩 완료
       if (waitForComponents.length === 0) {
-        if (!enableStreaming) return true;
-
-        // 기본 지연 시간만 적용
-        const delay = streamDelay !== undefined ? streamDelay + 100 :
-                    priority === 'high' ? 100 :
-                    priority === 'medium' ? 400 :
-                    priority === 'low' ? 900 : 400;
-
-        await new Promise(resolve => setTimeout(resolve, delay));
         return true;
       }
 
@@ -283,8 +268,8 @@ export const DocSection = component$<DocSectionProps>(
     const retryComponentLoading = $(() => {
       componentLoadingError.value = null;
       // Resource 재시도를 위해 섹션을 닫았다가 다시 열기
-      sectionOpen.value = false;
-      setTimeout(() => sectionOpen.value = true, 100);
+      shouldLoad.value = false;
+      setTimeout(() => shouldLoad.value = true, 100);
     });
 
     // 코드 복사 핸들러
@@ -307,6 +292,12 @@ export const DocSection = component$<DocSectionProps>(
     // 섹션 토글 핸들러
     const handleToggle = $(() => {
       sectionOpen.value = !sectionOpen.value;
+      
+      // 섹션이 열리고 이미 visible 상태라면 로딩 시작
+      if (sectionOpen.value && isVisible.value) {
+        shouldLoad.value = true;
+      }
+      
       if (onClick$) {
         onClick$();
       }
@@ -314,8 +305,9 @@ export const DocSection = component$<DocSectionProps>(
 
     return (
       <details
-        class={`docs ${priority}-priority ${enableStreaming ? 'streaming-enabled' : ''}`}
+        class="docs observer-based"
         open={sectionOpen.value}
+        data-section={title}
       >
         <summary onClick$={handleToggle}>
           {title}
@@ -326,16 +318,11 @@ export const DocSection = component$<DocSectionProps>(
                 <i class="fas fa-puzzle-piece"></i>
               </span>
             )}
-            {enableStreaming && (
-              <span class="streaming-indicator">
-                <i class="fas fa-stream"></i>
-              </span>
-            )}
           </div>
         </summary>
 
         <article class="docs-content">
-          {/* Description 영역 - 스트리밍 */}
+          {/* Description 영역 - Observer 기반 */}
           {description && (
             <div class="doc-description-wrapper">
               <Resource
@@ -356,8 +343,8 @@ export const DocSection = component$<DocSectionProps>(
                       <button
                         class="retry-button"
                         onClick$={() => {
-                          sectionOpen.value = false;
-                          setTimeout(() => sectionOpen.value = true, 100);
+                          shouldLoad.value = false;
+                          setTimeout(() => shouldLoad.value = true, 100);
                         }}
                       >
                         <i class="fas fa-redo"></i> {translations.descriptionRetry}
@@ -375,7 +362,7 @@ export const DocSection = component$<DocSectionProps>(
             </div>
           )}
 
-          {/* Components 영역 - 실제 컴포넌트 로딩 상태 기반 스트리밍 */}
+          {/* Components 영역 - Observer 기반 컴포넌트 로딩 */}
           <div class="doc-components-wrapper">
             <Resource
               value={componentResource}
@@ -423,8 +410,8 @@ export const DocSection = component$<DocSectionProps>(
                       <button
                         class="skip-button"
                         onClick$={() => {
-                          isComponentsLoaded.value = true;
                           componentLoadingError.value = null;
+                          shouldLoad.value = true;
                         }}
                       >
                         <i class="fas fa-forward"></i> {translations.componentSkip}
@@ -441,7 +428,7 @@ export const DocSection = component$<DocSectionProps>(
             />
           </div>
 
-          {/* Code 영역 - 스트리밍 */}
+          {/* Code 영역 - Observer 기반 */}
           {code && (
             <div class="doc-code-wrapper">
               <Resource
@@ -475,8 +462,8 @@ export const DocSection = component$<DocSectionProps>(
                         <button
                           class="retry-button"
                           onClick$={() => {
-                            sectionOpen.value = false;
-                            setTimeout(() => sectionOpen.value = true, 100);
+                            shouldLoad.value = false;
+                            setTimeout(() => shouldLoad.value = true, 100);
                           }}
                         >
                           <i class="fas fa-redo"></i> {translations.codeRetry}
