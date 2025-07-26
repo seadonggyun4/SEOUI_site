@@ -1,4 +1,4 @@
-import formatter from '@/components/seo-grid-table/formatter.js'
+import formatter from './formatter'
 
 /**
  * GridDataTable

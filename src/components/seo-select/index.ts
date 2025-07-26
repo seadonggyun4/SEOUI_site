@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import { InteractiveVirtualSelect } from '@/components/seo-select/InteractiveVirtualSelect';
+import { InteractiveVirtualSelect } from './InteractiveVirtualSelect';
 import './style.scss'
 
 interface VirtualSelectOption {
@@ -341,9 +341,8 @@ export class AgSelect extends LitElement {
             this._virtual?.setActiveIndex(0);
             // 가상 스크롤의 내부 상태도 첫 번째 옵션으로 설정
             if (this._virtual) {
-              this._virtual.activeIndex = 0;
-              this._virtual.focusedIndex = 0;
-              this._virtual._applyHighlight();
+              this._virtual.setActiveAndFocusedIndex(0);
+              this._virtual.applyHighlight();
             }
           });
         }

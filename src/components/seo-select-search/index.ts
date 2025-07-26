@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { getChosungAll } from '@/components/seo-select-search/search';
+import { getChosungAll } from './search';
 import { AgSelect } from '../seo-select';
 
 interface OptionItem {
@@ -213,12 +213,17 @@ export class AgSelectSearch extends AgSelect {
     this._searchText = input.value;
   };
 
+  // null을 undefined로 변환하는 헬퍼 함수
+  private getCurrentValue(): string | undefined {
+    return this.value ?? undefined;
+  }
+
   private _applyFilteredOptions(): void {
     if (!this._virtual) return;
 
     const rawInput = this._searchText.toLowerCase().replace(/\s+/g, '');
     if (!rawInput) {
-      this._virtual.setData(this.getAllOptionData(), this.multiple ? null : this.value);
+      this._virtual.setData(this.getAllOptionData(), this.multiple ? undefined : this.getCurrentValue());
       this._noMatchVisible = false;
       return;
     }
@@ -236,12 +241,12 @@ export class AgSelectSearch extends AgSelect {
     if (filtered.length === 0) {
       this._virtual.setData(
         [{ value: 'no_match', label: '데이터가 없습니다.', disabled: true }],
-        this.multiple ? null : this.value,
+        this.multiple ? undefined : this.getCurrentValue(),
       );
       return;
     }
 
-    this._virtual.setData(filtered, this.multiple ? null : this.value);
+    this._virtual.setData(filtered, this.multiple ? undefined : this.getCurrentValue());
   }
 
   // Renamed to avoid conflict with parent class method
@@ -328,9 +333,8 @@ export class AgSelectSearch extends AgSelect {
             this._virtual?.setActiveIndex(0);
             // 가상 스크롤의 내부 상태도 첫 번째 옵션으로 설정
             if (this._virtual) {
-              this._virtual.activeIndex = 0;
-              this._virtual.focusedIndex = 0;
-              this._virtual._applyHighlight();
+              this._virtual.setActiveAndFocusedIndex(0);
+              this._virtual.applyHighlight();
             }
           });
         }

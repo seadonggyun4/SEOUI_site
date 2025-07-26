@@ -1,7 +1,48 @@
-export class InteractiveVirtualSelect {
-  static activeInstance = null;
+interface OptionData {
+  value: string;
+  label: string;
+  [key: string]: any;
+}
 
-  constructor(container, data, options = {}) {
+interface InteractiveVirtualSelectOptions {
+  rowHeight?: number;
+  overscan?: number;
+  renderOption?: ((element: HTMLElement, option: OptionData) => void) | null;
+  onClick?: ((option: OptionData, index: number, event: Event) => void) | null;
+  onEscape?: (() => void) | null;
+  isMultiple?: boolean;
+}
+
+export class InteractiveVirtualSelect {
+  static activeInstance: InteractiveVirtualSelect | null = null;
+
+  private container: HTMLElement;
+  private data: OptionData[];
+  private rowHeight: number;
+  private overscan: number;
+  private renderOption: ((element: HTMLElement, option: OptionData) => void) | null;
+  private onClick: ((option: OptionData, index: number, event: Event) => void) | null;
+  private onEscape: (() => void) | null;
+  private isMultiple: boolean;
+
+  private total: number;
+  private focusedIndex: number;
+  private activeIndex: number;
+  private _prevStart: number;
+  private _prevEnd: number;
+  private pool: HTMLElement[];
+
+  private wrapper!: HTMLElement;
+  private topPad!: HTMLElement;
+  private botPad!: HTMLElement;
+  private visibleCount!: number;
+  private poolSize!: number;
+
+  private _ticking: boolean = false;
+  private _prevStartIdx: number = -1;
+  private _onScroll!: () => void;
+
+  constructor(container: HTMLElement, data: OptionData[], options: InteractiveVirtualSelectOptions = {}) {
     this.container = container;
     this.data = data;
     this.rowHeight = options.rowHeight || 36;
@@ -9,7 +50,7 @@ export class InteractiveVirtualSelect {
     this.renderOption = options.renderOption || null;
     this.onClick = options.onClick || null;
     this.onEscape = options.onEscape || null;
-    this.isMultiple = options.isMultiple || false; // multi 모드 여부 추가
+    this.isMultiple = options.isMultiple || false;
 
     this.total = data.length;
     this.focusedIndex = -1;
@@ -36,33 +77,37 @@ export class InteractiveVirtualSelect {
   }
 
   // 활성화 해제: 모든 하이라이트 클래스 제거
-  deactivate() {
+  deactivate(): void {
     this.pool.forEach(this._resetClass);
   }
 
   // 주어진 인덱스로 스크롤 이동 및 렌더링
-  renderToIndex(index) {
+  renderToIndex(index: number): void {
     const clamped = Math.max(0, Math.min(index, this.total - 1));
     const halfVisible = Math.floor(this.visibleCount / 2);
     const startIdx = Math.max(0, clamped - halfVisible);
     const scrollTop = startIdx * this.rowHeight;
 
     // 너무 자주 조정되지 않도록 오차 허용
-    if (Math.abs(this.container.scrollTop - scrollTop) > 1) this.container.scrollTop = scrollTop;
+    if (Math.abs(this.container.scrollTop - scrollTop) > 1) {
+      this.container.scrollTop = scrollTop;
+    }
 
     this.render();
   }
 
   // wrapper 엘리먼트를 보장
-  _ensureWrapper() {
-    this.wrapper = this.container.querySelector('.option-wrapper') || document.createElement('div');
+  private _ensureWrapper(): void {
+    this.wrapper = this.container.querySelector('.option-wrapper') as HTMLElement || document.createElement('div');
     this.wrapper.className = 'option-wrapper';
-    if (!this.wrapper.parentElement) this.container.appendChild(this.wrapper);
+    if (!this.wrapper.parentElement) {
+      this.container.appendChild(this.wrapper);
+    }
     this.wrapper.innerHTML = '';
   }
 
   // 가상 리스트용 padding 영역 생성
-  _buildDOM() {
+  private _buildDOM(): void {
     this.topPad = document.createElement('div');
     this.topPad.className = 'virtual-placeholder top';
     this.topPad.appendChild(document.createElement('div'));
@@ -75,7 +120,7 @@ export class InteractiveVirtualSelect {
   }
 
   // 컨테이너 및 풀 크기 초기화
-  _initializeContainer(extraHeight = 0) {
+  private _initializeContainer(extraHeight: number = 0): void {
     const maxHeight = 360;
     const computedHeight = this.total * this.rowHeight;
     const finalHeight = this.total > 10 ? maxHeight : computedHeight;
@@ -88,7 +133,7 @@ export class InteractiveVirtualSelect {
   }
 
   // option 요소 풀 구성
-  _buildPool() {
+  private _buildPool(): void {
     this.pool.forEach(el => el.remove());
     this.pool = [];
     const insertAfter = this.topPad.nextSibling;
@@ -101,7 +146,7 @@ export class InteractiveVirtualSelect {
   }
 
   // 스크롤 이벤트 바인딩
-  _bindScroll() {
+  private _bindScroll(): void {
     this._ticking = false;
     this._prevStartIdx = -1;
 
@@ -127,12 +172,12 @@ export class InteractiveVirtualSelect {
   }
 
   // 현재 표시 상태 여부 확인
-  _isVisible() {
+  private _isVisible(): boolean {
     return this.container.offsetParent !== null && this.container.offsetHeight > 0;
   }
 
   // 가상 리스트 렌더링
-  render() {
+  render(): void {
     const scrollTop = this.container.scrollTop;
     const startIdx = Math.max(0, Math.floor(scrollTop / this.rowHeight) - this.overscan);
     const endIdx = Math.min(this.total, startIdx + this.poolSize);
@@ -146,7 +191,9 @@ export class InteractiveVirtualSelect {
 
       requestAnimationFrame(() => {
         const delta = Math.abs(this.container.scrollTop - scrollTop);
-        if (delta > 1) this.container.scrollTop = scrollTop;
+        if (delta > 1) {
+          this.container.scrollTop = scrollTop;
+        }
         this._applyHighlight();
       });
     }
@@ -154,7 +201,7 @@ export class InteractiveVirtualSelect {
   }
 
   // index로 활성화 설정
-  setActiveIndex(index) {
+  setActiveIndex(index: number): void {
     if (index < 0 || index >= this.total) return;
 
     // focusedIndex는 모든 모드에서 설정
@@ -172,18 +219,18 @@ export class InteractiveVirtualSelect {
   }
 
   // padding 영역 설정
-  _setPlaceholders(startIdx, endIdx) {
+  private _setPlaceholders(startIdx: number, endIdx: number): void {
     const topPad = startIdx * this.rowHeight;
     const botPad = (this.total - endIdx) * this.rowHeight;
     this.container.style.setProperty('--top-placeholder', `${topPad}px`);
     this.container.style.setProperty('--bottom-placeholder', `${botPad}px`);
-    this.topPad.firstElementChild.style.height = `${topPad}px`;
-    this.botPad.firstElementChild.style.height = `${botPad}px`;
+    (this.topPad.firstElementChild as HTMLElement).style.height = `${topPad}px`;
+    (this.botPad.firstElementChild as HTMLElement).style.height = `${botPad}px`;
     this.wrapper.style.height = `${this.total * this.rowHeight}px`;
   }
 
   // 옵션 풀 재사용하여 렌더링
-  _renderPool(startIdx) {
+  private _renderPool(startIdx: number): void {
     for (let i = 0; i < this.pool.length; i++) {
       const el = this.pool[i];
       const dataIdx = startIdx + i;
@@ -197,9 +244,9 @@ export class InteractiveVirtualSelect {
       const option = this.data[dataIdx];
       el.style.display = '';
       el.dataset.index = String(dataIdx);
-      if (el._value !== option.value) {
+      if ((el as any)._value !== option.value) {
         el.textContent = option.label;
-        el._value = option.value;
+        (el as any)._value = option.value;
       }
       this._handleDisabledOption(el, option);
       this._resetClass(el);
@@ -217,7 +264,7 @@ export class InteractiveVirtualSelect {
   }
 
   // 강조 클래스 적용 - multi 모드일 때는 active 클래스 제외
-  _applyHighlight() {
+  private _applyHighlight(): void {
     for (const el of this.pool) {
       const idx = parseInt(el.dataset.index || '-1', 10);
       if (!Number.isFinite(idx)) continue;
@@ -232,20 +279,22 @@ export class InteractiveVirtualSelect {
   }
 
   // 비활성 옵션 처리
-  _handleDisabledOption(el, opt) {
+  private _handleDisabledOption(el: HTMLElement, opt: OptionData): void {
     const isDisabled = opt?.value === 'no_match';
     el.classList.toggle('disabled', isDisabled);
     el.toggleAttribute('aria-disabled', isDisabled);
-    if (isDisabled) this.container.style.height = '80px';
+    if (isDisabled) {
+      this.container.style.height = '80px';
+    }
   }
 
   // 강조 클래스 초기화
-  _resetClass(el) {
+  private _resetClass(el: HTMLElement): void {
     el.classList.remove('active', 'focused');
   }
 
   // 옵션 엘리먼트 생성
-  _createOptionElement() {
+  private _createOptionElement(): HTMLElement {
     const el = document.createElement('option');
     el.className = 'option';
     el.style.height = 'var(--row-height)';
@@ -261,7 +310,7 @@ export class InteractiveVirtualSelect {
   }
 
   // 클릭 이벤트 처리
-  _handleClick(e, el) {
+  private _handleClick(e: Event, el: HTMLElement): void {
     const index = parseInt(el.dataset.index || '-1', 10);
     const option = this.data[index];
     if (option?.value === 'no_match') return;
@@ -277,7 +326,7 @@ export class InteractiveVirtualSelect {
   }
 
   // 키보드 입력 처리
-  handleKeydown = (e) => {
+  handleKeydown = (e: KeyboardEvent): void => {
     switch (e.key) {
       case 'ArrowDown':
       case 'Tab': {
@@ -320,35 +369,35 @@ export class InteractiveVirtualSelect {
   };
 
   // 포커스 인덱스 설정
-  setFocusedIndex(index) {
+  setFocusedIndex(index: number): void {
     this.focusedIndex = Math.max(0, Math.min(index, this.total - 1));
     this.render();
     this._scrollIntoView(this.focusedIndex);
   }
 
   // 포커스된 아이템이 보이도록 스크롤
-  _scrollIntoView(index) {
-    const offset = this.total > 10 ? 9 : this.total - 1; // 몇 번째 줄에 고정할지 (0: top, 1: 한 줄 아래)
+  private _scrollIntoView(index: number): void {
+    const offset = this.total > 10 ? 9 : this.total - 1;
     const top = (index - offset) * this.rowHeight;
     const minScroll = Math.max(0, top);
     this.container.scrollTop = minScroll;
   }
 
   // 현재 포커스된 옵션 반환
-  getFocusedOption() {
+  getFocusedOption(): OptionData | null {
     return this.focusedIndex >= 0 && this.focusedIndex < this.data.length
       ? this.data[this.focusedIndex]
       : null;
   }
 
   // 데이터 갱신 및 렌더링
-  setData(newData, activeValue) {
+  setData(newData: OptionData[], activeValue?: string): void {
     this.data = newData;
     this.total = newData.length;
     this._prevStart = -1;
     this._prevEnd = -1;
 
-    const matchedIndex = activeValue != (null | undefined)
+    const matchedIndex = activeValue != null && activeValue !== undefined
       ? this.data.findIndex(opt => opt.value === activeValue)
       : -1;
 
@@ -367,15 +416,31 @@ export class InteractiveVirtualSelect {
   }
 
   // 파괴 및 이벤트 제거
-  destroy() {
+  destroy(): void {
     this.container.removeEventListener('scroll', this._onScroll);
     this.pool.forEach(el => el.remove());
-    this.wrapper.style.height = 0;
+    this.wrapper.style.height = '0';
     this.topPad?.remove();
     this.botPad?.remove();
     this.pool = [];
     if (InteractiveVirtualSelect.activeInstance === this) {
       InteractiveVirtualSelect.activeInstance = null;
     }
+  }
+
+  // 외부에서 하이라이트를 적용할 수 있는 public 메서드
+  public applyHighlight(): void {
+    this._applyHighlight();
+  }
+
+  // 외부에서 activeIndex와 focusedIndex를 함께 설정하는 헬퍼 메서드
+  public setActiveAndFocusedIndex(index: number): void {
+    if (index < 0 || index >= this.total) return;
+    
+    this.focusedIndex = index;
+    if (!this.isMultiple) {
+      this.activeIndex = index;
+    }
+    this._applyHighlight();
   }
 }

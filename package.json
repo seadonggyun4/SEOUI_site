@@ -32,6 +32,7 @@
     "@builder.io/qwik-city": "^1.15.0",
     "@eslint/js": "latest",
     "@netlify/edge-functions": "^2.0.0",
+    "@types/file-saver": "^2.0.7",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^20.14.11",
     "eslint": "9.25.1",
