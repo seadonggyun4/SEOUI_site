@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { getChosungAll } from './search';
+import { isMultilingualMatch } from './search';
 import { AgSelect } from '../seo-select';
 
 interface OptionItem {
@@ -252,11 +252,12 @@ export class AgSelectSearch extends AgSelect {
     return this.value ?? undefined;
   }
 
+  // 향상된 다국어 검색 필터 적용
   private _applyFilteredOptions(): void {
     if (!this._virtual) return;
 
     const searchTexts = this.getSearchLocalizedText();
-    const rawInput = this._searchText.toLowerCase().replace(/\s+/g, '');
+    const rawInput = this._searchText.trim();
     
     if (!rawInput) {
       this._virtual.setData(this.getAllOptionData(), this.multiple ? undefined : this.getCurrentValue());
@@ -264,14 +265,12 @@ export class AgSelectSearch extends AgSelect {
       return;
     }
 
-    const searchChosung = getChosungAll(rawInput);
-    const searchRegex = new RegExp(searchChosung.split('').join('.*'));
-
     const allOptions: OptionItem[] = this.getAllOptionData();
+    
+    // 향상된 다국어 검색 적용
     const filtered = allOptions.filter(opt => {
-      const label = (opt.label ?? '').toString().toLowerCase().replace(/\s+/g, '');
-      const labelChosung = getChosungAll(label);
-      return searchRegex.test(labelChosung);
+      const label = (opt.label ?? '').toString();
+      return isMultilingualMatch(rawInput, label);
     });
 
     if (filtered.length === 0) {
@@ -402,6 +401,11 @@ export class AgSelectSearch extends AgSelect {
   // 검색 관련 다국어 텍스트를 반환하는 정적 메서드
   static getSearchLocalizedTexts(): Record<SupportedLanguage, SearchLocalizedTexts> {
     return SEARCH_LOCALIZED_TEXTS;
+  }
+
+  // 디버깅을 위한 검색 테스트 메서드 (개발용)
+  public testMultilingualSearch(searchText: string, targetText: string): boolean {
+    return isMultilingualMatch(searchText, targetText);
   }
 }
 
