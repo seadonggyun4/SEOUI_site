@@ -1,51 +1,20 @@
-import { component$, useComputed$ } from '@builder.io/qwik';
-import { Link, useLocation } from '@builder.io/qwik-city';
+import { component$ } from '@builder.io/qwik';
+import { Link } from '@builder.io/qwik-city';
 import { TopBarMenu } from '@/config/menu';
 import { useLanguage } from '@/context/LanguageContext';
 import { useDarkMode } from '@/context/DarkModeContext';
+import { useMenuMatcher } from '@/hooks/useMenuMatcher';
 import './style.scss';
 
 export const TopBar = component$(() => {
-  const loc = useLocation();
   const context = useLanguage();
   const { isDark, toggleDarkMode } = useDarkMode();
+  const { checkMenuActive } = useMenuMatcher();
    
-  // useComputed$를 사용하여 반응형 계산 보장
-  const currentLanguage = useComputed$(() => {
-    return context.languages.find(
-      lang => lang.code === context.selectedLanguage.value
-    ) || context.languages[0];
-  });
-
-  // 안전한 URL 접근을 위한 computed
-  const currentPathname = useComputed$(() => {
-    // SSR에서 안전하게 처리
-    if (!loc || !loc.url) return '';
-    return loc.url.pathname || '';
-  });
-
-  // 현재 URL의 첫 번째 세그먼트 추출 (안전한 버전)
-  const getCurrentFirstSegment = useComputed$(() => {
-    const pathname = currentPathname.value;
-    if (!pathname) return '';
-    
-    const segments = pathname.split('/').filter(segment => segment !== '');
-    return segments[0] || '';
-  });
-
-  // TopBarMenu 링크의 첫 번째 세그먼트 추출
-  const getLinkFirstSegment = (link: string) => {
-    const segments = link.split('/').filter(segment => segment !== '');
-    return segments[0] || '';
-  };
-
-  // active 상태 확인 함수 (안전한 버전)
-  const isActive = (menuLink: string) => {
-    const currentFirstSegment = getCurrentFirstSegment.value;
-    const linkFirstSegment = getLinkFirstSegment(menuLink);
-         
-    return currentFirstSegment === linkFirstSegment && currentFirstSegment !== '';
-  };
+  // 현재 언어 정보 가져오기
+  const currentLanguage = context.languages.find(
+    lang => lang.code === context.selectedLanguage.value
+  ) || context.languages[0];
 
   return (
     <header class="topbar">
@@ -62,7 +31,7 @@ export const TopBar = component$(() => {
               <li key={item.link} class="topbar-menu-item">
                 <Link
                   href={item.link}
-                  class={`topbar-link ${isActive(item.link) ? 'active' : ''}`}
+                  class={`topbar-link ${checkMenuActive(item.link) ? 'active' : ''}`}
                 >
                   <span class="topbar-link-icon">
                     <i class={item.icon}></i>
@@ -105,8 +74,8 @@ export const TopBar = component$(() => {
               class={`topbar-language-trigger ${context.isDropdownOpen.value ? 'open' : ''}`}
               onClick$={context.toggleDropdown}
             >
-              <span class="topbar-language-flag">{currentLanguage.value.flag}</span>
-              <span class="topbar-language-label">{currentLanguage.value.label}</span>
+              <span class="topbar-language-flag">{currentLanguage.flag}</span>
+              <span class="topbar-language-label">{currentLanguage.label}</span>
               <span class="topbar-language-arrow">
                 <i class="fas fa-chevron-down"></i>
               </span>
