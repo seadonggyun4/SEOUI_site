@@ -1,0 +1,1 @@
+export const PAGE_LOAD_TIME = 3000

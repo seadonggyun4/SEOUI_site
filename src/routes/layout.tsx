@@ -2,7 +2,6 @@ import { component$, Slot } from '@builder.io/qwik';
 
 import { Navigation } from '@/widget/navigation';
 import { NavToggleButton } from '@/widget/nav-toggle-button';
-import { PageLoader } from '@/widget/page-loader';
 import { MobileNavigation } from '@/widget/mobile-navigation';
 import { TopBar } from '@/widget/top-bar';
 
@@ -25,7 +24,6 @@ export default component$(() => {
       <MobileNavigation />
       <Navigation />
       <NavToggleButton />
-      <PageLoader />
     </LanguageProvider>
   );
 });

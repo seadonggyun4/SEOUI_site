@@ -79,7 +79,7 @@
         }
 
         &:hover span {
-          background: lighten(colors.$primary-color, 10%);
+          opacity: 0.5;
           animation-duration: 1s;
         }
       }

@@ -1,4 +1,5 @@
 import { component$, useVisibleTask$, useSignal } from '@builder.io/qwik';
+import { PAGE_LOAD_TIME } from '@/config/common';
 import { useLanguage } from '@/context/LanguageContext';
 import { translate } from '@/utils/translate';
 import { pageLoaderTranslations } from './translations';
@@ -32,7 +33,7 @@ export const PageLoader = component$(() => {
       };
       
       pageLoader.addEventListener('animationend', handleAnimationEnd);
-    }, 3000);
+    }, PAGE_LOAD_TIME);
   });
 
   if (!showLoader.value) return null;
