@@ -196,6 +196,7 @@
         border-radius: 6px;
         min-width: 120px;
         position: relative;
+        overflow: hidden;
 
         .fas {
           color: doc-colors.$component-success;
