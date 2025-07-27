@@ -32,6 +32,8 @@ export const TopBarMenu: TopBarMenuItem[] = [
   },
 ];
 
+export const FirstPage = TopBarMenu[0].link
+
 export const selectMenu = [
   {
     title: 'UseCase',
