@@ -14,6 +14,32 @@ interface VirtualSelectOption {
 }
 
 type SelectTheme = 'basic' | 'float';
+type SupportedLanguage = 'en' | 'ko' | 'ja' | 'zh';
+
+// 검색 관련 다국어 텍스트 정의
+interface SearchLocalizedTexts {
+  searchPlaceholder: string;
+  noMatchText: string;
+}
+
+const SEARCH_LOCALIZED_TEXTS: Record<SupportedLanguage, SearchLocalizedTexts> = {
+  en: {
+    searchPlaceholder: 'Search...',
+    noMatchText: 'No matching data found.',
+  },
+  ko: {
+    searchPlaceholder: '검색하세요',
+    noMatchText: '데이터가 없습니다.',
+  },
+  ja: {
+    searchPlaceholder: '検索してください',
+    noMatchText: '一致するデータがありません。',
+  },
+  zh: {
+    searchPlaceholder: '请搜索',
+    noMatchText: '未找到匹配数据。',
+  }
+};
 
 export class AgSelectSearch extends AgSelect {
   static get properties() {
@@ -39,9 +65,14 @@ export class AgSelectSearch extends AgSelect {
     this.dark = false; // 기본값은 light 모드
   }
 
+  // 검색 관련 다국어 텍스트를 가져오는 헬퍼 메서드
+  private getSearchLocalizedText(): SearchLocalizedTexts {
+    return SEARCH_LOCALIZED_TEXTS[this.language] || SEARCH_LOCALIZED_TEXTS.en;
+  }
+
   updated(changed: Map<string, unknown>): void {
     super.updated?.(changed);
-    if (changed.has('optionItems') || changed.has('_searchText')) {
+    if (changed.has('optionItems') || changed.has('_searchText') || changed.has('language')) {
       this._applyFilteredOptions();
     }
   }
@@ -57,6 +88,7 @@ export class AgSelectSearch extends AgSelect {
 
   // 검색 기능이 있는 드롭다운 렌더링 - 부모 클래스의 로딩/데이터없음 처리 포함
   private renderSearchDropdown() {
+    const searchTexts = this.getSearchLocalizedText();
     const hasOptions = this.getAllOptionData().length > 0;
     const showNoData = this.multiple && !this._isLoading && !hasOptions;
 
@@ -66,7 +98,7 @@ export class AgSelectSearch extends AgSelect {
           <span class="search-icon" aria-hidden="true">${this.getSearchIcon()}</span>
           <input
             type="text"
-            placeholder="검색하세요"
+            placeholder="${searchTexts.searchPlaceholder}"
             .value=${this._searchText}
             @input=${this._handleSearchInput}
           />
@@ -99,6 +131,7 @@ export class AgSelectSearch extends AgSelect {
   }
 
   private renderMultiSelectSearch() {
+    const texts = this.getLocalizedText(); // 부모 클래스의 다국어 텍스트 사용
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
@@ -115,13 +148,13 @@ export class AgSelectSearch extends AgSelect {
                     type="button"
                     class="tag-remove"
                     @click=${(e: Event) => this.removeTagSearch(e, value)}
-                    title="제거"
+                    title="${texts.removeTag}"
                   >${this.getCloseIcon()}</button>
                 </span>
               `;
             })}
             ${this._selectedValues.length === 0
-              ? html`<span class="placeholder">선택해주세요</span>`
+              ? html`<span class="placeholder">${texts.placeholder}</span>`
               : ''
             }
           </div>
@@ -130,7 +163,7 @@ export class AgSelectSearch extends AgSelect {
                 type="button"
                 class="multi-reset-button"
                 @click=${this.resetToDefaultSearch}
-                title="모두 지우기"
+                title="${texts.clearAll}"
               >${this.getCloseIcon()}</button>`
             : ''
           }
@@ -142,6 +175,7 @@ export class AgSelectSearch extends AgSelect {
   }
 
   private renderSingleSelectSearch() {
+    const texts = this.getLocalizedText(); // 부모 클래스의 다국어 텍스트 사용
     const firstOptionValue = this._options && this._options.length > 0 ? this._options[0].value : null;
     const showResetButton = this.showReset &&
                           this._value !== null &&
@@ -157,7 +191,7 @@ export class AgSelectSearch extends AgSelect {
                 type="button"
                 class="reset-button"
                 @click=${this.resetToDefaultSearch}
-                title="기본값으로 되돌리기"
+                title="${texts.resetToDefault}"
               >${this.getCloseIcon()}</button>`
             : ''
           }
@@ -221,7 +255,9 @@ export class AgSelectSearch extends AgSelect {
   private _applyFilteredOptions(): void {
     if (!this._virtual) return;
 
+    const searchTexts = this.getSearchLocalizedText();
     const rawInput = this._searchText.toLowerCase().replace(/\s+/g, '');
+    
     if (!rawInput) {
       this._virtual.setData(this.getAllOptionData(), this.multiple ? undefined : this.getCurrentValue());
       this._noMatchVisible = false;
@@ -240,7 +276,7 @@ export class AgSelectSearch extends AgSelect {
 
     if (filtered.length === 0) {
       this._virtual.setData(
-        [{ value: 'no_match', label: '데이터가 없습니다.', disabled: true }],
+        [{ value: 'no_match', label: searchTexts.noMatchText, disabled: true }],
         this.multiple ? undefined : this.getCurrentValue(),
       );
       return;
@@ -354,6 +390,18 @@ export class AgSelectSearch extends AgSelect {
     super.closeDropdown();
     this._searchText = '';
     this._noMatchVisible = false;
+  }
+
+  // 부모 클래스의 언어 변경 메서드를 오버라이드하여 검색 관련 UI도 업데이트
+  public override setLanguage(language: SupportedLanguage): void {
+    super.setLanguage(language);
+    // 검색 관련 UI 업데이트를 위해 강제 리렌더링
+    this.requestUpdate();
+  }
+
+  // 검색 관련 다국어 텍스트를 반환하는 정적 메서드
+  static getSearchLocalizedTexts(): Record<SupportedLanguage, SearchLocalizedTexts> {
+    return SEARCH_LOCALIZED_TEXTS;
   }
 }
 

@@ -8,6 +8,57 @@ interface VirtualSelectOption {
 }
 
 type SelectTheme = 'basic' | 'float';
+type SupportedLanguage = 'en' | 'ko' | 'ja' | 'zh';
+
+// 다국어 텍스트 정의
+interface LocalizedTexts {
+  placeholder: string;
+  loadingText: string;
+  noDataText: string;
+  removeTag: string;
+  clearAll: string;
+  resetToDefault: string;
+  required: string;
+}
+
+const LOCALIZED_TEXTS: Record<SupportedLanguage, LocalizedTexts> = {
+  en: {
+    placeholder: 'Please select',
+    loadingText: 'Loading options...',
+    noDataText: 'No data available',
+    removeTag: 'Remove',
+    clearAll: 'Clear all',
+    resetToDefault: 'Reset to default',
+    required: 'This field is required.'
+  },
+  ko: {
+    placeholder: '선택해주세요',
+    loadingText: '옵션 로딩 중...',
+    noDataText: '데이터 없음',
+    removeTag: '제거',
+    clearAll: '모두 지우기',
+    resetToDefault: '기본값으로 되돌리기',
+    required: '필수 항목입니다.'
+  },
+  ja: {
+    placeholder: '選択してください',
+    loadingText: 'オプションを読み込み中...',
+    noDataText: 'データがありません',
+    removeTag: '削除',
+    clearAll: 'すべてクリア',
+    resetToDefault: 'デフォルトに戻す',
+    required: 'この項目は必須です。'
+  },
+  zh: {
+    placeholder: '请选择',
+    loadingText: '正在加载选项...',
+    noDataText: '无数据',
+    removeTag: '移除',
+    clearAll: '清除全部',
+    resetToDefault: '恢复默认',
+    required: '此项为必填项。'
+  }
+};
 
 export class AgSelect extends LitElement {
   static formAssociated = true;
@@ -27,7 +78,8 @@ export class AgSelect extends LitElement {
       _selectedValues: { type: Array, state: true },
       _isLoading: { type: Boolean, state: true },
       theme: { type: String },
-      dark: { type: Boolean }, // 다크 모드 prop 추가
+      dark: { type: Boolean },
+      language: { type: String }, // 언어 prop 추가
     };
   }
 
@@ -40,7 +92,8 @@ export class AgSelect extends LitElement {
   declare showReset: boolean;
   declare multiple: boolean;
   declare theme: SelectTheme;
-  declare dark: boolean; // 다크 모드 속성 추가
+  declare dark: boolean;
+  declare language: SupportedLanguage; // 언어 속성 추가
 
   declare open: boolean;
   declare _labelText: string;
@@ -75,11 +128,17 @@ export class AgSelect extends LitElement {
     this.multiple = false;
     this._selectedValues = [];
     this._isLoading = false;
-    this.theme = 'float'; // 기본값은 float
-    this.dark = false; // 기본값은 light 모드
+    this.theme = 'float';
+    this.dark = false;
+    this.language = 'en'; // 기본값은 영어
     this._handleKeydownBound = (e) => this._virtual?.handleKeydown(e);
     this.tabIndex = 0;
     this._pendingActiveIndex = null;
+  }
+
+  // 현재 언어의 텍스트를 가져오는 헬퍼 메서드
+  public getLocalizedText(): LocalizedTexts {
+    return LOCALIZED_TEXTS[this.language] || LOCALIZED_TEXTS.en;
   }
 
   createRenderRoot() {
@@ -110,7 +169,7 @@ export class AgSelect extends LitElement {
   }
 
   updated(changed: Map<string, unknown>) {
-    if (changed.has('optionItems')) {
+    if (changed.has('optionItems') || changed.has('language')) {
       this.initializeOptionsFromPropsOrSlot();
     }
   }
@@ -140,6 +199,7 @@ export class AgSelect extends LitElement {
   }
 
   protected renderLoadingSpinner() {
+    const texts = this.getLocalizedText();
     return html`
       <div class="loading-container">
         <div class="loading-dots">
@@ -147,15 +207,16 @@ export class AgSelect extends LitElement {
           <div class="dot"></div>
           <div class="dot"></div>
         </div>
-        <span class="loading-text">옵션 로딩 중...</span>
+        <span class="loading-text">${texts.loadingText}</span>
       </div>
     `;
   }
 
   protected renderNoData() {
+    const texts = this.getLocalizedText();
     return html`
       <div class="no-data-container">
-        <span class="no-data-text">데이터 없음</span>
+        <span class="no-data-text">${texts.noDataText}</span>
       </div>
     `;
   }
@@ -191,6 +252,7 @@ export class AgSelect extends LitElement {
   }
 
   protected renderMultiSelect() {
+    const texts = this.getLocalizedText();
     const showResetButton = this.showReset && this._selectedValues.length > 0;
 
     return html`
@@ -207,13 +269,13 @@ export class AgSelect extends LitElement {
                     type="button"
                     class="tag-remove"
                     @click=${(e: Event) => this.removeTag(e, value)}
-                    title="제거"
+                    title="${texts.removeTag}"
                   >${this.getCloseIcon()}</button>
                 </span>
               `;
             })}
             ${this._selectedValues.length === 0
-              ? html`<span class="placeholder">선택해주세요</span>`
+              ? html`<span class="placeholder">${texts.placeholder}</span>`
               : ''
             }
           </div>
@@ -222,7 +284,7 @@ export class AgSelect extends LitElement {
                 type="button"
                 class="multi-reset-button"
                 @click=${this.resetToDefault}
-                title="모두 지우기"
+                title="${texts.clearAll}"
               >${this.getCloseIcon()}</button>`
             : ''
           }
@@ -234,6 +296,7 @@ export class AgSelect extends LitElement {
   }
 
   protected renderSingleSelect() {
+    const texts = this.getLocalizedText();
     const firstOptionValue = this._options && this._options.length > 0 ? this._options[0].value : null;
     const showResetButton = this.showReset &&
                           this._value !== null &&
@@ -249,7 +312,7 @@ export class AgSelect extends LitElement {
                 type="button"
                 class="reset-button"
                 @click=${this.resetToDefault}
-                title="기본값으로 되돌리기"
+                title="${texts.resetToDefault}"
               >${this.getCloseIcon()}</button>`
             : ''
           }
@@ -531,12 +594,14 @@ export class AgSelect extends LitElement {
   }
 
   protected updateFormValue(): void {
+    const texts = this.getLocalizedText();
+    
     if (this.multiple) {
       const formValue = this._selectedValues.join(',');
       this._internals.setFormValue(formValue);
 
       if (this.required && this._selectedValues.length === 0) {
-        this._internals.setValidity({ valueMissing: true }, '필수 항목입니다.');
+        this._internals.setValidity({ valueMissing: true }, texts.required);
       } else {
         this._internals.setValidity({});
       }
@@ -608,8 +673,9 @@ export class AgSelect extends LitElement {
 
     this._internals.setFormValue(this._value || '');
 
+    const texts = this.getLocalizedText();
     if (this.required && !this._value) {
-      this._internals.setValidity({ valueMissing: true }, '필수 항목입니다.');
+      this._internals.setValidity({ valueMissing: true }, texts.required);
     } else {
       this._internals.setValidity({});
     }
@@ -664,6 +730,17 @@ export class AgSelect extends LitElement {
 
   public resetToDefaultValue(): void {
     this.resetToDefault(new Event('reset'));
+  }
+
+  // 언어 변경을 위한 공개 메서드
+  public setLanguage(language: SupportedLanguage): void {
+    this.language = language;
+    this.requestUpdate();
+  }
+
+  // 현재 지원하는 언어 목록을 반환하는 정적 메서드
+  static getSupportedLanguages(): SupportedLanguage[] {
+    return ['en', 'ko', 'ja', 'zh'];
   }
 }
 
