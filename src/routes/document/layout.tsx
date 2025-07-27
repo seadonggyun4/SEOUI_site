@@ -1,6 +1,7 @@
 import { component$, Slot, useVisibleTask$ } from '@builder.io/qwik';
 import { useNavigation } from '@/context/NavigationContext'
 import { useNavigate, useLocation } from '@builder.io/qwik-city';
+import './layout-component-page.scss'
 
 export default component$(() => {
   const location = useLocation();
@@ -8,8 +9,6 @@ export default component$(() => {
   const nav = useNavigation()
 
   useVisibleTask$(() => {
-    import('@/components/seo-grid-table');
-
     const $loader = document.querySelector('.document-loder') as HTMLElement;
     if (!$loader) return;
 

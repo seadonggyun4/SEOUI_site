@@ -9,7 +9,6 @@ import { useNavigationProvider } from '@/context/NavigationContext';
 import { LanguageProvider } from '@/context/LanguageContext';
 
 import './layout.scss';
-import './layout-component-page.scss'
 
 export default component$(() => {
   useNavigationProvider();
